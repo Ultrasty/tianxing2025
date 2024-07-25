@@ -231,25 +231,17 @@
         "content": "<div style=\"display: flex; flex-direction: column; gap: 32px;\"><div style=\"display: flex; flex-direction: column; gap: 24px;\"><div style=\"font-size: 17px; font-weight: 600;\">Support the Future of Innovation and Talent</div><div style=\"color: rgb(86, 98, 115); font-size: 15px;\">Hong Kong TSAF Consulting Ltd.warmly invites you to support the Futurism AI Award(FAA),Dynamic Art Award(DAA),and Cosmopolitan Writing Award(CWA),together shaping the future of technology,art,and literature.</div></div><div style=\"display: flex; flex-direction: column; gap: 24px;\"><div style=\"font-size: 17px; font-weight: 600;\">Your Impact</div><div style=\"color: rgb(86, 98, 115); font-size: 15px;\">At the heart of our efforts is the vision to foster a new generation of innovators,artists,and writers who can think diversely,act fairly,and contribute to their communities.By donating to these awards,you're not just funding a prize; you're investing in the future leaders of innovation,art,and literature.</div></div><div style=\"display: flex; flex-direction: column; gap: 24px;\"><div style=\"font-size: 17px; font-weight: 600;\">Awards&Recognition</div><div style=\"color: rgb(86, 98, 115); font-size: 15px;\">Winners of these prestigious awards Winners of these prestigious awards gain global recognition,media exposure,and opportunities for professional and academic advancement.Your donation directly contributes to the certificates of achievement,letters of recommendation,and promotion of their innovative work.</div></div><div style=\"display: flex; flex-direction: column; gap: 24px;\"><div style=\"font-size: 17px; font-weight: 600;\">How to Donate</div><div style=\"color: rgb(86, 98, 115); font-size: 15px;\">Initiate Your Contribution:To support the Futurism AI Award(FAA),Dynamic Art Award(DAA),or the Cosmopolitan Writing Award(CWA),simply send us an email expressing your interest in donating.Whether you wish to contribute to a specific award or to the general fund affecting all awards,your support is invaluable.Contact Us:Email us at[support@FuturismAI.Com]with the subject line\"Donation Inquiry.\"Please include your name,contact information,and any specific award you're interested in supporting or if you'd prefer to contribute to the general fund.Personalized Support:Our dedicated support team will get back to you promptly to guide you through the donation process.We're here to ensure your contribution is processed smoothly and to answer any questions you may have about the impact of your donation.</div></div></div>"
     },
     "footer": {
-        "email": "registration@FuturismAI.Com",
+        "email": "???",
         "links": [
             {
-                "title": "Massachusetts Institute of Technology",
+                "title": "同济大学",
                 "href": "https://www.mit.edu/"
             },
             {
-                "title": "California Institute of Technology",
+                "title": "同济大学软件学院",
                 "href": "https://www.caltech.edu/"
-            },
-            {
-                "title": "Stanford University",
-                "href": "https://www.stanford.edu/"
-            },
-            {
-                "title": "Harvard University",
-                "href": "https://www.harvard.edu/"
             }
         ],
-        "copyright": "Copyright © 2024. FUTURISM AI AWARD All Rights Reserved."
+        "copyright": "Copyright © 2024. TONGJI All Rights Reserved."
     }
 }

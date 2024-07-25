@@ -1,10 +1,5 @@
-import AboutView from '@/views/about/AboutView.vue'
-import ApplyView from '@/views/apply/ApplyView.vue'
-import ContactView from '@/views/contact/ContactView.vue'
-import DonationView from '@/views/donation/DonationView.vue'
-import LoginView from '@/views/login/LoginView.vue'
-import NewsDetailView from '@/views/news/NewsDetailView.vue'
-import NewsView from '@/views/news/NewsView.vue'
+import ENSOForecastExamination from '@/views/ENSO/ForecastExamination.vue'
+import Achievement from '@/views/About/Achievement.vue'
 import UserView from '@/views/user/UserView.vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
@@ -23,54 +18,17 @@ const router = createRouter({
                         title: 'About',
                     },
                     path: 'about',
-                    component: AboutView,
+                    component: Achievement,
                 },
                 {
-                    name: 'apply',
+                    name: 'ENSO',
                     meta: {
-                        title: 'Apply',
+                        title: 'ENSO',
                     },
-                    path: 'apply',
-                    component: ApplyView,
-                },
-                {
-                    name: 'news',
-                    meta: {
-                        title: 'News & Insights',
-                    },
-                    path: 'news',
-                    component: NewsView,
-                },
-                {
-                    name: 'newsDetail',
-                    meta: {
-                        title: 'News & Insights',
-                    },
-                    path: 'news/:id',
-                    component: NewsDetailView,
-                },
-                {
-                    name: 'contact',
-                    meta: {
-                        title: 'Contact Us',
-                    },
-                    path: 'contact',
-                    component: ContactView,
-                },
-                {
-                    name: 'donation',
-                    meta: {
-                        title: 'Donation',
-                    },
-                    path: 'donation',
-                    component: DonationView,
+                    path: 'ENSO',
+                    component: ENSOForecastExamination,
                 },
             ],
-        },
-        {
-            name: 'login',
-            path: '/login',
-            component: LoginView,
         },
     ],
 })
