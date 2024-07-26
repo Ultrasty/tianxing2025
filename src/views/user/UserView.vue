@@ -1,5 +1,5 @@
 <template>
-    <div class="h-screen bg-cover bg-default overflow-auto"
+    <div class="h-screen bg-cover bg-default overflow-hidden"
         :style="{ backgroundImage: `url(${bg})`, '--el-color-primary': '#2D8DD2' }">
         <template v-if="isLoginPage">
             <RouterView />
