@@ -20,6 +20,7 @@ import { computed, reactive } from 'vue';
 import { RouterView, useRoute } from 'vue-router';
 import FooterView from './FooterView.vue';
 import HeaderView from './HeaderView.vue';
+import { Position } from '@element-plus/icons-vue';
 const route = useRoute();
 const isLoginPage = computed(() => route.path === '/login');
 const user = reactive<UserModel>({

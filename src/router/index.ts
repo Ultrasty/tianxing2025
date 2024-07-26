@@ -1,78 +1,54 @@
-import AboutView from '@/views/about/AboutView.vue'
-import ApplyView from '@/views/apply/ApplyView.vue'
-import ContactView from '@/views/contact/ContactView.vue'
-import DonationView from '@/views/donation/DonationView.vue'
-import LoginView from '@/views/login/LoginView.vue'
-import NewsDetailView from '@/views/news/NewsDetailView.vue'
-import NewsView from '@/views/news/NewsView.vue'
+import ENSOForecastExamination from '@/views/ENSO/ForecastExamination.vue'
+import ENSOForecastResult from '@/views/ENSO/ForecastResult.vue'
+import GlobalWeatherForecastResult from '@/views/GlobalWeather/ForecastResult.vue'
+import Achievement from '@/views/About/Achievement.vue'
 import UserView from '@/views/user/UserView.vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 const router = createRouter({
-    history: createWebHashHistory('/faa'),
+    history: createWebHashHistory('/tianxing'),
     routes: [
         {
             name: 'home',
             path: '/',
             component: UserView,
             redirect: { name: 'about' },
-            children: [
+            children: [ //这块跟headerview里面menus对应
                 {
                     name: 'about',
                     meta: {
                         title: 'About',
                     },
                     path: 'about',
-                    component: AboutView,
+                    component: Achievement,
                 },
                 {
-                    name: 'apply',
+                    name: 'ENSO_ForecastExamination',
                     meta: {
-                        title: 'Apply',
+                        title: 'ENSO_ForecastExamination',
                     },
-                    path: 'apply',
-                    component: ApplyView,
+                    path: 'ENSO_ForecastExamination',
+                    component: ENSOForecastExamination,
                 },
                 {
-                    name: 'news',
+                    name: 'ENSO_ForecastResult',
                     meta: {
-                        title: 'News & Insights',
+                        title: 'ENSO_ForecastResult',
                     },
-                    path: 'news',
-                    component: NewsView,
+                    path: 'ENSO_ForecastResult',
+                    component: ENSOForecastResult,
                 },
                 {
-                    name: 'newsDetail',
+                    name: 'GlobalWeather_ForecastResult',
                     meta: {
-                        title: 'News & Insights',
+                        title: 'GlobalWeather_ForecastResult',
                     },
-                    path: 'news/:id',
-                    component: NewsDetailView,
-                },
-                {
-                    name: 'contact',
-                    meta: {
-                        title: 'Contact Us',
-                    },
-                    path: 'contact',
-                    component: ContactView,
-                },
-                {
-                    name: 'donation',
-                    meta: {
-                        title: 'Donation',
-                    },
-                    path: 'donation',
-                    component: DonationView,
-                },
+                    path: 'GlobalWeather_ForecastResult',
+                    component: GlobalWeatherForecastResult,
+                }
             ],
-        },
-        {
-            name: 'login',
-            path: '/login',
-            component: LoginView,
         },
     ],
 })
 
-export default router
+export default router;

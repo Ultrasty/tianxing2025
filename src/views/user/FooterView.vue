@@ -23,12 +23,15 @@
                 {{ config.footer.email }}
             </a>
             <div class="flex gap-[10px] mt-[64px]">
-                <template v-for="link, index in config.footer.links" :key="index">
-                    <div class="text-primary text-[14px] cursor-pointer">{{ link.title }}</div>
+                <template v-for="(link, index) in config.footer.links" :key="index">
+                    <a class="text-primary text-[14px] cursor-pointer" style="text-decoration: none;"
+                        :href="link.href">{{
+                            link.title }}</a>
                     <div v-if="index !== config.footer.links.length - 1" class='text-gray text-[14px]'>|</div>
                 </template>
             </div>
-            <div class="text-gray text-[14px] mt-[10px] opacity-50">{{ config.footer.copyright }}</div>
+            <div class="text-gray text-[14px] mt-[10px] opacity-50">{{ config.footer.copyright }}
+            </div>
         </div>
     </div>
 </template>
