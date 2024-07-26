@@ -4,14 +4,14 @@ import UserView from '@/views/user/UserView.vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 const router = createRouter({
-    history: createWebHashHistory('/faa'),
+    history: createWebHashHistory('/tianxing'),
     routes: [
         {
             name: 'home',
             path: '/',
             component: UserView,
             redirect: { name: 'about' },
-            children: [
+            children: [ //这块跟headerview里面menus对应
                 {
                     name: 'about',
                     meta: {
@@ -21,11 +21,11 @@ const router = createRouter({
                     component: Achievement,
                 },
                 {
-                    name: 'ENSO',
+                    name: 'ENSO_ForecastExamination',
                     meta: {
-                        title: 'ENSO',
+                        title: 'ENSO_ForecastExamination',
                     },
-                    path: 'ENSO',
+                    path: 'ENSO_ForecastExamination',
                     component: ENSOForecastExamination,
                 },
             ],

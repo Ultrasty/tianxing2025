@@ -2,7 +2,7 @@
     <div class="mt-[70px]">
         <div
             class="flex flex-col items-center mx-auto w-[1200px] border-0 border-t-[1px] border-t-default border-solid pb-[50px]">
-            <!-- <a class="flex w-fit px-[24px] text-primary rounded-[12px] h-[55px] gap-[16px] items-center mt-[64px] min-w-[287px] box-border border border-primary border-solid justify-center text-[17px] cursor-pointer hover:bg-primary hover:text-white transition ease-in no-underline"
+            <a class="flex w-fit px-[24px] text-primary rounded-[12px] h-[55px] gap-[16px] items-center mt-[64px] min-w-[287px] box-border border border-primary border-solid justify-center text-[17px] cursor-pointer hover:bg-primary hover:text-white transition ease-in no-underline"
                 :href="`mailto:${config.footer.email}`">
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none">
                     <g clip-path="url(#clip0_17_696)">
@@ -21,14 +21,17 @@
                     </defs>
                 </svg>
                 {{ config.footer.email }}
-            </a> -->
-            <!-- <div class="flex gap-[10px] mt-[64px]">
-                <template v-for="link, index in config.footer.links" :key="index">
-                    <div class="text-primary text-[14px] cursor-pointer">{{ link.title }}</div>
+            </a>
+            <div class="flex gap-[10px] mt-[64px]">
+                <template v-for="(link, index) in config.footer.links" :key="index">
+                    <a class="text-primary text-[14px] cursor-pointer" style="text-decoration: none;"
+                        :href="link.href">{{
+                            link.title }}</a>
                     <div v-if="index !== config.footer.links.length - 1" class='text-gray text-[14px]'>|</div>
                 </template>
-            </div> -->
-            <div class="text-gray text-[14px] mt-[10px] opacity-50">{{ config.footer.copyright }}</div>
+            </div>
+            <div class="text-gray text-[14px] mt-[10px] opacity-50">{{ config.footer.copyright }}
+            </div>
         </div>
     </div>
 </template>

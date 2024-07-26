@@ -35,10 +35,12 @@ const props = defineProps<{
     top: 70px;
     left: 0;
     width: 100vw;
+    /* 副菜单高一点好看 */
+    height: 30vh;
     background-color: rgb(237, 236, 236);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     display: flex;
-    z-index: 900;
+    z-index: 10;
 }
 
 .submenu-header {

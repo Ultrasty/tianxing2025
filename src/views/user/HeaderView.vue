@@ -1,7 +1,9 @@
 <template>
     <div class="header-container">
         <div class="header-content">
-            <img class='logo' :src="logo" />
+            <router-link :to="{ name: 'home' }">
+                <img class='logo' :src="logo" />
+            </router-link>
             <div class="nav-wrapper">
                 <div class="nav-items">
                     <div v-for="menu in menus" :key="menu.name" @mouseenter="handleMouseOver(menu.name)"
@@ -19,7 +21,7 @@
 </template>
 
 <script lang="ts" setup>
-const logo = "https://via.placeholder.com/183x70?text=Logo"; // 暂时用占位图片
+import logo from '@/assets/logo.png'
 import DropdownMenu from '@/views/user/DropdownMenu.vue'
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
@@ -30,33 +32,33 @@ const menus = [
         title: 'ENSO',
         name: 'ENSO',
         subMenus: [
-            { title: '预测结果', name: 'ENSO_ForecastResult' },
+            // { title: '预测结果', name: 'ENSO_ForecastResult' },
             { title: '预测检验', name: 'ENSO_ForecastExamination' },
         ]
     },
-    {
-        title: '全球天气',
-        name: 'GlobalWeather',
-        subMenus: [
-            { title: '预测结果', name: 'GlobalWeather_ForecastResult' },
-        ]
-    },
-    {
-        title: 'NAO',
-        name: 'NAO',
-        subMenus: [
-            { title: '预测结果', name: 'NAO_ForecastResult' },
-            { title: '预测检验', name: 'NAO_ForecastExamination' },
-        ]
-    },
-    {
-        title: '海冰',
-        name: 'SeaIce',
-        subMenus: [
-            { title: '预测结果', name: 'SeaIce_ForecastResult' },
-            { title: '预测检验', name: 'SeaIce_ForecastExamination' },
-        ]
-    },
+    // {
+    //     title: '全球天气',
+    //     name: 'GlobalWeather',
+    //     subMenus: [
+    //         { title: '预测结果', name: 'GlobalWeather_ForecastResult' },
+    //     ]
+    // },
+    // {
+    //     title: 'NAO',
+    //     name: 'NAO',
+    //     subMenus: [
+    //         { title: '预测结果', name: 'NAO_ForecastResult' },
+    //         { title: '预测检验', name: 'NAO_ForecastExamination' },
+    //     ]
+    // },
+    // {
+    //     title: '海冰',
+    //     name: 'SeaIce',
+    //     subMenus: [
+    //         { title: '预测结果', name: 'SeaIce_ForecastResult' },
+    //         { title: '预测检验', name: 'SeaIce_ForecastExamination' },
+    //     ]
+    // },
 ];
 
 const menuDropdown = ref<string | null>(null);
@@ -78,13 +80,9 @@ const isActive = (menuName: string) => {
 <style scoped>
 .header-container {
     border-bottom: 1px solid #C9C5BC;
-    z-index: 1000;
-    /* TODO:
-        z-index 未能起效！
-        导致副菜单动画会出现在主菜单上方。
-        可能是设置了 Transform 动画的原因 */
     background-color: white;
     position: relative;
+    z-index: 100;
 }
 
 .header-content {
@@ -97,7 +95,6 @@ const isActive = (menuName: string) => {
 }
 
 .logo {
-    width: 183px;
     height: 100%;
     object-fit: cover;
     cursor: pointer;
