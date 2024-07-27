@@ -398,7 +398,7 @@ import {ArrowLeft,
   <div class="pageContent">
     <div class="banner">
       <img :src="bannerImg" />
-      <h3 class="title">全球天气结果检验</h3>
+      <h3 class="title">全球天气预报结果</h3>
     </div>
 
     <div class="menu-container">
