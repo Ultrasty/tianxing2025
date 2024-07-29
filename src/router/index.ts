@@ -1,4 +1,6 @@
 import ENSOForecastExamination from '@/views/ENSO/ForecastExamination.vue'
+import ENSOForecastResult from '@/views/ENSO/ForecastResult.vue'
+import GlobalWeatherForecastResult from '@/views/GlobalWeather/ForecastResult.vue'
 import Achievement from '@/views/About/Achievement.vue'
 import UserView from '@/views/user/UserView.vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
@@ -28,6 +30,22 @@ const router = createRouter({
                     path: 'ENSO_ForecastExamination',
                     component: ENSOForecastExamination,
                 },
+                {
+                    name: 'ENSO_ForecastResult',
+                    meta: {
+                        title: 'ENSO_ForecastResult',
+                    },
+                    path: 'ENSO_ForecastResult',
+                    component: ENSOForecastResult,
+                },
+                {
+                    name: 'GlobalWeather_ForecastResult',
+                    meta: {
+                        title: 'GlobalWeather_ForecastResult',
+                    },
+                    path: 'GlobalWeather_ForecastResult',
+                    component: GlobalWeatherForecastResult,
+                }
             ],
         },
     ],
