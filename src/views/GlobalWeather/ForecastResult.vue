@@ -49,8 +49,6 @@ const limitedDateRange = (time) => {
 function handleClick(chartName, index) {
   //这里标号发生改变，图表切换
   chartSelected.value = index;
-
-  console.log(tab.props.label);
   if(chartName == '气温预测'){
     axios.get('/imgs/WEA_T2M/getInitData')
     .then(res =>{
