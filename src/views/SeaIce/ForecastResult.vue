@@ -1,34 +1,29 @@
 <script setup>
-
-import { ref, onMounted, defineExpose } from "vue";
+import { ref, onMounted, computed } from "vue";
 import axios from 'axios';
 import VChart from 'vue-echarts';
 import { ArrowLeft, ArrowRight } from '@element-plus/icons-vue';
+import bannerImg from '@/assets/ensoBanner.png';
 
-const selectedSIE = ref(true)
-const selectedSIC = ref(false)
+const selectedSIE = ref(true);
+const selectedSIC = ref(false);
 
-const selectedYear = ref('');
-const selectedMonth = ref('');
-const selectedDay = ref('');
+const selectedYear = ref('2023');
+const selectedMonth = ref('01');
+const selectedDay = ref(new Date());
 
-selectedYear.value = '2023';
-selectedMonth.value = '01';
-selectedDay.value = new Date();
-
-const SIEAvailableList = ref([])
+const SIEAvailableList = ref([]);
 const SICAvailableList = ref({
   yearList: [],
   monthList: [],
   dateList: []
-})
+});
 
-const SIEChartTitle = ref('')
-const SICChartTitle = ref('')
+const SIEChartTitle = ref('');
+const SICChartTitle = ref('');
 
-const SIEOption = ref({})
-
-const SIEDescription = ref('')
+const SIEOption = ref({});
+const SIEDescription = ref('');
 
 const imgSrc = ref([]);
 const imgIndex = ref(0);
@@ -36,14 +31,29 @@ const imgIndex = ref(0);
 const SIELoading = ref(false);
 const SICLoading = ref(false);
 
-function selectChart(tab) {
-  if(tab.index == 0) {
-    selectedSIE.value = true;
-    selectedSIC.value = false;
-  }
-  else {
-    selectedSIE.value = false;
-    selectedSIC.value = true;
+const chartSelected = ref(0);
+const chartNames = ['SIE指数', 'SIC模态'];
+
+const moveBoxLeft = computed(() => chartSelected.value * 250);
+const movBoxStyle = computed(() => ({
+  position: "absolute",
+  bottom: "0px",
+  left: `${moveBoxLeft.value}px`,
+  height: "2px",
+  width: "125px",
+  transform: "translateX(50%)",
+  backgroundColor: "blue",
+  transition: "left 0.3s ease"
+}));
+
+function selectChart(index) {
+  chartSelected.value = index;
+  selectedSIE.value = index === 0;
+  selectedSIC.value = index === 1;
+  if (selectedSIE.value) {
+    updateSIEChart();
+  } else {
+    updateSICChart();
   }
 }
 
@@ -120,27 +130,9 @@ const initSICAvailableList = () => {
       SICAvailableList.value.monthList = response.data.monthList;
       SICAvailableList.value.dateList = response.data.dateList;
       imgSrc.value = response.data.sicInitial;
-      let newestYear = 0;
-      let newestMonth = 0;
-      let newestDate = 0;
-      for(let i = 0; i < SICAvailableList.value.yearList.length; i++) {
-        SICAvailableList.value.yearList[i] = Number(SICAvailableList.value.yearList[i]);
-        if(newestYear < SICAvailableList.value.yearList[i]) {
-          newestYear = SICAvailableList.value.yearList[i];
-        }
-      }
-      for(let i = 0; i < SICAvailableList.value.monthList.length; i++) {
-        SICAvailableList.value.monthList[i] = Number(SICAvailableList.value.monthList[i]);
-        if(newestMonth < SICAvailableList.value.monthList[i]) {
-          newestMonth = SICAvailableList.value.monthList[i];
-        }
-      }
-      for(let i = 0; i < SICAvailableList.value.dateList.length; i++) {
-        SICAvailableList.value.dateList[i] = Number(SICAvailableList.value.dateList[i]);
-        if(newestDate < SICAvailableList.value.dateList[i]) {
-          newestDate = SICAvailableList.value.dateList[i];
-        }
-      }
+      let newestYear = Math.max(...SICAvailableList.value.yearList);
+      let newestMonth = Math.max(...SICAvailableList.value.monthList);
+      let newestDate = Math.max(...SICAvailableList.value.dateList);
       selectedDay.value = new Date(newestYear, newestMonth - 1, newestDate);
       imgIndex.value = 0;
       loadImg(imgSrc.value);
@@ -156,9 +148,9 @@ const initSICAvailableList = () => {
 function updateSIEChartTitle() {
   let year1 = selectedYear.value;
   let month1 = selectedMonth.value;
-  let year2 = ''
-  let month2 = ''
-  if(Number(month1) == 1) {
+  let year2 = '';
+  let month2 = '';
+  if (Number(month1) === 1) {
     month2 = '12';
     year2 = year1;
   }
@@ -167,8 +159,6 @@ function updateSIEChartTitle() {
     year2 = Number(year1) + 1 + '';
   }
   SIEChartTitle.value = year1 + '年' + month1 + '月~' + year2 + '年' + month2 + '月 海冰预测结果';
-  console.log(SIEChartTitle.value);
-  console.log(selectedSIE.value)
 }
 
 function updateSICChartTitle() {
@@ -233,106 +223,172 @@ const buttonLeft = ref(null);
 const buttonRight = ref(null);
 
 const changeIndex = (direction) => {
-  if(direction == 'left') { // 点击了左按钮
-    if(imgIndex.value == 0)
-      imgIndex.value = imgSrc.value.length - 1;
-    else
-      imgIndex.value--;
-    buttonLeft.value.$el.blur(); // 使左按钮失焦
-  }
-  else { // 点击了右按钮
-    if(imgIndex.value == imgSrc.value.length - 1)
-      imgIndex.value = 0;
-    else
-      imgIndex.value++;
-    buttonRight.value.$el.blur(); // 使右按钮失焦
+  if (direction === 'left') {
+    imgIndex.value = imgIndex.value === 0 ? imgSrc.value.length - 1 : imgIndex.value - 1;
+    buttonLeft.value.$el.blur();
+  } else {
+    imgIndex.value = imgIndex.value === imgSrc.value.length - 1 ? 0 : imgIndex.value + 1;
+    buttonRight.value.$el.blur();
   }
 };
 
-defineExpose({
-  changeIndex
-});
+defineExpose({ changeIndex });
 /* 使el-button点击后能正常失焦 End */
 
 // 图片预加载
 const loadImg = (imgList) => {
-  for (let i = 0; i < imgList.length; i++) {
+  imgList.forEach(src => {
     let img = new Image();
-    let currentSrc = '';
-    img.src = 'http://tianxing.tongji.edu.cn' + imgList[i];
-    img.onload = function () {
-      console.log('加载完毕', this.currentSrc);
-    }
-    img.onerror = function () {
-      console.log('加载错误', this.currentSrc);
-    }
-  }
+    img.src = 'http://tianxing.tongji.edu.cn' + src;
+    img.onload = () => console.log('加载完毕', img.src);
+    img.onerror = () => console.log('加载错误', img.src);
+  });
 }
 
-onMounted(
-  () => {
-    initSIEAvailableList();
-    initSICAvailableList();
-  }
-)
+onMounted(() => {
+  initSIEAvailableList();
+  initSICAvailableList();
+});
 </script>
 
 <template>
   <div class="pageContent">
-    <h1 v-show="selectedSIE" class="title">
+    <div class="banner">
+      <img :src="bannerImg" />
+      <h3 class="title">海冰预测结果</h3>
+    </div>
+
+    <div class="menu-container">
+      <ul class="menu">
+        <div :style="movBoxStyle"></div>
+        <li v-for="(chartName, index) of chartNames" :key="chartName" @click="selectChart(index)"
+          :class="{ 'chart-name-selected': chartSelected === index }">
+          <p>{{ chartName }}</p>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 不需要额外的表头 -->
+    <!-- <h1 v-show="selectedSIE" class="title">
       {{ SIEChartTitle }}
     </h1>
     <h1 v-show="selectedSIC" class="title">
-      {{ selectedDay.getFullYear() }}年{{ selectedDay.getMonth() + 1 }}月 海冰预测结果
-    </h1>
+      {{ SICChartTitle }}
+    </h1> -->
+
     <div class="datePickerContainer" v-show="selectedSIE">
-      <el-date-picker @change="handleYearChange" v-model="selectedYear" type="year" format="YYYY" value-format="YYYY" :clearable="false" style="width: 80px; height: 25px" :disabled-date="disabledYear" />
+      <el-date-picker @change="handleYearChange" v-model="selectedYear" type="year" format="YYYY" value-format="YYYY"
+        :clearable="false" style="width: 80px; height: 25px" :disabled-date="disabledYear" />
       <div class="text">年</div>
-      <el-date-picker @change="updateSIEChart" v-model="selectedMonth" type="month" format="MM" value-format="MM" :clearable="false" style="width: 60px; height: 25px" :disabled-date="disabledMonth" />
+      <el-date-picker @change="updateSIEChart" v-model="selectedMonth" type="month" format="MM" value-format="MM"
+        :clearable="false" style="width: 60px; height: 25px" :disabled-date="disabledMonth" />
       <div class="text">月</div>
     </div>
+
     <div class="datePickerContainer" v-show="selectedSIC">
-      <el-date-picker @change="updateSICChart" v-model="selectedDay" :clearable="false" style="width: 115px; height: 25px" :disabled-date="disabledDate" />
+      <el-date-picker @change="updateSICChart" v-model="selectedDay" :clearable="false"
+        style="width: 115px; height: 25px" :disabled-date="disabledDate" />
     </div>
-    <el-tabs type="border-card" @tab-click="selectChart" :stretch="true">
-      <el-tab-pane label="SIE指数" v-loading="SIELoading && selectedSIE">
-        <v-chart class="SIEChart" :option="SIEOption" autoresize />
-        <div class="description">
-          {{ SIEDescription }}
-        </div>
-      </el-tab-pane>
-      <el-tab-pane label="SIC模态" v-loading="SICLoading && selectedSIC">
-        <h3 style="text-align: center; margin-top: 0px; font-size: 18px">{{ SICChartTitle }}</h3>
-        <h4 style="text-align: center; margin-top: 0px; font-size: 16px">({{ imgIndex + 1 }}/{{ imgSrc.length }})</h4>
-        <div class="imageContainer">
-          <img v-if="imgSrc.length" :src="'http://tianxing.tongji.edu.cn' + imgSrc[imgIndex]" class="image" alt="" />
-        </div>
+
+    <div v-if="selectedSIE">
+      <v-chart class="SIEChart" :option="SIEOption" autoresize />
+      <div class="description">
+        {{ SIEDescription }}
+      </div>
+    </div>
+
+    <div v-if="selectedSIC">
+      <h3 style="text-align: center; margin-top: 0px; font-size: 18px">{{ SICChartTitle }}</h3>
+      <h4 style="text-align: center; margin-top: 0px; font-size: 16px">({{ imgIndex + 1 }}/{{ imgSrc.length }})</h4>
+      <div class="imageContainer">
         <el-button ref="buttonLeft" type="primary" class="arrowLeft" :icon="ArrowLeft" @click="changeIndex('left')" />
+        <img v-if="imgSrc.length" :src="'http://tianxing.tongji.edu.cn' + imgSrc[imgIndex]" class="image" alt="" />
         <el-button ref="buttonRight" type="primary" class="arrowRight" :icon="ArrowRight" @click="changeIndex('right')" />
-      </el-tab-pane>
-    </el-tabs>
+      </div>
+    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
 .title {
-  text-align: center
-}
-
-.SIEChart {
-  height: 500px;
-}
-
-.description {
-  margin-top: 20px;
-  font-size: 16px;
   text-align: center;
+  font-size: 50px;
+  margin-left: 20%;
+  z-index: 1;
+}
+
+.banner {
+  position: relative;
+  height: 500px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.banner img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* 确保图片在文字下方 */
+  z-index: 0;
+}
+
+.menu-container {
+  display: flex;
+  height: 105px;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: -50px;
+}
+
+ul.menu {
+  position: relative;
+  list-style-type: none;
+  height: 100%;
+  display: flex;
+  padding: 0px;
+  flex-direction: row;
+  justify-content: center;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
+}
+
+ul.menu li {
+  position: relative;
+  display: flex;
+  width: 250px;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+ul.menu li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 2px;
+  height: 50%;
+  background-color: #00000020;
+  transform: translateY(-50%);
+}
+
+.chart-name-selected {
+  color: blue;
 }
 
 .datePickerContainer {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 20px;
+  padding-right: 15%;
+  padding-top: 50px;
 }
 
 .text {
@@ -347,25 +403,71 @@ onMounted(
   height: 500px;
 }
 
+.SIEChart {
+  height: 400px;
+}
+
 .image {
   height: 100%;
 }
 
-.el-button.arrowLeft {
-  position: absolute;
-  top: 50%;
-  left: 10%;
+/* 设置箭头按钮的样式 */
+.el-button.arrowLeft,
+.el-button.arrowRight {
+  position: relative;
+  margin: 20px;
   width: 40px;
   height: 80px;
-  transform: translateY(-50%);
 }
 
-.el-button.arrowRight {
+.chart-selector {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 15%;
+}
+
+.chart-name-selected {
+  color: blue;
+}
+
+.description {
+  position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    /* 使文本内容居中 */
+}
+
+/* 设置左箭头按钮的样式 */
+.el-button.arrow-left {
   position: absolute;
   top: 50%;
-  right: 10%;
+  /* 将箭头按钮的顶部与父容器的中间对齐 */
+  left: 0;
+  /* 将箭头按钮的左侧与父容器的左侧对齐 */
   width: 40px;
+  /* 设置按钮宽度 */
   height: 80px;
+  /* 设置按钮高度 */
   transform: translateY(-50%);
+  /* 垂直居中箭头按钮 */
+}
+
+/* 设置右箭头按钮的样式 */
+.el-button.arrow-right {
+  position: absolute;
+  top: 50%;
+  /* 将箭头按钮的顶部与父容器的中间对齐 */
+  right: 0;
+  /* 将箭头按钮的右侧与父容器的右侧对齐 */
+  width: 40px;
+  /* 设置按钮宽度 */
+  height: 80px;
+  /* 设置按钮高度 */
+  transform: translateY(-50%);
+  /* 垂直居中箭头按钮 */
 }
 </style>
