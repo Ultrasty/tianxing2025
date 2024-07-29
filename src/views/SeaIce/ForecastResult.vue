@@ -290,7 +290,7 @@ onMounted(() => {
         style="width: 115px; height: 25px" :disabled-date="disabledDate" />
     </div>
 
-    <div v-if="selectedSIE">
+    <div v-if="selectedSIE" class="SIEChartContainer">
       <v-chart class="SIEChart" :option="SIEOption" autoresize />
       <div class="description">
         {{ SIEDescription }}
@@ -303,7 +303,8 @@ onMounted(() => {
       <div class="imageContainer">
         <el-button ref="buttonLeft" type="primary" class="arrowLeft" :icon="ArrowLeft" @click="changeIndex('left')" />
         <img v-if="imgSrc.length" :src="'http://tianxing.tongji.edu.cn' + imgSrc[imgIndex]" class="image" alt="" />
-        <el-button ref="buttonRight" type="primary" class="arrowRight" :icon="ArrowRight" @click="changeIndex('right')" />
+        <el-button ref="buttonRight" type="primary" class="arrowRight" :icon="ArrowRight"
+          @click="changeIndex('right')" />
       </div>
     </div>
   </div>
@@ -391,6 +392,15 @@ ul.menu li:not(:last-child)::after {
   padding-top: 50px;
 }
 
+.SIEChartContainer{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 15%;
+}
+
 .text {
   margin-left: 5px;
   margin-right: 10px;
@@ -404,7 +414,7 @@ ul.menu li:not(:last-child)::after {
 }
 
 .SIEChart {
-  height: 400px;
+  height: 500px;
 }
 
 .image {
@@ -435,10 +445,8 @@ ul.menu li:not(:last-child)::after {
 
 .description {
   position: relative;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    /* 使文本内容居中 */
+  text-align: center;
+  /* 使文本内容居中 */
 }
 
 /* 设置左箭头按钮的样式 */
