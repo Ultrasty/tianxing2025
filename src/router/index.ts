@@ -1,4 +1,8 @@
 import ENSOForecastExamination from '@/views/ENSO/ForecastExamination.vue'
+
+import ENSOForecastResult from '@/views/ENSO/ForecastResult.vue'
+import GlobalWeatherForecastResult from '@/views/GlobalWeather/ForecastResult.vue'
+
 // Import SeaIce components
 import SeaIce_ForecastResult from '@/views/SeaIce/ForecastResult.vue';
 import SeaIce_ForecastExamination from '@/views/SeaIce/ForecastExamination.vue';
@@ -33,6 +37,23 @@ const router = createRouter({
                     component: ENSOForecastExamination,
                 },
                 {
+
+                    name: 'ENSO_ForecastResult',
+                    meta: {
+                        title: 'ENSO_ForecastResult',
+                    },
+                    path: 'ENSO_ForecastResult',
+                    component: ENSOForecastResult,
+                },
+                {
+                    name: 'GlobalWeather_ForecastResult',
+                    meta: {
+                        title: 'GlobalWeather_ForecastResult',
+                    },
+                    path: 'GlobalWeather_ForecastResult',
+                    component: GlobalWeatherForecastResult,
+                }
+
                     name: 'SeaIce_ForecastResult',
                     meta: {
                         title: 'SeaIce Forecast Result',
@@ -48,6 +69,7 @@ const router = createRouter({
                     path: 'SeaIce/ForecastExamination',
                     component: SeaIce_ForecastExamination,
                 },
+
             ],
         },
     ],
