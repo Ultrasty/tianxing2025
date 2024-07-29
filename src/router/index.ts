@@ -52,8 +52,8 @@ const router = createRouter({
                     },
                     path: 'GlobalWeather_ForecastResult',
                     component: GlobalWeatherForecastResult,
-                }
-
+                },
+                {
                     name: 'SeaIce_ForecastResult',
                     meta: {
                         title: 'SeaIce Forecast Result',
