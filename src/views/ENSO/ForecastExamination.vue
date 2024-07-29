@@ -258,6 +258,7 @@ import {
       <p class="text3">{{ Chart3_Description.text }}</p>
     </div>
 
+
     <div class="chart-selector" v-else-if="chartSelected === 3">
       <v-chart class="chart_4" :option="chart4" autoresize></v-chart>
       <p class="text4">{{ Chart4_Description.text }}</p>
