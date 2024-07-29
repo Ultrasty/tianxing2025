@@ -51,14 +51,14 @@ const menus = [
     //         { title: '预测检验', name: 'NAO_ForecastExamination' },
     //     ]
     // },
-    // {
-    //     title: '海冰',
-    //     name: 'SeaIce',
-    //     subMenus: [
-    //         { title: '预测结果', name: 'SeaIce_ForecastResult' },
-    //         { title: '预测检验', name: 'SeaIce_ForecastExamination' },
-    //     ]
-    // },
+    {
+        title: '海冰',
+        name: 'SeaIce',
+        subMenus: [
+            { title: '预测结果', name: 'SeaIce_ForecastResult' },
+            { title: '预测检验', name: 'SeaIce_ForecastExamination' },
+        ]
+    },
 ];
 
 const menuDropdown = ref<string | null>(null);
