@@ -430,15 +430,6 @@ ul.menu li:not(:last-child)::after {
   height: 80px;
 }
 
-.chart-selector {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 0px 15%;
-}
-
 .chart-name-selected {
   color: blue;
 }
