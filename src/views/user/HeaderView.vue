@@ -32,17 +32,17 @@ const menus = [
         title: 'ENSO',
         name: 'ENSO',
         subMenus: [
-            // { title: '预测结果', name: 'ENSO_ForecastResult' },
+            { title: '预测结果', name: 'ENSO_ForecastResult' },
             { title: '预测检验', name: 'ENSO_ForecastExamination' },
+        ],
+    },
+    {
+        title: '全球天气',
+        name: 'GlobalWeather',
+        subMenus: [
+            { title: '预测结果', name: 'GlobalWeather_ForecastResult' },
         ]
     },
-    // {
-    //     title: '全球天气',
-    //     name: 'GlobalWeather',
-    //     subMenus: [
-    //         { title: '预测结果', name: 'GlobalWeather_ForecastResult' },
-    //     ]
-    // },
     // {
     //     title: 'NAO',
     //     name: 'NAO',
