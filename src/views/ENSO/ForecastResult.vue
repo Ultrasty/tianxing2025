@@ -14,8 +14,8 @@ const end_time = ref(null);
 /* 赋初值————默认为指数预测 */
 axios.get('/enso/linechart/getInitData')
   .then(res => {
-    start_time.value = new Date(res.data.start.replace(/-/g, '/'));
-    end_time.value = new Date(res.data.end.replace(/-/g, '/'));
+    start_time.value = new Date(res.data.start);
+    end_time.value = new Date(res.data.end);
   });
 
 const limitedDateRange = (time) => {
