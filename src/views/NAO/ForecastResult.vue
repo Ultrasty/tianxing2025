@@ -285,7 +285,7 @@ onMounted(
       <img :src="bannerImg" />
       <h3 class="title">NAO预测结果</h3>
     </div>
-
+      
     <!-- <h1 v-show="selectedNAOI" class="title">
       {{ NAOIChartTitle }}
     </h1>
@@ -302,7 +302,12 @@ onMounted(
       </ul>
     </div>
 
-
+    <div><p></p></div>
+    <div class="text-container" v-if="chartSelected === 0">
+      <div class="description">
+          {{ NAOIDescription }}
+        </div>
+      </div>
     
 
     <div class="datePickerContainer">
@@ -316,9 +321,6 @@ onMounted(
 
     <div class="chart-selector" v-if="chartSelected === 0">
       <v-chart class="NAOIChart" :option="NAOIOption" autoresize />
-        <div class="description">
-          {{ NAOIDescription }}
-        </div>
     </div>
 
     <div class="chart-selector" v-else-if="chartSelected === 1">
@@ -383,15 +385,15 @@ onMounted(
 }
 
 .description {
-  margin-top: 20px;
-  font-size: 16px;
-  text-align: center;
+  text-align: left;
 }
 
 .datePickerContainer {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 20px;
+  padding-right: 15%;
+  padding-top: 50px;
 }
 
 .text {
@@ -522,4 +524,17 @@ ul.menu li:hover p {
   color: blue;
 }
 
+.text-container {
+  width: 70%;
+  max-width: 800px; /* 最大宽度 */
+  margin: 0 auto;
+  display: block; 
+  text-align: left;
+  background-color: #e6e6fa; /* 淡紫色 */
+  display: flex;
+  padding: 15px;
+  border: 2px solid #aca0a0; 
+  border-radius: 8px; /* 可选的圆角 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 可选的阴影 */
+}
 </style>

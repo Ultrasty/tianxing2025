@@ -189,6 +189,19 @@ const movBoxStyle = computed(() => ({
       </ul>
     </div>
 
+    <div><p></p></div>
+    <div class="text-container" v-if="chartSelected === 0">
+        <div class="description">
+            {{ text_of_option1 }}
+        </div>  
+      </div>
+
+    <div class="text-container" v-if="chartSelected === 1">
+      <div class="description1">
+          {{ text_of_option7 }}
+        </div>
+      </div>
+
     <div class="datePickerContainer">
       <el-date-picker @change="updateChartTitle" v-model="selectedYear" 
       :disabledDate="limitedDateRange"
@@ -208,9 +221,6 @@ const movBoxStyle = computed(() => ({
         <div class="chart">
           <v-chart :option="option7" autoresize></v-chart>
         </div>   
-        <div class="description1">
-          {{ text_of_option7 }}
-        </div>
     </div>
 
     <div class="chart-selector" v-else-if="chartSelected === 0">
@@ -225,9 +235,6 @@ const movBoxStyle = computed(() => ({
             @click=" change_time_nao('left')"></el-button>
           <el-button ref="buttonRight" type="primary" class="arrowRight" :icon="ArrowRight"
             @click=" change_time_nao('right')"></el-button> -->
-            <div class="description">
-            {{ text_of_option1 }}
-            </div>  
           </div>
     </div>
 
@@ -254,13 +261,13 @@ const movBoxStyle = computed(() => ({
   }
 
   .description {
-    text-align: center;
-    font-size: 16px;
+    text-align: left;
+    // font-size: 16px;
     margin-left: 10px;
   }
   .description1 {
-    // text-align: center;
-    font-size: 16px;
+    text-align: left;
+    // font-size: 16px;
     margin-left: 10px;
   }
 
@@ -268,6 +275,8 @@ const movBoxStyle = computed(() => ({
     display: flex;
     justify-content: flex-end;
     margin-bottom: 20px;
+    padding-right: 15%;
+    padding-top: 50px;
   }
 
   .text {
@@ -400,5 +409,19 @@ ul.menu li:hover p {
 
 .chart-name-selected {
   color: blue;
+}
+
+.text-container {
+  width: 70%;
+  max-width: 800px; /* 最大宽度 */
+  margin: 0 auto;
+  display: block; 
+  text-align: left;
+  background-color: #e6e6fa; /* 淡紫色 */
+  display: flex;
+  padding: 15px;
+  border: 2px solid #aca0a0; 
+  border-radius: 8px; /* 可选的圆角 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 可选的阴影 */
 }
 </style>

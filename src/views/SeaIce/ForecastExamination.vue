@@ -698,6 +698,23 @@ axios.get('/seaice/predictionExamination/errorAnalysis?year=2022')
       </ul>
     </div>
 
+    <div><p></p></div>
+    <div class="text-container" v-if="chartSelected === 0">
+      <div class="description">
+        {{ SICChartErroPrediction }}
+      </div>
+      </div>
+      <div class="text-container" v-if="chartSelected === 1">
+        <div class="description">
+        {{ SICChartErroAdd }}
+        </div>
+      </div>
+      <div class="text-container" v-if="chartSelected === 2">
+        <div class="description">
+        {{ SIEChartErroAnalyse }}
+        </div>
+      </div>
+
     <div v-show="chartSelected === 0">
       <div class="chart">
         <v-chart :option="option1" autoresize></v-chart>
@@ -705,16 +722,10 @@ axios.get('/seaice/predictionExamination/errorAnalysis?year=2022')
       <div class="chart">
         <v-chart :option="option2" autoresize></v-chart>
       </div>
-      <div class="description">
-        {{ SICChartErroPrediction }}
-      </div>
     </div>
     <div v-show="chartSelected === 1">
       <div class="chart">
         <v-chart :option="option3" autoresize></v-chart>
-      </div>
-      <div class="description">
-        {{ SICChartErroAdd }}
       </div>
     </div>
     <div v-show="chartSelected === 2">
@@ -729,9 +740,6 @@ axios.get('/seaice/predictionExamination/errorAnalysis?year=2022')
       </div>
       <div class="chart">
         <v-chart :option="option7" autoresize></v-chart>
-      </div>
-      <div class="description">
-        {{ SIEChartErroAnalyse }}
       </div>
     </div>
   </div>
@@ -825,7 +833,8 @@ ul.menu li:hover p {
 }
 
 .description {
-  font-size: 16px;
+  // font-size: 16px;
+  text-align: left;
 }
 
 .datePickerContainer {
@@ -837,5 +846,19 @@ ul.menu li:hover p {
 .text {
   margin-left: 5px;
   margin-right: 10px;
+}
+
+.text-container {
+  width: 70%;
+  max-width: 800px; /* 最大宽度 */
+  margin: 0 auto;
+  display: block; 
+  text-align: left;
+  background-color: #e6e6fa; /* 淡紫色 */
+  display: flex;
+  padding: 15px;
+  border: 2px solid #aca0a0; 
+  border-radius: 8px; /* 可选的圆角 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 可选的阴影 */
 }
 </style>

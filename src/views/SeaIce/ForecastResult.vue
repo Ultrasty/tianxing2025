@@ -268,6 +268,12 @@ onMounted(() => {
       </ul>
     </div>
 
+    <div><p></p></div>
+    <div class="text-container" v-if="selectedSIE">
+      <div class="description">
+        {{ SIEDescription }}
+      </div>
+    </div>
     <!-- 不需要额外的表头 -->
     <!-- <h1 v-show="selectedSIE" class="title">
       {{ SIEChartTitle }}
@@ -292,9 +298,6 @@ onMounted(() => {
 
     <div v-if="selectedSIE" class="SIEChartContainer">
       <v-chart class="SIEChart" :option="SIEOption" autoresize />
-      <div class="description">
-        {{ SIEDescription }}
-      </div>
     </div>
 
     <div v-if="selectedSIC">
@@ -442,7 +445,7 @@ ul.menu li:hover p {
 
 .description {
   position: relative;
-  text-align: center;
+  text-align: left;
   /* 使文本内容居中 */
 }
 
@@ -474,5 +477,18 @@ ul.menu li:hover p {
   /* 设置按钮高度 */
   transform: translateY(-50%);
   /* 垂直居中箭头按钮 */
+}
+.text-container {
+  width: 70%;
+  max-width: 800px; /* 最大宽度 */
+  margin: 0 auto;
+  display: block; 
+  text-align: left;
+  background-color: #e6e6fa; /* 淡紫色 */
+  display: flex;
+  padding: 15px;
+  border: 2px solid #aca0a0; 
+  border-radius: 8px; /* 可选的圆角 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 可选的阴影 */
 }
 </style>
