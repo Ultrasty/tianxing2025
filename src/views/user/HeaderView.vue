@@ -43,14 +43,14 @@ const menus = [
             { title: '预测结果', name: 'GlobalWeather_ForecastResult' },
         ]
     },
-    // {
-    //     title: 'NAO',
-    //     name: 'NAO',
-    //     subMenus: [
-    //         { title: '预测结果', name: 'NAO_ForecastResult' },
-    //         { title: '预测检验', name: 'NAO_ForecastExamination' },
-    //     ]
-    // },
+    {
+        title: 'NAO',
+        name: 'NAO',
+        subMenus: [
+            { title: '预测结果', name: 'NAO_ForecastResult' },
+            { title: '预测检验', name: 'NAO_ForecastExamination' },
+        ]
+    },
     {
         title: '海冰',
         name: 'SeaIce',
