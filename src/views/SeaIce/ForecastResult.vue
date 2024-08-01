@@ -1,0 +1,494 @@
+<script setup>
+import { ref, onMounted, computed } from "vue";
+import axios from 'axios';
+import VChart from 'vue-echarts';
+import { ArrowLeft, ArrowRight } from '@element-plus/icons-vue';
+import bannerImg from '@/assets/ensoBanner.png';
+
+const selectedSIE = ref(true);
+const selectedSIC = ref(false);
+
+const selectedYear = ref('2023');
+const selectedMonth = ref('01');
+const selectedDay = ref(new Date());
+
+const SIEAvailableList = ref([]);
+const SICAvailableList = ref({
+  yearList: [],
+  monthList: [],
+  dateList: []
+});
+
+const SIEChartTitle = ref('');
+const SICChartTitle = ref('');
+
+const SIEOption = ref({});
+const SIEDescription = ref('');
+
+const imgSrc = ref([]);
+const imgIndex = ref(0);
+
+const SIELoading = ref(false);
+const SICLoading = ref(false);
+
+const chartSelected = ref(0);
+const chartNames = ['SIE指数', 'SIC模态'];
+
+const moveBoxLeft = computed(() => chartSelected.value * 250);
+const movBoxStyle = computed(() => ({
+  position: "absolute",
+  bottom: "0px",
+  left: `${moveBoxLeft.value}px`,
+  height: "2px",
+  width: "125px",
+  transform: "translateX(50%)",
+  backgroundColor: "blue",
+  transition: "left 0.3s ease"
+}));
+
+function selectChart(index) {
+  chartSelected.value = index;
+  selectedSIE.value = index === 0;
+  selectedSIC.value = index === 1;
+  if (selectedSIE.value) {
+    updateSIEChart();
+  } else {
+    updateSICChart();
+  }
+}
+
+// 请求SIE数据
+const updateSIEChart = async () => {
+  SIELoading.value = true;
+  updateSIEChartTitle();
+  const params = {
+    year: Number(selectedYear.value),
+    month: Number(selectedMonth.value)
+  };
+  axios.get('/seaice/predictionResult/SIE', { params })
+    .then(response => {
+      SIEOption.value = response.data.option;
+      SIEDescription.value = response.data.description;
+      SIELoading.value = false;
+    })
+    .catch(error => {
+      console.error(error);
+      SIELoading.value = false;
+    });
+}
+
+// 请求SIC数据
+const updateSICChart = async () => {
+  SICLoading.value = true;
+  updateSICChartTitle();
+  const params = {
+    year: selectedDay.value.getFullYear(),
+    month: selectedDay.value.getMonth() + 1,
+    day: selectedDay.value.getDate()
+  };
+  axios.get('/seaice/predictionResult/SIC', { params })
+    .then(response => {
+      imgSrc.value = response.data;
+      imgIndex.value = 0;
+      loadImg(imgSrc.value);
+      SICLoading.value = false;
+    })
+    .catch(error => {
+      console.error(error);
+      SICLoading.value = false;
+    });
+}
+
+// 初始化SIE可请求的年月
+const initSIEAvailableList = () => {
+  updateSIEChartTitle();
+  SIELoading.value = true;
+  const params = {
+    year: 2023,
+    month: 1
+  };
+  axios.get('/seaice/predictionResult/SIE', { params })
+    .then(response => {
+      SIEAvailableList.value = response.data.availableList;
+      SIEOption.value = response.data.option;
+      SIEDescription.value = response.data.description;
+      SIELoading.value = false;
+    })
+    .catch(error => {
+      console.error(error);
+      SIELoading.value = false;
+    });
+}
+
+// 初始化SIC可请求的年月
+const initSICAvailableList = () => {
+  updateSICChartTitle();
+  SICLoading.value = true;
+  axios.get('/seaice/initial/SICprediction')
+    .then(response => {
+      SICAvailableList.value.yearList = response.data.yearList;
+      SICAvailableList.value.monthList = response.data.monthList;
+      SICAvailableList.value.dateList = response.data.dateList;
+      imgSrc.value = response.data.sicInitial;
+      let newestYear = Math.max(...SICAvailableList.value.yearList);
+      let newestMonth = Math.max(...SICAvailableList.value.monthList);
+      let newestDate = Math.max(...SICAvailableList.value.dateList);
+      selectedDay.value = new Date(newestYear, newestMonth - 1, newestDate);
+      imgIndex.value = 0;
+      loadImg(imgSrc.value);
+      SICLoading.value = false;
+      updateSICChartTitle();
+    })
+    .catch(error => {
+      console.error(error);
+      SICLoading.value = false;
+    });
+}
+
+function updateSIEChartTitle() {
+  let year1 = selectedYear.value;
+  let month1 = selectedMonth.value;
+  let year2 = '';
+  let month2 = '';
+  if (Number(month1) === 1) {
+    month2 = '12';
+    year2 = year1;
+  }
+  else {
+    month2 = (Number(month1) - 1).toString().padStart(2, '0');
+    year2 = Number(year1) + 1 + '';
+  }
+  SIEChartTitle.value = year1 + '年' + month1 + '月~' + year2 + '年' + month2 + '月 海冰预测结果';
+}
+
+function updateSICChartTitle() {
+  SICChartTitle.value = selectedDay.value.getFullYear() + '年' + (selectedDay.value.getMonth() + 1) + '月' + selectedDay.value.getDate() + '日 海冰SIC预测结果';
+}
+
+// 选择的年份改变时，判断之前选择的月份在新的年份中是否可用，不可用则改为最早的可用月份
+function handleYearChange() {
+  for (let i = 0; i < SIEAvailableList.value.length; i++) {
+    if (selectedYear.value == SIEAvailableList.value[i].year && selectedMonth.value == SIEAvailableList.value[i].month) {
+      updateSIEChart();
+      return;
+    }
+  }
+  for (let i = 0; i < SIEAvailableList.value.length; i++) {
+    if (selectedYear.value == SIEAvailableList.value[i].year) {
+      selectedMonth.value = SIEAvailableList.value[i].month < 10 ? '0' + (SIEAvailableList.value[i].month + '') : SIEAvailableList.value[i].month + ''
+      updateSIEChart();
+      return;
+    }
+  }
+}
+
+function disabledYear(day) {
+  const year = day.getFullYear();
+  for (let i = 0; i < SIEAvailableList.value.length; i++) {
+    if (year == SIEAvailableList.value[i].year) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function disabledMonth(day) {
+  const month = day.getMonth() + 1;
+  for (let i = 0; i < SIEAvailableList.value.length; i++) {
+    if (selectedYear.value == SIEAvailableList.value[i].year && month == SIEAvailableList.value[i].month) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function disabledDate(day) {
+  const year = day.getFullYear();
+  const month = day.getMonth() + 1;
+  const date = day.getDate();
+  for (let i = 0; i < SICAvailableList.value.yearList.length; i++) {
+    for (let j = 0; j < SICAvailableList.value.monthList.length; j++) {
+      for (let k = 0; k < SICAvailableList.value.dateList.length; k++) {
+        if (year == SICAvailableList.value.yearList[i] && month == SICAvailableList.value.monthList[j] && date == SICAvailableList.value.dateList[k]) {
+          return false;
+        }
+      }
+    }
+  }
+  return true;
+}
+
+/* 使el-button点击后能正常失焦 Start */
+const buttonLeft = ref(null);
+const buttonRight = ref(null);
+
+const changeIndex = (direction) => {
+  if (direction === 'left') {
+    imgIndex.value = imgIndex.value === 0 ? imgSrc.value.length - 1 : imgIndex.value - 1;
+    buttonLeft.value.$el.blur();
+  } else {
+    imgIndex.value = imgIndex.value === imgSrc.value.length - 1 ? 0 : imgIndex.value + 1;
+    buttonRight.value.$el.blur();
+  }
+};
+
+defineExpose({ changeIndex });
+/* 使el-button点击后能正常失焦 End */
+
+// 图片预加载
+const loadImg = (imgList) => {
+  imgList.forEach(src => {
+    let img = new Image();
+    img.src = 'http://tianxing.tongji.edu.cn' + src;
+    img.onload = () => console.log('加载完毕', img.src);
+    img.onerror = () => console.log('加载错误', img.src);
+  });
+}
+
+onMounted(() => {
+  initSIEAvailableList();
+  initSICAvailableList();
+});
+</script>
+
+<template>
+  <div class="pageContent">
+    <div class="banner">
+      <img :src="bannerImg" />
+      <h3 class="title">海冰预测结果</h3>
+    </div>
+
+    <div class="menu-container">
+      <ul class="menu">
+        <div :style="movBoxStyle"></div>
+        <li v-for="(chartName, index) of chartNames" :key="chartName" @click="selectChart(index)"
+          :class="{ 'chart-name-selected': chartSelected === index }">
+          <p>{{ chartName }}</p>
+        </li>
+      </ul>
+    </div>
+
+    <div><p></p></div>
+    <div class="text-container" v-if="selectedSIE">
+      <div class="description">
+        {{ SIEDescription }}
+      </div>
+    </div>
+    <!-- 不需要额外的表头 -->
+    <!-- <h1 v-show="selectedSIE" class="title">
+      {{ SIEChartTitle }}
+    </h1>
+    <h1 v-show="selectedSIC" class="title">
+      {{ SICChartTitle }}
+    </h1> -->
+
+    <div class="datePickerContainer" v-show="selectedSIE">
+      <el-date-picker @change="handleYearChange" v-model="selectedYear" type="year" format="YYYY" value-format="YYYY"
+        :clearable="false" style="width: 80px; height: 25px" :disabled-date="disabledYear" />
+      <div class="text">年</div>
+      <el-date-picker @change="updateSIEChart" v-model="selectedMonth" type="month" format="MM" value-format="MM"
+        :clearable="false" style="width: 60px; height: 25px" :disabled-date="disabledMonth" />
+      <div class="text">月</div>
+    </div>
+
+    <div class="datePickerContainer" v-show="selectedSIC">
+      <el-date-picker @change="updateSICChart" v-model="selectedDay" :clearable="false"
+        style="width: 115px; height: 25px" :disabled-date="disabledDate" />
+    </div>
+
+    <div v-if="selectedSIE" class="SIEChartContainer">
+      <v-chart class="SIEChart" :option="SIEOption" autoresize />
+    </div>
+
+    <div v-if="selectedSIC">
+      <h3 style="text-align: center; margin-top: 0px; font-size: 18px">{{ SICChartTitle }}</h3>
+      <h4 style="text-align: center; margin-top: 0px; font-size: 16px">({{ imgIndex + 1 }}/{{ imgSrc.length }})</h4>
+      <div class="imageContainer">
+        <el-button ref="buttonLeft" type="primary" class="arrowLeft" :icon="ArrowLeft" @click="changeIndex('left')" />
+        <img v-if="imgSrc.length" :src="'http://tianxing.tongji.edu.cn' + imgSrc[imgIndex]" class="image" alt="" />
+        <el-button ref="buttonRight" type="primary" class="arrowRight" :icon="ArrowRight"
+          @click="changeIndex('right')" />
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped lang="scss">
+.title {
+  text-align: center;
+  font-size: 50px;
+  margin-left: 20%;
+  z-index: 1;
+}
+
+.banner {
+  position: relative;
+  height: 500px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.banner img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* 确保图片在文字下方 */
+  z-index: 0;
+}
+
+.menu-container {
+  display: flex;
+  height: 105px;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: -50px;
+}
+
+ul.menu {
+  position: relative;
+  list-style-type: none;
+  height: 100%;
+  display: flex;
+  padding: 0px;
+  flex-direction: row;
+  justify-content: center;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
+}
+
+ul.menu li {
+  position: relative;
+  display: flex;
+  width: 250px;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer; /* 更改鼠标形状为手形 */
+}
+
+ul.menu li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 2px;
+  height: 50%;
+  background-color: #00000020;
+  transform: translateY(-50%);
+}
+ul.menu li:hover p {
+  color: red;
+   /* 悬停时文字颜色变化为红色 */
+  //color: lightgray; //浅灰不太好看
+}
+
+.chart-name-selected {
+  color: blue;
+}
+
+.datePickerContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+  padding-right: 15%;
+  padding-top: 50px;
+}
+
+.SIEChartContainer{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 15%;
+}
+
+.text {
+  margin-left: 5px;
+  margin-right: 10px;
+}
+
+.imageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 500px;
+}
+
+.SIEChart {
+  height: 500px;
+}
+
+.image {
+  height: 100%;
+}
+
+/* 设置箭头按钮的样式 */
+.el-button.arrowLeft,
+.el-button.arrowRight {
+  position: relative;
+  margin: 20px;
+  width: 40px;
+  height: 80px;
+}
+
+.chart-name-selected {
+  color: blue;
+}
+
+.description {
+  position: relative;
+  text-align: left;
+  /* 使文本内容居中 */
+}
+
+/* 设置左箭头按钮的样式 */
+.el-button.arrow-left {
+  position: absolute;
+  top: 50%;
+  /* 将箭头按钮的顶部与父容器的中间对齐 */
+  left: 0;
+  /* 将箭头按钮的左侧与父容器的左侧对齐 */
+  width: 40px;
+  /* 设置按钮宽度 */
+  height: 80px;
+  /* 设置按钮高度 */
+  transform: translateY(-50%);
+  /* 垂直居中箭头按钮 */
+}
+
+/* 设置右箭头按钮的样式 */
+.el-button.arrow-right {
+  position: absolute;
+  top: 50%;
+  /* 将箭头按钮的顶部与父容器的中间对齐 */
+  right: 0;
+  /* 将箭头按钮的右侧与父容器的右侧对齐 */
+  width: 40px;
+  /* 设置按钮宽度 */
+  height: 80px;
+  /* 设置按钮高度 */
+  transform: translateY(-50%);
+  /* 垂直居中箭头按钮 */
+}
+.text-container {
+  width: 70%;
+  max-width: 800px; /* 最大宽度 */
+  margin: 0 auto;
+  display: block; 
+  text-align: left;
+  background-color: #e6e6fa; /* 淡紫色 */
+  display: flex;
+  padding: 15px;
+  border: 2px solid #aca0a0; 
+  border-radius: 8px; /* 可选的圆角 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 可选的阴影 */
+}
+</style>
