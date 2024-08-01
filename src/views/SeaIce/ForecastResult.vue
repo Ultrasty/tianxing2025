@@ -8,9 +8,15 @@ import bannerImg from '@/assets/ensoBanner.png';
 const selectedSIE = ref(true);
 const selectedSIC = ref(false);
 
-const selectedYear = ref('2023');
-const selectedMonth = ref('01');
-const selectedDay = ref(new Date());
+const selectedTime = ref(new Date('2023-01'));
+
+const selectedYear = computed(() => {
+  return selectedTime.value.getFullYear();
+})
+const selectedMonth = computed(() => {
+  return selectedTime.value.getMonth() + 1;
+})
+const selectedDay = computed(() => { return selectedTime.value; });
 
 const SIEAvailableList = ref([]);
 const SICAvailableList = ref({
@@ -165,37 +171,11 @@ function updateSICChartTitle() {
   SICChartTitle.value = selectedDay.value.getFullYear() + '年' + (selectedDay.value.getMonth() + 1) + '月' + selectedDay.value.getDate() + '日 海冰SIC预测结果';
 }
 
-// 选择的年份改变时，判断之前选择的月份在新的年份中是否可用，不可用则改为最早的可用月份
-function handleYearChange() {
-  for (let i = 0; i < SIEAvailableList.value.length; i++) {
-    if (selectedYear.value == SIEAvailableList.value[i].year && selectedMonth.value == SIEAvailableList.value[i].month) {
-      updateSIEChart();
-      return;
-    }
-  }
-  for (let i = 0; i < SIEAvailableList.value.length; i++) {
-    if (selectedYear.value == SIEAvailableList.value[i].year) {
-      selectedMonth.value = SIEAvailableList.value[i].month < 10 ? '0' + (SIEAvailableList.value[i].month + '') : SIEAvailableList.value[i].month + ''
-      updateSIEChart();
-      return;
-    }
-  }
-}
-
-function disabledYear(day) {
-  const year = day.getFullYear();
-  for (let i = 0; i < SIEAvailableList.value.length; i++) {
-    if (year == SIEAvailableList.value[i].year) {
-      return false;
-    }
-  }
-  return true;
-}
-
 function disabledMonth(day) {
+  const year = day.getFullYear();
   const month = day.getMonth() + 1;
   for (let i = 0; i < SIEAvailableList.value.length; i++) {
-    if (selectedYear.value == SIEAvailableList.value[i].year && month == SIEAvailableList.value[i].month) {
+    if (year == SIEAvailableList.value[i].year && month == SIEAvailableList.value[i].month) {
       return false;
     }
   }
@@ -268,7 +248,9 @@ onMounted(() => {
       </ul>
     </div>
 
-    <div><p></p></div>
+    <div>
+      <p></p>
+    </div>
     <div class="text-container" v-if="selectedSIE">
       <div class="description">
         {{ SIEDescription }}
@@ -282,19 +264,13 @@ onMounted(() => {
       {{ SICChartTitle }}
     </h1> -->
 
-    <div class="datePickerContainer" v-show="selectedSIE">
-      <el-date-picker @change="handleYearChange" v-model="selectedYear" type="year" format="YYYY" value-format="YYYY"
-        :clearable="false" style="width: 80px; height: 25px" :disabled-date="disabledYear" />
-      <div class="text">年</div>
-      <el-date-picker @change="updateSIEChart" v-model="selectedMonth" type="month" format="MM" value-format="MM"
-        :clearable="false" style="width: 60px; height: 25px" :disabled-date="disabledMonth" />
-      <div class="text">月</div>
+    <div class="datePickerContainer">
+      <el-date-picker @change="updateSIEChartTitle" v-model="selectedTime" :clearable="false" type="month"
+        :disabled-date="disabledMonth" v-if="selectedSIE" />
+      <el-date-picker @change="updateSICChart" v-model="selectedTime" :clearable="false" :disabled-date="disabledDate"
+        v-if="selectedSIC" />
     </div>
 
-    <div class="datePickerContainer" v-show="selectedSIC">
-      <el-date-picker @change="updateSICChart" v-model="selectedDay" :clearable="false"
-        style="width: 115px; height: 25px" :disabled-date="disabledDate" />
-    </div>
 
     <div v-if="selectedSIE" class="SIEChartContainer">
       <v-chart class="SIEChart" :option="SIEOption" autoresize />
@@ -370,7 +346,8 @@ ul.menu li {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  cursor: pointer; /* 更改鼠标形状为手形 */
+  cursor: pointer;
+  /* 更改鼠标形状为手形 */
 }
 
 ul.menu li:not(:last-child)::after {
@@ -383,9 +360,10 @@ ul.menu li:not(:last-child)::after {
   background-color: #00000020;
   transform: translateY(-50%);
 }
+
 ul.menu li:hover p {
   color: red;
-   /* 悬停时文字颜色变化为红色 */
+  /* 悬停时文字颜色变化为红色 */
   //color: lightgray; //浅灰不太好看
 }
 
@@ -401,7 +379,7 @@ ul.menu li:hover p {
   padding-top: 50px;
 }
 
-.SIEChartContainer{
+.SIEChartContainer {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -478,17 +456,22 @@ ul.menu li:hover p {
   transform: translateY(-50%);
   /* 垂直居中箭头按钮 */
 }
+
 .text-container {
   width: 70%;
-  max-width: 800px; /* 最大宽度 */
+  max-width: 800px;
+  /* 最大宽度 */
   margin: 0 auto;
-  display: block; 
+  display: block;
   text-align: left;
-  background-color: #e6e6fa; /* 淡紫色 */
+  background-color: #e6e6fa;
+  /* 淡紫色 */
   display: flex;
   padding: 15px;
-  border: 2px solid #aca0a0; 
-  border-radius: 8px; /* 可选的圆角 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 可选的阴影 */
+  border: 2px solid #aca0a0;
+  border-radius: 8px;
+  /* 可选的圆角 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* 可选的阴影 */
 }
 </style>
