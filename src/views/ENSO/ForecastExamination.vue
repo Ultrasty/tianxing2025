@@ -253,7 +253,7 @@ import {
     </div>
 
     <div class="chart-selector" v-if="chartSelected === 0">
-      <v-chart class="chart" :option="chart1" autoresize></v-chart>
+      <v-chart class="chart1" :option="chart1" autoresize></v-chart>
     </div>
 
     <div class="chart-selector" v-else-if="chartSelected === 1">
@@ -298,11 +298,14 @@ import {
 }
 
 /*chart1、2 的表和文字*/
+.chart1 {
+  height: 50vh;
+  min-height: 700px;
+}
 .chart {
   height: 50vh;
-  min-height: 400px;
+  min-height: 500px;
 }
-
 .text_of_graph {
   text-align: left;
 }
