@@ -394,6 +394,7 @@ ul.menu li:hover p {
 }
 
 .imageContainer {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -408,15 +409,6 @@ ul.menu li:hover p {
   height: 100%;
 }
 
-/* 设置箭头按钮的样式 */
-.el-button.arrowLeft,
-.el-button.arrowRight {
-  position: relative;
-  margin: 20px;
-  width: 40px;
-  height: 80px;
-}
-
 .chart-name-selected {
   color: blue;
 }
@@ -425,36 +417,6 @@ ul.menu li:hover p {
   position: relative;
   text-align: left;
   /* 使文本内容居中 */
-}
-
-/* 设置左箭头按钮的样式 */
-.el-button.arrow-left {
-  position: absolute;
-  top: 50%;
-  /* 将箭头按钮的顶部与父容器的中间对齐 */
-  left: 0;
-  /* 将箭头按钮的左侧与父容器的左侧对齐 */
-  width: 40px;
-  /* 设置按钮宽度 */
-  height: 80px;
-  /* 设置按钮高度 */
-  transform: translateY(-50%);
-  /* 垂直居中箭头按钮 */
-}
-
-/* 设置右箭头按钮的样式 */
-.el-button.arrow-right {
-  position: absolute;
-  top: 50%;
-  /* 将箭头按钮的顶部与父容器的中间对齐 */
-  right: 0;
-  /* 将箭头按钮的右侧与父容器的右侧对齐 */
-  width: 40px;
-  /* 设置按钮宽度 */
-  height: 80px;
-  /* 设置按钮高度 */
-  transform: translateY(-50%);
-  /* 垂直居中箭头按钮 */
 }
 
 .text-container {

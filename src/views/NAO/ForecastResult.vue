@@ -404,36 +404,6 @@ onMounted(
   transform: translateX(-3%);
 }
 
-.el-button.arrowLeft {
-  z-index: 1;
-  position: absolute;
-  top: 50%;
-  left: 4%;
-  width: 5%;
-  height: 30%;
-  min-width: 40px;
-  min-height: 80px;
-  max-width: 50px;
-  max-height: 115px;
-  transform: translateY(-65%);
-  font-size: 20px;
-}
-
-.el-button.arrowRight {
-  z-index: 1;
-  position: absolute;
-  top: 50%;
-  right: 4%;
-  width: 5%;
-  height: 30%;
-  min-width: 40px;
-  min-height: 80px;
-  max-width: 50px;
-  max-height: 115px;
-  transform: translateY(-65%);
-  font-size: 20px;
-}
-
 // 以下是新加代码
 .banner {
   position: relative;
