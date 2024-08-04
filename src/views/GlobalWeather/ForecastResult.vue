@@ -573,12 +573,11 @@ import {
   /* 将元素设置为块级元素 */
   margin-top: -15%;
   margin-bottom: -15%;
-  max-width: 100%;
-  /* 确保图片不会超出父容器 */
-  height: auto;
-  /* 保持图片比例 */
-  display: inline-block;
-  /* 使图片可以与 text-align 一起使用 */
+  margin-left: -20%;
+  margin-right: -20%;
+  max-width: 100%; /* 确保图片不会超出父容器 */
+  height: auto; /* 保持图片比例 */
+  display: inline-block; /* 使图片可以与 text-align 一起使用 */
 }
 
 .pic_container {
