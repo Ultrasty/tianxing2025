@@ -85,6 +85,9 @@ const updateSIEChart = async () => {
 
 // 请求SIC数据
 const updateSICChart = async () => {
+  //使元素失焦
+  document.activeElement.blur();
+
   SICLoading.value = true;
   updateSICChartTitle();
   const params = {
@@ -152,6 +155,9 @@ const initSICAvailableList = () => {
 }
 
 function updateSIEChartTitle() {
+  //使元素失焦
+  document.activeElement.blur();
+
   let year1 = selectedYear.value;
   let month1 = selectedMonth.value;
   let year2 = '';

@@ -94,6 +94,9 @@ axios.get('/imgs/predictionResult/ssta?year=' + Number(start_year.value) + '&mon
 
 /* 图表更新 */
 function update_charts() {
+  //使元素失焦
+  document.activeElement.blur();
+
   // 当日期时间选择发生变化时被调用
 
   console.log(start_month.value); // 输出当前选择的日期和时间

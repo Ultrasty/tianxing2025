@@ -212,6 +212,9 @@ chartX1.value = [`${selectedYear.value - 2}spring`, `${selectedYear.value - 2}su
 ]
 
 function updateChart() {
+  //使元素失焦
+  document.activeElement.blur();
+
   updateTitles();
   updateXAxisData();
   updateChartOptions();

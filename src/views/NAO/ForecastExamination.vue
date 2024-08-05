@@ -57,6 +57,9 @@ const title_of_nao = ref({})
 const option7 = ref({})
 
 function updateChartTitle() {
+  //使元素失焦
+  document.activeElement.blur();
+
   axios.get('/nao/predictionExamination/nao?year=' + Number(selectedYear.value) + '&month=' + Number(selectedMonth.value))
     .then(res => {
       index_nao = 0;

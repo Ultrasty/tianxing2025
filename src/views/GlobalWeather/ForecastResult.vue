@@ -187,8 +187,10 @@ axios.get('/imgs/WEA_MSLP/getImgsPath?year=' + selectedYear.value + '&month=' + 
     text_of_wind2.value = text_of_wind2_Array[0];
   });
 
-
 const handleDateTimeChange = () => {
+  //使元素失焦
+  document.activeElement.blur();
+
   // 当日期时间选择发生变化时被调用
   console.log(selectedDateTime.value); // 输出当前选择的日期和时间
 
@@ -575,9 +577,12 @@ import {
   margin-bottom: -15%;
   margin-left: -20%;
   margin-right: -20%;
-  max-width: 100%; /* 确保图片不会超出父容器 */
-  height: auto; /* 保持图片比例 */
-  display: inline-block; /* 使图片可以与 text-align 一起使用 */
+  max-width: 100%;
+  /* 确保图片不会超出父容器 */
+  height: auto;
+  /* 保持图片比例 */
+  display: inline-block;
+  /* 使图片可以与 text-align 一起使用 */
 }
 
 .pic_container {

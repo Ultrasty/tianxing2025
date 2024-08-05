@@ -117,11 +117,11 @@ axios.get('/enso/predictionExamination/errorCorr?year=' + Number(start_year.valu
     Chart4_Description.text = res.data.text
   });
 
-
-
-
 /* 图表更新 */
 function update_charts() {
+  //使元素失去焦点
+  document.activeElement.blur();
+
   axios.get('/enso/predictionExamination/monthlyComparison?year=' + Number(start_year.value) + '&month=' + Number(start_month.value))
     .then(res => {
       chart1.value = res.data.option
@@ -147,7 +147,6 @@ function update_charts() {
     });
 }
 
-/* 使el-button点击后能正常失焦 Start (by wyf)*/
 const buttonLeft = ref(null);
 const buttonRight = ref(null);
 
@@ -180,7 +179,6 @@ function change_Month(flag) {
 defineExpose({
   change_Month
 });
-/* 使el-button点击后能正常失焦 End */
 
 /* 新版添加的代码========================================================== */
 import bannerImg from '@/assets/ensoBanner.png';
@@ -302,10 +300,12 @@ import {
   height: 50vh;
   min-height: 700px;
 }
+
 .chart {
   height: 50vh;
   min-height: 500px;
 }
+
 .text_of_graph {
   text-align: left;
 }

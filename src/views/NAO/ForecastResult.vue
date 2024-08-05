@@ -15,7 +15,7 @@ const selectedSLP = ref(false)
 const chartSelected = ref(0);
 const chartNames = ['指数预测', '模态预测'];
 
-const selectedDate = ref(new Date());
+const selectedDate = ref(new Date('2015-1'));
 
 const NAOISelectedYear = computed(() => selectedDate.value.getFullYear());
 const NAOISelectedMonth = computed(() => selectedDate.value.getMonth() + 1);
@@ -77,6 +77,9 @@ const movBoxStyle = computed(() => ({
 
 // 请求NAOI数据
 const updateNAOIChart = async () => {
+  //使元素失焦
+  document.activeElement.blur();
+
   NAOILoading.value = true;
   updateNAOIChartTitle();
   const params = {
@@ -97,6 +100,9 @@ const updateNAOIChart = async () => {
 
 // 请求SLP数据
 const updateSLPChart = async () => {
+  //使元素失焦
+  document.activeElement.blur();
+
   SLPLoading.value = true;
   updateSLPChartTitle();
   const params = {
@@ -127,8 +133,7 @@ const initNAOIChart = () => {
       NAOIStartMonth = response.data.start_month;
       NAOIEndYear = response.data.end_year;
       NAOIEndMonth = response.data.end_month;
-      NAOISelectedYear.value = NAOIEndYear;
-      NAOISelectedMonth.value = NAOIEndMonth.toString().padStart(2, '0');
+      selectedDate.value = new Date(NAOIEndYear, NAOIEndMonth);
       NAOIOption.value = response.data.option;
       NAOIDescription.value = response.data.description;
       updateNAOIChartTitle();
@@ -150,8 +155,6 @@ const initSLPChart = () => {
       SLPStartMonth = response.data.start_month;
       SLPEndYear = response.data.end_year;
       SLPEndMonth = response.data.end_month;
-      SLPSelectedYear.value = SLPEndYear;
-      SLPSelectedMonth.value = SLPEndMonth.toString().padStart(2, '0');
       imgSrc.value = response.data.data;
       // SLPDescription.value = response.data.description; // 接口未提供描述
       updateSLPChartTitle();
