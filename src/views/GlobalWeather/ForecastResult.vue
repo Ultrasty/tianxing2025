@@ -370,7 +370,7 @@ defineExpose({
 });
 /* 使el-button点击后能正常失焦 End */
 //新添加代码
-import bannerImg from '@/assets/ensoBanner.png';
+import bannerImg from '@/assets/header.jpg';
 
 
 const chartSelected = ref(0);
@@ -562,6 +562,7 @@ import {
   margin-left: 20%;
   /* 确保图片在文字下方 */
   z-index: 1;
+  color:#ffffff;
 }
 
 .picture_title {
@@ -651,6 +652,7 @@ ul.menu li {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  cursor: pointer; /* 更改鼠标形状为手形 */
 }
 
 ul.menu li:not(:last-child)::after {
@@ -664,6 +666,11 @@ ul.menu li:not(:last-child)::after {
   transform: translateY(-50%);
 }
 
+ul.menu li:hover p {
+  color: red;
+   /* 悬停时文字颜色变化为红色 */
+  //color: lightgray; //浅灰不太好看
+}
 .chart-selector {
   position: relative;
   //修改为块级

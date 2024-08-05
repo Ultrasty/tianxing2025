@@ -5,6 +5,7 @@ import axios from "axios";
 import VChart from 'vue-echarts';
 import { nextTick } from "vue";
 import { configProviderContextKey } from "element-plus";
+
 import { ArrowLeft, ArrowRight } from "@element-plus/icons-vue";
 import bannerImg from '@/assets/ensoBanner.png';//首页图
 
@@ -225,6 +226,7 @@ const movBoxStyle = computed(() => ({
   margin-left: 20%;
   /* 确保图片在文字下方 */
   z-index: 1;
+  color:#ffffff;
 }
 
 .chart {
