@@ -10,7 +10,6 @@ import SeaIce_ForecastExamination from '@/views/SeaIce/ForecastExamination.vue';
 import NAOForecastResult from '@/views/NAO/ForecastResult.vue';
 import NAOForecastExamination from '@/views/NAO/ForecastExamination.vue';
 
-import Achievement from '@/views/About/Achievement.vue'
 import UserView from '@/views/user/UserView.vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
@@ -23,14 +22,6 @@ const router = createRouter({
             component: UserView,
             redirect: { name: 'ENSO_ForecastExamination' },
             children: [ //这块跟headerview里面menus对应
-                {
-                    name: 'about',
-                    meta: {
-                        title: 'About',
-                    },
-                    path: 'about',
-                    component: Achievement,
-                },
                 {
                     name: 'ENSO_ForecastExamination',
                     meta: {
