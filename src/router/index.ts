@@ -21,7 +21,7 @@ const router = createRouter({
             name: 'home',
             path: '/',
             component: UserView,
-            redirect: { name: 'about' },
+            redirect: { name: 'ENSO_ForecastExamination' },
             children: [ //这块跟headerview里面menus对应
                 {
                     name: 'about',
