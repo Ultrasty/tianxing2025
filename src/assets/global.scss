@@ -37,7 +37,7 @@
     }
     &:before,&:active:before{
       left: -100%;
-      background: linear-gradient(to left, white, aqua);
+      background: linear-gradient(to left, white, rgb(83, 128, 196));
       transition: left 0.3s ease;
     }
   }
@@ -49,7 +49,7 @@
     }
     &:before,&:active:before{
       right: -100%;
-      background: linear-gradient(to right, white, aqua);
+      background: linear-gradient(to right, white, rgb(83, 128, 196));
       transition: right 0.3s ease;
     }
   }
@@ -58,7 +58,7 @@
 .datePickerContainer .el-input__wrapper {
   position: relative;
   border: none;
-  border-bottom: 2px solid aqua;
+  border-bottom: 2px solid rgb(173, 216, 230);
   border-radius: 0;
   box-shadow: none;
   transition: all ease 0.3s;
@@ -76,7 +76,7 @@
     left: 0;
     width: 0;
     height: 2px;
-    background: blue;
+    background: rgb(83, 128, 196);
     transition: width 0.3s ease;
   }
 
