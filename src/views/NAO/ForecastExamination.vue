@@ -225,6 +225,7 @@ const movBoxStyle = computed(() => ({
   margin-left: 20%;
   /* 确保图片在文字下方 */
   z-index: 1;
+  color: #ffffff;
 }
 
 .chart {

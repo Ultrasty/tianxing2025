@@ -181,7 +181,7 @@ defineExpose({
 });
 
 /* 新版添加的代码========================================================== */
-import bannerImg from '@/assets/ensoBanner.png';
+import bannerImg from '@/assets/header.jpg';
 
 
 const chartSelected = ref(0);
@@ -366,6 +366,7 @@ ul.menu li {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  cursor: pointer; /* 更改鼠标形状为手形 */
 }
 
 ul.menu li:not(:last-child)::after {
@@ -378,7 +379,11 @@ ul.menu li:not(:last-child)::after {
   background-color: #00000020;
   transform: translateY(-50%);
 }
-
+ul.menu li:hover p {
+  color: red;
+   /* 悬停时文字颜色变化为红色 */
+  //color: lightgray; //浅灰不太好看
+}
 .chart-selector {
   position: relative;
   display: flex;

@@ -764,6 +764,7 @@ axios.get('/seaice/predictionExamination/errorAnalysis?year=2022')
   font-size: 50px;
   margin-left: 20%;
   z-index: 1;
+  color: #ffffff;
 }
 
 .banner {
