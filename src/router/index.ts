@@ -10,7 +10,6 @@ import SeaIce_ForecastExamination from '@/views/SeaIce/ForecastExamination.vue';
 import NAOForecastResult from '@/views/NAO/ForecastResult.vue';
 import NAOForecastExamination from '@/views/NAO/ForecastExamination.vue';
 
-import Achievement from '@/views/About/Achievement.vue'
 import UserView from '@/views/user/UserView.vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
