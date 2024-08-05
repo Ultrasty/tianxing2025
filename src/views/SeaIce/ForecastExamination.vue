@@ -3,7 +3,7 @@
 import { ref,computed} from "vue";
 import VChart from 'vue-echarts'
 import axios from 'axios';
-import bannerImg from '@/assets/ensoBanner.png';
+import bannerImg from '@/assets/header.jpg';
 const currentDate = new Date();
 const year = currentDate.getFullYear() - 1 + '';
 const month = currentDate.getMonth() < 10 ? '0' + (currentDate.getMonth() + 1 + '') : currentDate.getMonth() + 1 + ''
@@ -752,6 +752,7 @@ axios.get('/seaice/predictionExamination/errorAnalysis?year=2022')
   font-size: 50px;
   margin-left: 20%;
   z-index: 1;
+  color:#ffffff;
 }
 
 .banner {

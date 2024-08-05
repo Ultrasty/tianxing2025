@@ -3,7 +3,7 @@ import { ref, onMounted, computed } from "vue";
 import axios from 'axios';
 import VChart from 'vue-echarts';
 import { ArrowLeft, ArrowRight } from '@element-plus/icons-vue';
-import bannerImg from '@/assets/ensoBanner.png';
+import bannerImg from '@/assets/header.jpg';
 
 const selectedSIE = ref(true);
 const selectedSIC = ref(false);
@@ -319,6 +319,7 @@ onMounted(() => {
   font-size: 50px;
   margin-left: 20%;
   z-index: 1;
+  color:#ffffff;
 }
 
 .banner {

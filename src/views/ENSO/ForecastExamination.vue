@@ -181,7 +181,7 @@ defineExpose({
 /* 使el-button点击后能正常失焦 End */
 
 /* 新版添加的代码========================================================== */
-import bannerImg from '@/assets/ensoBanner.png';
+import bannerImg from '@/assets/header.jpg';
 
 
 const chartSelected = ref(0);

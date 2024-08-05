@@ -368,7 +368,7 @@ defineExpose({
 });
 /* 使el-button点击后能正常失焦 End */
 //新添加代码
-import bannerImg from '@/assets/ensoBanner.png';
+import bannerImg from '@/assets/header.jpg';
 
 
 const chartSelected = ref(0);
@@ -551,6 +551,7 @@ import {ArrowLeft,
   margin-left: 20%;
   /* 确保图片在文字下方 */
   z-index: 1;
+  color:#ffffff;
 }
 .picture_title {
    text-align: center;

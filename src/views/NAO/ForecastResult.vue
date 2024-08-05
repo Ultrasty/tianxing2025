@@ -7,7 +7,7 @@ import { nextTick } from "vue";
 import { configProviderContextKey } from "element-plus";
 
 import { ArrowLeft, ArrowRight } from '@element-plus/icons-vue';
-import bannerImg from '@/assets/ensoBanner.png';//首页图
+import bannerImg from '@/assets/header.jpg';//首页图
 
 const selectedNAOI = ref(true)
 const selectedSLP = ref(false)
@@ -378,6 +378,7 @@ onMounted(
   margin-left: 20%;
   /* 确保图片在文字下方 */
   z-index: 1;
+  color:#ffffff;
 }
 
 .NAOIChart {
