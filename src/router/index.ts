@@ -7,6 +7,9 @@ import GlobalWeatherForecastResult from '@/views/GlobalWeather/ForecastResult.vu
 import SeaIce_ForecastResult from '@/views/SeaIce/ForecastResult.vue';
 import SeaIce_ForecastExamination from '@/views/SeaIce/ForecastExamination.vue';
 
+import NAOForecastResult from '@/views/NAO/ForecastResult.vue';
+import NAOForecastExamination from '@/views/NAO/ForecastExamination.vue';
+
 import Achievement from '@/views/About/Achievement.vue'
 import UserView from '@/views/user/UserView.vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
@@ -69,6 +72,22 @@ const router = createRouter({
                     path: 'SeaIce/ForecastExamination',
                     component: SeaIce_ForecastExamination,
                 },
+                {
+                    name: 'NAO_ForecastResult',
+                    meta: {
+                        title: 'NAO_ForecastResult',
+                    },
+                    path: 'NAO_ForecastResult',
+                    component: NAOForecastResult,
+                },
+                {
+                    name: 'NAO_ForecastExamination',
+                    meta: {
+                        title: 'NAO_ForecastExamination',
+                    },
+                    path: 'NAO_ForecastExamination',
+                    component: NAOForecastExamination,
+                }
 
             ],
         },

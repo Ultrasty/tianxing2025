@@ -14,8 +14,8 @@ const end_time = ref(null);
 /* 赋初值————默认为指数预测 */
 axios.get('/enso/linechart/getInitData')
   .then(res => {
-    start_time.value = new Date(res.data.start.replace(/-/g, '/'));
-    end_time.value = new Date(res.data.end.replace(/-/g, '/'));
+    start_time.value = new Date(res.data.start);
+    end_time.value = new Date(res.data.end);
   });
 
 const limitedDateRange = (time) => {
@@ -344,6 +344,7 @@ ul.menu li {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  cursor: pointer; /* 更改鼠标形状为手形 */
 }
 
 ul.menu li:not(:last-child)::after {
@@ -355,6 +356,11 @@ ul.menu li:not(:last-child)::after {
   height: 50%;
   background-color: #00000020;
   transform: translateY(-50%);
+}
+ul.menu li:hover p {
+  color: red;
+   /* 悬停时文字颜色变化为红色 */
+  //color: lightgray; //浅灰不太好看
 }
 
 .chart-selector {
