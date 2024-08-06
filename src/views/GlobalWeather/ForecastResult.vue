@@ -712,7 +712,7 @@ ul.menu li:hover p {
 }
 
 .text_of_graph {
-  text-align: left;
+  text-align: center;
 }
 
 .text3 {
@@ -724,20 +724,18 @@ ul.menu li:hover p {
 }
 
 .text-container {
-  width: 70%;
-  max-width: 800px;
-  /* 最大宽度 */
+  width: 90%;
+  max-width: 1100px;
   margin: 0 auto;
-  display: block;
-  text-align: left;
-  background-color: #e6e6fa;
+  text-align: center;
+  background-color:rgba(239, 242, 252, 0.801);; 
   /* 淡紫色 */
   display: flex;
-  padding: 15px;
-  border: 2px solid #aca0a0;
+  padding: 20px;
   border-radius: 8px;
   /* 可选的圆角 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  /* 可选的阴影 */
+  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893); /* 阴影 */
+  font-family: 'STKaiti';
+  font-size: 18px;
 }
 </style>
