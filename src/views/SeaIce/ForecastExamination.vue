@@ -3,7 +3,7 @@
 import { ref, computed } from "vue";
 import VChart from 'vue-echarts'
 import axios from 'axios';
-import bannerImg from '@/assets/ensoBanner.png';
+import bannerImg from '@/assets/header.jpg';
 const currentDate = ref(new Date());
 
 const selectedYear = computed(() => {

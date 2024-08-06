@@ -6,7 +6,7 @@ import VChart from 'vue-echarts';
 import { nextTick } from "vue";
 import { configProviderContextKey } from "element-plus";
 import { ArrowLeft, ArrowRight } from "@element-plus/icons-vue";
-import bannerImg from '@/assets/ensoBanner.png';//首页图
+import bannerImg from '@/assets/header.jpg';//首页图
 
 const prefix = "https://tianxing.tongji.edu.cn"
 // 新加入
