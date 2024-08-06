@@ -6,11 +6,13 @@ import VChart from 'vue-echarts';
 import { nextTick } from "vue";
 import { configProviderContextKey } from "element-plus";
 /* 时间选择器 -- begin */
-const currentDate = new Date('2023-2');   //  赋初值
-const year = currentDate.getFullYear() + '';
-const month = currentDate.getMonth() < 10 ? '0' + (currentDate.getMonth() + 1 + '') : currentDate.getMonth() + 1 + ''
-const start_year = ref(year);     //选择的年
-const start_month = ref(month);   //选择的月
+const currentDate = ref(new Date('2023-2'));   //  赋初值
+const start_year = computed(() => {
+  return currentDate.value.getFullYear();
+});
+const start_month = computed(() => {
+  return currentDate.value.getMonth() + 1;
+});
 
 const start_time = ref(null);     //可选时间范围
 const end_time = ref(null);
@@ -115,11 +117,11 @@ axios.get('/enso/predictionExamination/errorCorr?year=' + Number(start_year.valu
     Chart4_Description.text = res.data.text
   });
 
-
-
-
 /* 图表更新 */
 function update_charts() {
+  //使元素失去焦点
+  document.activeElement.blur();
+
   axios.get('/enso/predictionExamination/monthlyComparison?year=' + Number(start_year.value) + '&month=' + Number(start_month.value))
     .then(res => {
       chart1.value = res.data.option
@@ -145,7 +147,6 @@ function update_charts() {
     });
 }
 
-/* 使el-button点击后能正常失焦 Start (by wyf)*/
 const buttonLeft = ref(null);
 const buttonRight = ref(null);
 
@@ -178,7 +179,6 @@ function change_Month(flag) {
 defineExpose({
   change_Month
 });
-/* 使el-button点击后能正常失焦 End */
 
 /* 新版添加的代码========================================================== */
 import bannerImg from '@/assets/header.jpg';
@@ -229,7 +229,9 @@ import {
         </li>
       </ul>
     </div>
-    <div><p></p></div>
+    <div>
+      <p></p>
+    </div>
     <div class="text-container" v-if="chartSelected === 0">
       <p class="text_of_graph">{{ Chart1_Description.text }}</p>
     </div>
@@ -244,12 +246,8 @@ import {
     </div>
 
     <div class="datePickerContainer">
-      <el-date-picker @change="update_charts()" v-model="start_year" type="year" format="YYYY" value-format="YYYY"
-        :clearable="false" :disabledDate="limitedDateRange" style="width: 80px; height: 25px" />
-      <div class="text">年</div>
-      <el-date-picker @change="update_charts()" v-model="start_month" type="month" format="MM" value-format="MM"
-        :clearable="false" :disabledDate="limitedDateRange" style="width: 60px; height: 25px" />
-      <div class="text">月</div>
+      <el-date-picker @change="update_charts()" v-model="currentDate" type="month" :clearable="false"
+        :disabledDate="limitedDateRange" />
     </div>
 
     <div class="chart-selector" v-if="chartSelected === 0">
@@ -305,10 +303,12 @@ import {
   height: 50vh;
   min-height: 700px;
 }
+
 .chart {
   height: 50vh;
   min-height: 500px;
 }
+
 .text_of_graph {
   text-align: left;
 }
@@ -318,36 +318,6 @@ import {
 // .chart-container {
 //   size: 100%
 // }
-
-/* 设置左箭头按钮的样式 */
-.el-button.arrow-left {
-  position: absolute;
-  top: 50%;
-  /* 将箭头按钮的顶部与父容器的中间对齐 */
-  left: 15%;
-  /* 将箭头按钮的左侧与父容器的左侧对齐 */
-  width: 40px;
-  /* 设置按钮宽度 */
-  height: 80px;
-  /* 设置按钮高度 */
-  transform: translateY(-50%);
-  /* 垂直居中箭头按钮 */
-}
-
-/* 设置右箭头按钮的样式 */
-.el-button.arrow-right {
-  position: absolute;
-  top: 50%;
-  /* 将箭头按钮的顶部与父容器的中间对齐 */
-  right: 15%;
-  /* 将箭头按钮的右侧与父容器的右侧对齐 */
-  width: 40px;
-  /* 设置按钮宽度 */
-  height: 80px;
-  /* 设置按钮高度 */
-  transform: translateY(-50%);
-  /* 垂直居中箭头按钮 */
-}
 
 /* 新版添加的代码 =====================================================*/
 .banner {
@@ -449,15 +419,19 @@ ul.menu li:hover p {
 
 .text-container {
   width: 70%;
-  max-width: 800px; /* 最大宽度 */
+  max-width: 800px;
+  /* 最大宽度 */
   margin: 0 auto;
-  display: block; 
+  display: block;
   text-align: left;
-  background-color: #e6e6fa; /* 淡紫色 */
+  background-color: #e6e6fa;
+  /* 淡紫色 */
   display: flex;
   padding: 15px;
-  border: 2px solid #aca0a0; 
-  border-radius: 8px; /* 可选的圆角 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 可选的阴影 */
+  border: 2px solid #aca0a0;
+  border-radius: 8px;
+  /* 可选的圆角 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* 可选的阴影 */
 }
 </style>
