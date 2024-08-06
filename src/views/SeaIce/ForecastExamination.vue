@@ -690,7 +690,7 @@ axios.get('/seaice/predictionExamination/errorAnalysis?year=2022')
 
     <div class="menu-container">
       <ul class="menu">
-        <div :style="movBoxStyle"></div>
+        <div :style="movBoxStyle" class="mov-box"></div>
         <li v-for="(chartName, index) in chartNames" :key="chartName" @click="selectChart(index)"
           :class="{ 'chart-name-selected': chartSelected === index }">
           <p>{{ chartName }}</p>
@@ -748,10 +748,13 @@ axios.get('/seaice/predictionExamination/errorAnalysis?year=2022')
 
 <style scoped lang="scss">
 .title {
+  font-family: 'STXinwei';
+  font-weight: 300; //调整字体粗细
   text-align: center;
-  font-size: 50px;
+  font-size: 55px;
   margin-left: 20%;
-  z-index: 1;
+  letter-spacing: 1px; /* 字符间距 */
+  z-index: 1; /* 确保图片在文字下方 */
   color:#ffffff;
 }
 
@@ -805,6 +808,7 @@ ul.menu li {
   justify-content: center;
   align-items: center;
   cursor: pointer; /* 更改鼠标形状为手形 */
+  overflow: hidden; /* 确保伪元素的边界与 li 元素一致 */
 }
 
 ul.menu li:not(:last-child)::after {
@@ -817,10 +821,26 @@ ul.menu li:not(:last-child)::after {
   background-color: #00000020;
   transform: translateY(-50%);
 }
+ul.menu li:hover::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(240, 240, 240, 0.8); /* 浅灰色 */
+  border-radius: 10px; /* 确保形状与选项卡一致 */
+  pointer-events: none; /* 确保伪元素不影响鼠标事件 */
+  z-index: 1; /* 确保覆盖层在文字和内容下方 */
+}
+
 ul.menu li:hover p {
-  color: red;
-   /* 悬停时文字颜色变化为红色 */
-  //color: lightgray; //浅灰不太好看
+  color: rgb(255, 89, 0);
+  z-index: 2; /* 确保文字在覆盖层之上 */
+}
+.mov-box {
+  position: absolute;
+  z-index: 3; /* 确保滑动条在覆盖层之上 */
 }
 
 .chart-name-selected {

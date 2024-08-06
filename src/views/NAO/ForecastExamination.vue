@@ -181,7 +181,7 @@ const movBoxStyle = computed(() => ({
 
     <div class="menu-container">
       <ul class="menu">
-        <div :style="movBoxStyle"></div>
+        <div :style="movBoxStyle" class="mov-box"></div>
         <li v-for="(chartName, index) of chartNames" :key="chartName" @click="selectChart(index)"
           :class="{ 'chart-name-selected': chartSelected === index }">
           <p>{{ chartName }}</p>
@@ -250,11 +250,21 @@ const movBoxStyle = computed(() => ({
 }
 
 .title {
+  //font-family: 'FangSong', sans-serif;
+  //font-family: 'STKaiti';
+  //font-family: 'SimSun';
+  font-family: 'STXinwei';
+  
+  font-weight: 300; //调整字体粗细
   text-align: center;
-  font-size: 50px;
+  font-size: 55px;
   margin-left: 20%;
-  /* 确保图片在文字下方 */
-  z-index: 1;
+  //text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* 添加阴影 */
+  //text-shadow: 1px 1px 2px #000, 0 0 25px blue, 0 0 5px darkblue;
+  //webkit-text-stroke: 1px black; /* 文字描边 */
+  letter-spacing: 1px; /* 字符间距 */
+ 
+  z-index: 1; /* 确保图片在文字下方 */
   color:#ffffff;
 }
   .chart {
@@ -378,7 +388,8 @@ ul.menu li {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-    cursor: pointer; /* 更改鼠标形状为手形 */
+  cursor: pointer; /* 更改鼠标形状为手形 */
+  overflow: hidden; /* 确保伪元素的边界与 li 元素一致 */
 }
 
 ul.menu li:not(:last-child)::after {
@@ -391,13 +402,26 @@ ul.menu li:not(:last-child)::after {
   background-color: #00000020;
   transform: translateY(-50%);
 }
-
-ul.menu li:hover p {
-  color: red;
-   /* 悬停时文字颜色变化为红色 */
-  //color: lightgray; //浅灰不太好看
+ul.menu li:hover::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(240, 240, 240, 0.8); /* 浅灰色 */
+  border-radius: 10px; /* 确保形状与选项卡一致 */
+  pointer-events: none; /* 确保伪元素不影响鼠标事件 */
+  z-index: 1; /* 确保覆盖层在文字和内容下方 */
 }
-
+ul.menu li:hover p {
+  color: rgb(255, 89, 0);
+  z-index: 2; /* 确保文字在覆盖层之上 */
+}
+.mov-box {
+  position: absolute;
+  z-index: 3; /* 确保滑动条在覆盖层之上 */
+}
 .chart-selector {
   position: relative;
   //修改为块级

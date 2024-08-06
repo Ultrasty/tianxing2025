@@ -9,4 +9,11 @@ axios.defaults.baseURL = 'https://tianxing.tongji.edu.cn/api/'
   <RouterView />
 </template>
 
-<style scoped></style>
+<style scoped>
+@font-face {
+  font-family: 'HeaderFont';
+  src: url('@/assets/fonts/fangzheng.TTF') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+</style>
