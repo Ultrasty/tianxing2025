@@ -5,14 +5,13 @@
                 <img class='logo' :src="logo" />
             </router-link>
             <div class="nav-wrapper">
-                <div class="nav-items">
-                    <div v-for="menu in menus" :key="menu.name" @mouseenter="handleMouseOver(menu.name)"
-                        @mouseleave="handleMouseLeave" class="nav-item" :class="{ active: isActive(menu.name) }">
-
-                        <span class="nav-link">{{ menu.title }}</span> <!-- 替换为 span -->
-
+                <div class="nav-items" :style="{ zIndex: 1200 }">
+                    <div v-for="menu in menus" :key="menu.name" @mouseenter="handleMouseEnterNavItem(menu, $event)"
+                        @mouseleave="handleMouseLeaveNavItem" class="nav-item" :class="{ active: isActive(menu.name) }">
                         <DropdownMenu :title="menu.title" :subMenus="menu.subMenus"
-                            :isVisible="menuDropdown === menu.name" />
+                            :isVisible="nav_item_selected === menu.name"
+                            :style="{ left: menu.offsetLeft + 'px', zIndex: -10 }" />
+                        <span class="nav-link">{{ menu.title }}</span>
                     </div>
                 </div>
             </div>
@@ -24,10 +23,8 @@
 import logo from '@/assets/logo.png'
 import DropdownMenu from '@/views/user/DropdownMenu.vue'
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
 
-const router = useRouter();
-const menus = [
+const menus = ref([
     {
         title: 'ENSO',
         name: 'ENSO',
@@ -35,13 +32,15 @@ const menus = [
             { title: '预测结果', name: 'ENSO_ForecastResult' },
             { title: '预测检验', name: 'ENSO_ForecastExamination' },
         ],
+        offsetLeft: 0 // 初始化 offsetLeft
     },
     {
         title: '全球天气',
         name: 'GlobalWeather',
         subMenus: [
             { title: '预测结果', name: 'GlobalWeather_ForecastResult' },
-        ]
+        ],
+        offsetLeft: 0 // 初始化 offsetLeft
     },
     {
         title: 'NAO',
@@ -49,7 +48,8 @@ const menus = [
         subMenus: [
             { title: '预测结果', name: 'NAO_ForecastResult' },
             { title: '预测检验', name: 'NAO_ForecastExamination' },
-        ]
+        ],
+        offsetLeft: 0 // 初始化 offsetLeft
     },
     {
         title: '海冰',
@@ -57,24 +57,29 @@ const menus = [
         subMenus: [
             { title: '预测结果', name: 'SeaIce_ForecastResult' },
             { title: '预测检验', name: 'SeaIce_ForecastExamination' },
-        ]
+        ],
+        offsetLeft: 0 // 初始化 offsetLeft
     },
-];
+]);
 
-const menuDropdown = ref<string | null>(null);
+const nav_item_selected = ref<string | null>(null);
 
-const handleMouseOver = (menuName: string) => {
-    menuDropdown.value = menuName;
+const handleMouseEnterNavItem = (menu: any, event: MouseEvent) => {
+    const navItem = (event.target as HTMLElement).closest('.nav-item');
+    if (navItem) {
+        const rect = navItem.getBoundingClientRect();
+        menu.offsetLeft = -rect.left; // 设置 offsetLeft 为负的 rect.left 以使 DropdownMenu 与屏幕左侧对齐
+    }
+    nav_item_selected.value = menu.name;
 };
 
-const handleMouseLeave = () => {
-    menuDropdown.value = null;
+const handleMouseLeaveNavItem = () => {
+    nav_item_selected.value = null;
 };
 
 const isActive = (menuName: string) => {
-    return router.currentRoute.value.name === menuName;
+    return nav_item_selected.value === menuName;
 };
-
 </script>
 
 <style scoped>
@@ -82,7 +87,7 @@ const isActive = (menuName: string) => {
     border-bottom: 1px solid #C9C5BC;
     background-color: white;
     position: relative;
-    z-index: 100;
+    z-index: 50;
 }
 
 .header-content {
@@ -91,7 +96,6 @@ const isActive = (menuName: string) => {
     margin: 0 auto;
     display: flex;
     align-items: center;
-    /* justify-content: space-between; */
 }
 
 .logo {
@@ -104,29 +108,23 @@ const isActive = (menuName: string) => {
 .nav-wrapper {
     display: flex;
     width: 100%;
-    /* 视需要调整 */
     align-items: center;
     height: 100%;
     position: relative;
     justify-content: center;
-    /* 确保导航项居中 */
 }
 
 .nav-items {
     display: flex;
     width: 50%;
-    /* 确保子元素撑满父容器 */
     gap: 20px;
-    /* 控制导航项之间的间距 */
     height: 100%;
     align-items: center;
     justify-content: center;
-    /* 确保导航项居中 */
 }
 
 .nav-item {
     flex-grow: 1;
-    /* 使每个导航项平分剩余空间 */
     height: 100%;
     display: flex;
     align-items: center;
@@ -137,7 +135,6 @@ const isActive = (menuName: string) => {
     font-weight: 500;
     cursor: pointer;
     white-space: nowrap;
-    /* 防止文本换行 */
 }
 
 .nav-item::after {
@@ -170,6 +167,5 @@ const isActive = (menuName: string) => {
 .dropdown-enter-from,
 .dropdown-leave-to {
     opacity: 0;
-    transform: translateY(-10px);
 }
 </style>
