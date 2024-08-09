@@ -1,17 +1,21 @@
 <script setup>
+
 import { ref, onMounted, computed } from "vue";
+
 import VChart from 'vue-echarts'
 import axios from 'axios';
-import bannerImg from '@/assets/ensoBanner.png';
-const currentDate = new Date();
-const year = currentDate.getFullYear() - 1 + '';
-const month = currentDate.getMonth() < 10 ? '0' + (currentDate.getMonth() + 1 + '') : currentDate.getMonth() + 1 + ''
+import bannerImg from '@/assets/header.jpg';
+const currentDate = ref(new Date());
 
-const selectedYear = ref('');
-const selectedMonth = ref('');
+const selectedYear = computed(() => {
+  return currentDate.value.getFullYear();
+});
+const selectedMonth = computed(() => {
+  return currentDate.value.getMonth() + 1;
+});
+
 
 selectedYear.value = '2023'
-selectedMonth.value = '01';
 
 const start_year1 = ref(null);
 const start_month1 = ref(null);
@@ -39,6 +43,7 @@ const movBoxStyle = computed(() => ({
   backgroundColor: "blue",
   transition: "left 0.3s ease"
 }));
+
 
 const limitedDateRange = (time) => {
   return time.getFullYear() < start_year.value || time.getFullYear() > end_year.value;
@@ -94,6 +99,7 @@ chartX1.value = [`${selectedYear.value - 2}spring`, `${selectedYear.value - 2}su
 `${selectedYear.value - 1}spring`, `${selectedYear.value - 1}summer`, `${selectedYear.value - 1}fall`, `${selectedYear.value - 1}winter`,
 `${selectedYear.value}spring`, `${selectedYear.value}summer`, `${selectedYear.value}fall`, `${selectedYear.value}winter`
 ]
+
 
 const updateTab1 = () => {
   // axios.get('/seaice/error?year=2023&month=1')
@@ -557,6 +563,7 @@ onMounted(() => {
 
 
 
+
 </script>
 
 <template>
@@ -568,13 +575,14 @@ onMounted(() => {
 
     <div class="menu-container">
       <ul class="menu">
-        <div :style="movBoxStyle"></div>
+        <div :style="movBoxStyle" class="mov-box"></div>
         <li v-for="(chartName, index) in chartNames" :key="chartName" @click="selectChart(index)"
           :class="{ 'chart-name-selected': chartSelected === index }">
           <p>{{ chartName }}</p>
         </li>
       </ul>
     </div>
+
 
     <div class="datePickerContainer">
       <el-date-picker :disabledDate="limitedDateRange" v-model="selectedYear" type="year" format="YYYY"
@@ -601,6 +609,7 @@ onMounted(() => {
         <div class="description">
           {{ SICChartErroPrediction }}
         </div>
+
       </div>
       <div v-if="chartSelected === 1">
         <div class="chart">
@@ -610,6 +619,7 @@ onMounted(() => {
           {{ SICChartErroAdd }}
         </div>
       </div>
+
       <div v-if="chartSelected === 2">
         <div class="chart">
           <v-chart :option="option4" autoresize></v-chart>
@@ -627,6 +637,7 @@ onMounted(() => {
           {{ SIEChartErroAnalyse }}
         </div>
       </div>
+
     </div>
   </div>
 </template>
@@ -634,10 +645,14 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .title {
+  font-family: 'STXinwei';
+  font-weight: 300; //调整字体粗细
   text-align: center;
-  font-size: 50px;
+  font-size: 55px;
   margin-left: 20%;
-  z-index: 1;
+  letter-spacing: 1px; /* 字符间距 */
+  z-index: 1; /* 确保图片在文字下方 */
+  color:#ffffff;
 }
 
 .banner {
@@ -690,6 +705,7 @@ ul.menu li {
   justify-content: center;
   align-items: center;
   cursor: pointer; /* 更改鼠标形状为手形 */
+  overflow: hidden; /* 确保伪元素的边界与 li 元素一致 */
 }
 
 ul.menu li:not(:last-child)::after {
@@ -702,10 +718,26 @@ ul.menu li:not(:last-child)::after {
   background-color: #00000020;
   transform: translateY(-50%);
 }
+ul.menu li:hover::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(240, 240, 240, 0.8); /* 浅灰色 */
+  border-radius: 10px; /* 确保形状与选项卡一致 */
+  pointer-events: none; /* 确保伪元素不影响鼠标事件 */
+  z-index: 1; /* 确保覆盖层在文字和内容下方 */
+}
+
 ul.menu li:hover p {
-  color: red;
-   /* 悬停时文字颜色变化为红色 */
-  //color: lightgray; //浅灰不太好看
+  color: rgb(255, 89, 0);
+  z-index: 2; /* 确保文字在覆盖层之上 */
+}
+.mov-box {
+  position: absolute;
+  z-index: 3; /* 确保滑动条在覆盖层之上 */
 }
 
 .chart-name-selected {
@@ -719,12 +751,15 @@ ul.menu li:hover p {
 }
 
 .description {
-  font-size: 16px;
+  // font-size: 16px;
+  text-align: center;
 }
 
 .datePickerContainer {
   display: flex;
   justify-content: flex-end;
+  padding-right: 15%;
+  padding-top: 50px;
   margin-bottom: 20px;
 }
 
@@ -732,6 +767,7 @@ ul.menu li:hover p {
   margin-left: 5px;
   margin-right: 10px;
 }
+
 
 .chart-selector {
   position: relative;
@@ -742,3 +778,4 @@ ul.menu li:hover p {
   padding: 0px 15%;
 }
 </style>
+

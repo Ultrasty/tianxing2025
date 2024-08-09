@@ -6,11 +6,13 @@ import VChart from 'vue-echarts';
 import { nextTick } from "vue";
 import { configProviderContextKey } from "element-plus";
 /* 时间选择器 -- begin */
-const currentDate = new Date('2023-2');   //  赋初值
-const year = currentDate.getFullYear() + '';
-const month = currentDate.getMonth() < 10 ? '0' + (currentDate.getMonth() + 1 + '') : currentDate.getMonth() + 1 + ''
-const start_year = ref(year);     //选择的年
-const start_month = ref(month);   //选择的月
+const currentDate = ref(new Date('2023-2'));   //  赋初值
+const start_year = computed(() => {
+  return currentDate.value.getFullYear();
+});
+const start_month = computed(() => {
+  return currentDate.value.getMonth() + 1;
+});
 
 const start_time = ref(null);     //可选时间范围
 const end_time = ref(null);
@@ -115,11 +117,11 @@ axios.get('/enso/predictionExamination/errorCorr?year=' + Number(start_year.valu
     Chart4_Description.text = res.data.text
   });
 
-
-
-
 /* 图表更新 */
 function update_charts() {
+  //使元素失去焦点
+  document.activeElement.blur();
+
   axios.get('/enso/predictionExamination/monthlyComparison?year=' + Number(start_year.value) + '&month=' + Number(start_month.value))
     .then(res => {
       chart1.value = res.data.option
@@ -145,7 +147,6 @@ function update_charts() {
     });
 }
 
-/* 使el-button点击后能正常失焦 Start (by wyf)*/
 const buttonLeft = ref(null);
 const buttonRight = ref(null);
 
@@ -178,10 +179,9 @@ function change_Month(flag) {
 defineExpose({
   change_Month
 });
-/* 使el-button点击后能正常失焦 End */
 
 /* 新版添加的代码========================================================== */
-import bannerImg from '@/assets/ensoBanner.png';
+import bannerImg from '@/assets/header.jpg';
 
 
 const chartSelected = ref(0);
@@ -222,26 +222,36 @@ import {
 
     <div class="menu-container">
       <ul class="menu">
-        <div :style="movBoxStyle"></div>
+        <div :style="movBoxStyle" class="mov-box"></div>
         <li v-for="(chartName, index) of chartNames" :key="chartName" @click="handleClick(chartName, index)"
           :class="{ 'chart-name-selected': chartSelected === index }">
           <p>{{ chartName }}</p>
         </li>
       </ul>
     </div>
+    <div>
+      <p></p>
+    </div>
+    <div class="text-container" v-if="chartSelected === 0">
+      <p class="text_of_graph">{{ Chart1_Description.text }}</p>
+    </div>
+    <div class="text-container" v-if="chartSelected === 1">
+      <p class="text_of_graph">{{ Chart2_Description.text }}</p>
+    </div>
+    <div class="text-container" v-if="chartSelected === 2">
+      <p class="text_of_graph">{{ Chart3_Description.text }}</p>
+    </div>
+    <div class="text-container" v-if="chartSelected === 3">
+      <p class="text_of_graph">{{ Chart4_Description.text }}</p>
+    </div>
 
     <div class="datePickerContainer">
-      <el-date-picker @change="update_charts()" v-model="start_year" type="year" format="YYYY" value-format="YYYY"
-        :clearable="false" :disabledDate="limitedDateRange" style="width: 80px; height: 25px" />
-      <div class="text">年</div>
-      <el-date-picker @change="update_charts()" v-model="start_month" type="month" format="MM" value-format="MM"
-        :clearable="false" :disabledDate="limitedDateRange" style="width: 60px; height: 25px" />
-      <div class="text">月</div>
+      <el-date-picker @change="update_charts()" v-model="currentDate" type="month" :clearable="false"
+        :disabledDate="limitedDateRange" />
     </div>
 
     <div class="chart-selector" v-if="chartSelected === 0">
-      <v-chart class="chart" :option="chart1" autoresize></v-chart>
-      <p class="text_of_graph">{{ Chart1_Description.text }}</p>
+      <v-chart class="chart1" :option="chart1" autoresize></v-chart>
     </div>
 
     <div class="chart-selector" v-else-if="chartSelected === 1">
@@ -250,29 +260,29 @@ import {
         @click="change_Month('left')"></el-button>
       <el-button ref="buttonRight" type="primary" class="arrow-right" :icon="ArrowRight"
         @click="change_Month('right')"></el-button>
-      <p class="text_of_graph">{{ Chart2_Description.text }}</p>
     </div>
 
     <div class="chart-selector" v-else-if="chartSelected === 2">
-      <v-chart class="chart_3" :option="chart3" autoresize></v-chart>
-      <p class="text3">{{ Chart3_Description.text }}</p>
+      <v-chart class="chart" :option="chart3" autoresize></v-chart>
     </div>
 
 
     <div class="chart-selector" v-else-if="chartSelected === 3">
-      <v-chart class="chart_4" :option="chart4" autoresize></v-chart>
-      <p class="text4">{{ Chart4_Description.text }}</p>
+      <v-chart class="chart" :option="chart4" autoresize></v-chart>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
 .title {
+  font-family: 'STXinwei';
+  font-weight: 300; //调整字体粗细
   text-align: center;
-  font-size: 50px;
+  font-size: 55px;
   margin-left: 20%;
-  /* 确保图片在文字下方 */
-  z-index: 1;
+  letter-spacing: 1px; /* 字符间距 */
+  z-index: 1; /* 确保图片在文字下方 */
+  color:#ffffff;
 }
 
 .datePickerContainer {
@@ -289,65 +299,25 @@ import {
 }
 
 /*chart1、2 的表和文字*/
+.chart1 {
+  height: 50vh;
+  min-height: 700px;
+}
+
 .chart {
-  height: 400px;
+  height: 50vh;
+  min-height: 500px;
 }
 
 .text_of_graph {
   text-align: center;
 }
 
-/*chart3、4 的表和文字*/
-.chart_3 {
-  height: 400px;
-}
-
-.chart_4 {
-  height: 400px;
-}
-
-.text3 {
-  text-align: center;
-}
-
-.text4 {
-  text-align: center;
-}
 
 /* 预报误差页面的容器 没用了*/
 // .chart-container {
 //   size: 100%
 // }
-
-/* 设置左箭头按钮的样式 */
-.el-button.arrow-left {
-  position: absolute;
-  top: 50%;
-  /* 将箭头按钮的顶部与父容器的中间对齐 */
-  left: 15%;
-  /* 将箭头按钮的左侧与父容器的左侧对齐 */
-  width: 40px;
-  /* 设置按钮宽度 */
-  height: 80px;
-  /* 设置按钮高度 */
-  transform: translateY(-50%);
-  /* 垂直居中箭头按钮 */
-}
-
-/* 设置右箭头按钮的样式 */
-.el-button.arrow-right {
-  position: absolute;
-  top: 50%;
-  /* 将箭头按钮的顶部与父容器的中间对齐 */
-  right: 15%;
-  /* 将箭头按钮的右侧与父容器的右侧对齐 */
-  width: 40px;
-  /* 设置按钮宽度 */
-  height: 80px;
-  /* 设置按钮高度 */
-  transform: translateY(-50%);
-  /* 垂直居中箭头按钮 */
-}
 
 /* 新版添加的代码 =====================================================*/
 .banner {
@@ -400,6 +370,7 @@ ul.menu li {
   justify-content: center;
   align-items: center;
   cursor: pointer; /* 更改鼠标形状为手形 */
+  overflow: hidden; /* 确保伪元素的边界与 li 元素一致 */
 }
 
 ul.menu li:not(:last-child)::after {
@@ -412,12 +383,27 @@ ul.menu li:not(:last-child)::after {
   background-color: #00000020;
   transform: translateY(-50%);
 }
-ul.menu li:hover p {
-  color: red;
-   /* 悬停时文字颜色变化为红色 */
-  //color: lightgray; //浅灰不太好看
+ul.menu li:hover::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(240, 240, 240, 0.8); /* 浅灰色 */
+  border-radius: 10px; /* 确保形状与选项卡一致 */
+  pointer-events: none; /* 确保伪元素不影响鼠标事件 */
+  z-index: 1; /* 确保覆盖层在文字和内容下方 */
 }
 
+ul.menu li:hover p {
+  color: rgb(255, 89, 0);
+  z-index: 2; /* 确保文字在覆盖层之上 */
+}
+.mov-box {
+  position: absolute;
+  z-index: 3; /* 确保滑动条在覆盖层之上 */
+}
 .chart-selector {
   position: relative;
   display: flex;
@@ -429,5 +415,21 @@ ul.menu li:hover p {
 
 .chart-name-selected {
   color: blue;
+}
+
+.text-container {
+  width: 90%;
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: center;
+  background-color:rgba(239, 242, 252, 0.801);; 
+  /* 淡紫色 */
+  display: flex;
+  padding: 20px;
+  border-radius: 8px;
+  /* 可选的圆角 */
+  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893); /* 阴影 */
+  font-family: 'STKaiti';
+  font-size: 18px;
 }
 </style>

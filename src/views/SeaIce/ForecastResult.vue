@@ -3,14 +3,20 @@ import { ref, onMounted, computed } from "vue";
 import axios from 'axios';
 import VChart from 'vue-echarts';
 import { ArrowLeft, ArrowRight } from '@element-plus/icons-vue';
-import bannerImg from '@/assets/ensoBanner.png';
+import bannerImg from '@/assets/header.jpg';
 
 const selectedSIE = ref(true);
 const selectedSIC = ref(false);
 
-const selectedYear = ref('2023');
-const selectedMonth = ref('01');
-const selectedDay = ref(new Date());
+const selectedTime = ref(new Date('2023-01'));
+
+const selectedYear = computed(() => {
+  return selectedTime.value.getFullYear();
+})
+const selectedMonth = computed(() => {
+  return selectedTime.value.getMonth() + 1;
+})
+const selectedDay = computed(() => { return selectedTime.value; });
 
 const SIEAvailableList = ref([]);
 const SICAvailableList = ref({
@@ -79,6 +85,9 @@ const updateSIEChart = async () => {
 
 // 请求SIC数据
 const updateSICChart = async () => {
+  //使元素失焦
+  document.activeElement.blur();
+
   SICLoading.value = true;
   updateSICChartTitle();
   const params = {
@@ -146,6 +155,9 @@ const initSICAvailableList = () => {
 }
 
 function updateSIEChartTitle() {
+  //使元素失焦
+  document.activeElement.blur();
+
   let year1 = selectedYear.value;
   let month1 = selectedMonth.value;
   let year2 = '';
@@ -165,37 +177,11 @@ function updateSICChartTitle() {
   SICChartTitle.value = selectedDay.value.getFullYear() + '年' + (selectedDay.value.getMonth() + 1) + '月' + selectedDay.value.getDate() + '日 海冰SIC预测结果';
 }
 
-// 选择的年份改变时，判断之前选择的月份在新的年份中是否可用，不可用则改为最早的可用月份
-function handleYearChange() {
-  for (let i = 0; i < SIEAvailableList.value.length; i++) {
-    if (selectedYear.value == SIEAvailableList.value[i].year && selectedMonth.value == SIEAvailableList.value[i].month) {
-      updateSIEChart();
-      return;
-    }
-  }
-  for (let i = 0; i < SIEAvailableList.value.length; i++) {
-    if (selectedYear.value == SIEAvailableList.value[i].year) {
-      selectedMonth.value = SIEAvailableList.value[i].month < 10 ? '0' + (SIEAvailableList.value[i].month + '') : SIEAvailableList.value[i].month + ''
-      updateSIEChart();
-      return;
-    }
-  }
-}
-
-function disabledYear(day) {
-  const year = day.getFullYear();
-  for (let i = 0; i < SIEAvailableList.value.length; i++) {
-    if (year == SIEAvailableList.value[i].year) {
-      return false;
-    }
-  }
-  return true;
-}
-
 function disabledMonth(day) {
+  const year = day.getFullYear();
   const month = day.getMonth() + 1;
   for (let i = 0; i < SIEAvailableList.value.length; i++) {
-    if (selectedYear.value == SIEAvailableList.value[i].year && month == SIEAvailableList.value[i].month) {
+    if (year == SIEAvailableList.value[i].year && month == SIEAvailableList.value[i].month) {
       return false;
     }
   }
@@ -260,7 +246,7 @@ onMounted(() => {
 
     <div class="menu-container">
       <ul class="menu">
-        <div :style="movBoxStyle"></div>
+        <div :style="movBoxStyle" class="mov-box"></div>
         <li v-for="(chartName, index) of chartNames" :key="chartName" @click="selectChart(index)"
           :class="{ 'chart-name-selected': chartSelected === index }">
           <p>{{ chartName }}</p>
@@ -268,6 +254,14 @@ onMounted(() => {
       </ul>
     </div>
 
+    <div>
+      <p></p>
+    </div>
+    <div class="text-container" v-if="selectedSIE">
+      <div class="description">
+        {{ SIEDescription }}
+      </div>
+    </div>
     <!-- 不需要额外的表头 -->
     <!-- <h1 v-show="selectedSIE" class="title">
       {{ SIEChartTitle }}
@@ -276,25 +270,16 @@ onMounted(() => {
       {{ SICChartTitle }}
     </h1> -->
 
-    <div class="datePickerContainer" v-show="selectedSIE">
-      <el-date-picker @change="handleYearChange" v-model="selectedYear" type="year" format="YYYY" value-format="YYYY"
-        :clearable="false" style="width: 80px; height: 25px" :disabled-date="disabledYear" />
-      <div class="text">年</div>
-      <el-date-picker @change="updateSIEChart" v-model="selectedMonth" type="month" format="MM" value-format="MM"
-        :clearable="false" style="width: 60px; height: 25px" :disabled-date="disabledMonth" />
-      <div class="text">月</div>
+    <div class="datePickerContainer">
+      <el-date-picker @change="updateSIEChartTitle" v-model="selectedTime" :clearable="false" type="month"
+        :disabled-date="disabledMonth" v-if="selectedSIE" />
+      <el-date-picker @change="updateSICChart" v-model="selectedTime" :clearable="false" :disabled-date="disabledDate"
+        v-if="selectedSIC" />
     </div>
 
-    <div class="datePickerContainer" v-show="selectedSIC">
-      <el-date-picker @change="updateSICChart" v-model="selectedDay" :clearable="false"
-        style="width: 115px; height: 25px" :disabled-date="disabledDate" />
-    </div>
 
     <div v-if="selectedSIE" class="SIEChartContainer">
       <v-chart class="SIEChart" :option="SIEOption" autoresize />
-      <div class="description">
-        {{ SIEDescription }}
-      </div>
     </div>
 
     <div v-if="selectedSIC">
@@ -312,10 +297,14 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .title {
+  font-family: 'STXinwei';
+  font-weight: 300; //调整字体粗细
   text-align: center;
-  font-size: 50px;
+  font-size: 55px;
   margin-left: 20%;
-  z-index: 1;
+  letter-spacing: 1px; /* 字符间距 */
+  z-index: 1; /* 确保图片在文字下方 */
+  color:#ffffff;
 }
 
 .banner {
@@ -368,6 +357,7 @@ ul.menu li {
   justify-content: center;
   align-items: center;
   cursor: pointer; /* 更改鼠标形状为手形 */
+  overflow: hidden; /* 确保伪元素的边界与 li 元素一致 */
 }
 
 ul.menu li:not(:last-child)::after {
@@ -380,14 +370,33 @@ ul.menu li:not(:last-child)::after {
   background-color: #00000020;
   transform: translateY(-50%);
 }
-ul.menu li:hover p {
-  color: red;
-   /* 悬停时文字颜色变化为红色 */
-  //color: lightgray; //浅灰不太好看
+
+ul.menu li:hover::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(240, 240, 240, 0.8); /* 浅灰色 */
+  border-radius: 10px; /* 确保形状与选项卡一致 */
+  pointer-events: none; /* 确保伪元素不影响鼠标事件 */
+  z-index: 1; /* 确保覆盖层在文字和内容下方 */
 }
 
+ul.menu li:hover p {
+  color: rgb(255, 89, 0);
+  z-index: 2; /* 确保文字在覆盖层之上 */
+}
+.mov-box {
+  position: absolute;
+  z-index: 3; /* 确保滑动条在覆盖层之上 */
+}
+
+
 .chart-name-selected {
-  color: blue;
+  color:blue;
+  //color: rgba(0, 55, 255, 0.957);
 }
 
 .datePickerContainer {
@@ -398,7 +407,7 @@ ul.menu li:hover p {
   padding-top: 50px;
 }
 
-.SIEChartContainer{
+.SIEChartContainer {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -413,6 +422,7 @@ ul.menu li:hover p {
 }
 
 .imageContainer {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -436,9 +446,6 @@ ul.menu li:hover p {
   height: 80px;
 }
 
-.chart-name-selected {
-  color: blue;
-}
 
 .description {
   position: relative;
@@ -446,33 +453,19 @@ ul.menu li:hover p {
   /* 使文本内容居中 */
 }
 
-/* 设置左箭头按钮的样式 */
-.el-button.arrow-left {
-  position: absolute;
-  top: 50%;
-  /* 将箭头按钮的顶部与父容器的中间对齐 */
-  left: 0;
-  /* 将箭头按钮的左侧与父容器的左侧对齐 */
-  width: 40px;
-  /* 设置按钮宽度 */
-  height: 80px;
-  /* 设置按钮高度 */
-  transform: translateY(-50%);
-  /* 垂直居中箭头按钮 */
-}
-
-/* 设置右箭头按钮的样式 */
-.el-button.arrow-right {
-  position: absolute;
-  top: 50%;
-  /* 将箭头按钮的顶部与父容器的中间对齐 */
-  right: 0;
-  /* 将箭头按钮的右侧与父容器的右侧对齐 */
-  width: 40px;
-  /* 设置按钮宽度 */
-  height: 80px;
-  /* 设置按钮高度 */
-  transform: translateY(-50%);
-  /* 垂直居中箭头按钮 */
+.text-container {
+  width: 90%;
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: center;
+  background-color:rgba(239, 242, 252, 0.801);; 
+  /* 淡紫色 */
+  display: flex;
+  padding: 20px;
+  border-radius: 8px;
+  /* 可选的圆角 */
+  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893); /* 阴影 */
+  font-family: 'STKaiti';
+  font-size: 18px;
 }
 </style>

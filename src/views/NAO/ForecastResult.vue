@@ -7,7 +7,7 @@ import { nextTick } from "vue";
 import { configProviderContextKey } from "element-plus";
 
 import { ArrowLeft, ArrowRight } from '@element-plus/icons-vue';
-import bannerImg from '@/assets/ensoBanner.png';//首页图
+import bannerImg from '@/assets/header.jpg';//首页图
 
 const selectedNAOI = ref(true)
 const selectedSLP = ref(false)
@@ -15,14 +15,13 @@ const selectedSLP = ref(false)
 const chartSelected = ref(0);
 const chartNames = ['指数预测', '模态预测'];
 
-const currentDate = new Date();
-const year = currentDate.getFullYear() + '';
-const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+const selectedDate = ref(new Date('2015-1'));
 
-const NAOISelectedYear = ref('');
-const NAOISelectedMonth = ref('');
-const SLPSelectedYear = ref('');
-const SLPSelectedMonth = ref('');
+const NAOISelectedYear = computed(() => selectedDate.value.getFullYear());
+const NAOISelectedMonth = computed(() => selectedDate.value.getMonth() + 1);
+
+const SLPSelectedYear = computed(() => selectedDate.value.getFullYear());
+const SLPSelectedMonth = computed(() => selectedDate.value.getMonth() + 1);
 
 //用于NAOI和SLP的初始化
 let NAOIStartYear = 0;
@@ -34,12 +33,6 @@ let SLPStartYear = 0;
 let SLPStartMonth = 0;
 let SLPEndYear = 0;
 let SLPEndMonth = 0;
-
-//用于接受用户选择的年月数据
-NAOISelectedYear.value = year;
-NAOISelectedMonth.value = month;
-SLPSelectedYear.value = year;
-SLPSelectedMonth.value = month;
 
 const NAOIChartTitle = ref('')
 const SLPChartTitle = ref('')
@@ -68,7 +61,7 @@ function selectChart(index) {
 }
 
 const moveBoxLeft = computed(() => {
-  return chartSelected.value*250 ;
+  return chartSelected.value * 250;
 });
 
 const movBoxStyle = computed(() => ({
@@ -84,6 +77,9 @@ const movBoxStyle = computed(() => ({
 
 // 请求NAOI数据
 const updateNAOIChart = async () => {
+  //使元素失焦
+  document.activeElement.blur();
+
   NAOILoading.value = true;
   updateNAOIChartTitle();
   const params = {
@@ -104,6 +100,9 @@ const updateNAOIChart = async () => {
 
 // 请求SLP数据
 const updateSLPChart = async () => {
+  //使元素失焦
+  document.activeElement.blur();
+
   SLPLoading.value = true;
   updateSLPChartTitle();
   const params = {
@@ -134,8 +133,7 @@ const initNAOIChart = () => {
       NAOIStartMonth = response.data.start_month;
       NAOIEndYear = response.data.end_year;
       NAOIEndMonth = response.data.end_month;
-      NAOISelectedYear.value = NAOIEndYear;
-      NAOISelectedMonth.value = NAOIEndMonth.toString().padStart(2, '0');
+      selectedDate.value = new Date(NAOIEndYear, NAOIEndMonth);
       NAOIOption.value = response.data.option;
       NAOIDescription.value = response.data.description;
       updateNAOIChartTitle();
@@ -157,8 +155,6 @@ const initSLPChart = () => {
       SLPStartMonth = response.data.start_month;
       SLPEndYear = response.data.end_year;
       SLPEndMonth = response.data.end_month;
-      SLPSelectedYear.value = SLPEndYear;
-      SLPSelectedMonth.value = SLPEndMonth.toString().padStart(2, '0');
       imgSrc.value = response.data.data;
       // SLPDescription.value = response.data.description; // 接口未提供描述
       updateSLPChartTitle();
@@ -176,7 +172,7 @@ function updateNAOIChartTitle() {
   let month1 = NAOISelectedMonth.value;
   let year2 = '';
   let month2 = '';
-  if(Number(month1) > 7) {
+  if (Number(month1) > 7) {
     month2 = Number(month1) - 7 + '';
     year2 = Number(year1) + 1 + '';
   }
@@ -184,7 +180,7 @@ function updateNAOIChartTitle() {
     month2 = Number(month1) + 5 + '';
     year2 = year1;
   }
-  if(month2.length == 1) {
+  if (month2.length == 1) {
     month2 = '0' + month2;
   }
   NAOIChartTitle.value = year1 + '年' + month1 + '月~' + year2 + '年' + month2 + '月 NAO预测结果';
@@ -196,7 +192,7 @@ function updateSLPChartTitle() {
 
 function NAOIDisabledYear(day) {
   const year = day.getFullYear();
-  if(year < NAOIStartYear || year > NAOIEndYear)
+  if (year < NAOIStartYear || year > NAOIEndYear)
     return true;
   else
     return false;
@@ -204,9 +200,9 @@ function NAOIDisabledYear(day) {
 
 function NAOIDisabledMonth(day) {
   const month = day.getMonth() + 1;
-  if(NAOISelectedYear.value == NAOIStartYear && month < NAOIStartMonth)
+  if (NAOISelectedYear.value == NAOIStartYear && month < NAOIStartMonth)
     return true;
-  else if(NAOISelectedYear.value == NAOIEndYear && month > NAOIEndMonth)
+  else if (NAOISelectedYear.value == NAOIEndYear && month > NAOIEndMonth)
     return true;
   else
     return false;
@@ -214,7 +210,7 @@ function NAOIDisabledMonth(day) {
 
 function SLPDisabledYear(day) {
   const year = day.getFullYear();
-  if(year < SLPStartYear || year > SLPEndYear)
+  if (year < SLPStartYear || year > SLPEndYear)
     return true;
   else
     return false;
@@ -222,9 +218,9 @@ function SLPDisabledYear(day) {
 
 function SLPDisabledMonth(day) {
   const month = day.getMonth() + 1;
-  if(SLPSelectedYear.value == SLPStartYear && month < SLPStartMonth)
+  if (SLPSelectedYear.value == SLPStartYear && month < SLPStartMonth)
     return true;
-  else if(SLPSelectedYear.value == SLPEndYear && month > SLPEndMonth)
+  else if (SLPSelectedYear.value == SLPEndYear && month > SLPEndMonth)
     return true;
   else
     return false;
@@ -235,15 +231,15 @@ const buttonLeft = ref(null);
 const buttonRight = ref(null);
 
 const changeIndex = (direction) => {
-  if(direction == 'left') { // 点击了左按钮
-    if(imgIndex.value == 0)
+  if (direction == 'left') { // 点击了左按钮
+    if (imgIndex.value == 0)
       imgIndex.value = imgSrc.value.length - 1;
     else
       imgIndex.value--;
     buttonLeft.value.$el.blur(); // 使左按钮失焦
   }
   else { // 点击了右按钮
-    if(imgIndex.value == imgSrc.value.length - 1)
+    if (imgIndex.value == imgSrc.value.length - 1)
       imgIndex.value = 0;
     else
       imgIndex.value++;
@@ -294,7 +290,7 @@ onMounted(
     </h1> -->
     <div class="menu-container">
       <ul class="menu">
-        <div :style="movBoxStyle"></div>
+        <div :style="movBoxStyle" class="mov-box"></div>
         <li v-for="(chartName, index) of chartNames" :key="chartName" @click="selectChart(index)"
           :class="{ 'chart-name-selected': chartSelected === index }">
           <p>{{ chartName }}</p>
@@ -302,36 +298,39 @@ onMounted(
       </ul>
     </div>
 
+    <div>
+      <p></p>
+    </div>
+    <div class="text-container" v-if="chartSelected === 0">
+      <div class="description">
+        {{ NAOIDescription }}
+      </div>
+    </div>
 
-    
 
     <div class="datePickerContainer">
-      <el-date-picker @change="updateNAOIChart" v-if="selectedNAOI" v-model="NAOISelectedYear" type="year" format="YYYY" value-format="YYYY" :clearable="false" style="width: 80px; height: 25px" :disabled-date="NAOIDisabledYear" />
-      <el-date-picker @change="updateSLPChart" v-if="selectedSLP" v-model="SLPSelectedYear" type="year" format="YYYY" value-format="YYYY" :clearable="false" style="width: 80px; height: 25px" :disabled-date="SLPDisabledYear" />
-      <div class="text">年</div>
-      <el-date-picker @change="updateNAOIChart" v-if="selectedNAOI" v-model="NAOISelectedMonth" type="month" format="MM" value-format="MM" :clearable="false" style="width: 60px; height: 25px" :disabled-date="NAOIDisabledMonth" />
-      <el-date-picker @change="updateSLPChart" v-if="selectedSLP" v-model="SLPSelectedMonth" type="month" format="MM" value-format="MM" :clearable="false" style="width: 60px; height: 25px" :disabled-date="SLPDisabledMonth" />
-      <div class="text">月</div>
+      <el-date-picker @change="updateNAOIChart" v-if="selectedNAOI" type="month" v-model="selectedDate"
+        :clearable="false" :disabled-date="NAOIDisabledYear" />
+      <el-date-picker @change="updateSLPChart" v-if="selectedSLP" type="month" v-model="selectedDate" :clearable="false"
+        :disabled-date="SLPDisabledYear" />
     </div>
 
     <div class="chart-selector" v-if="chartSelected === 0">
       <v-chart class="NAOIChart" :option="NAOIOption" autoresize />
-        <div class="description">
-          {{ NAOIDescription }}
-        </div>
     </div>
 
     <div class="chart-selector" v-else-if="chartSelected === 1">
       <h3 v-show="!SLPLoading" style="text-align: center; margin-top: 0px; margin-bottom: 15px">{{ SLPChartTitle }}</h3>
-        <h4 v-show="!SLPLoading" style="text-align: center; margin-top: 0px; margin-bottom: 15px; font-size: 16px">({{ imgIndex + 1 }}/{{ imgSrc.length }})</h4>
-        <div class="imgContainer">
-              <img v-if="imgSrc.length" :src="'http://tianxing.tongji.edu.cn' + imgSrc[imgIndex]" class="image" alt="" />
-          </div>
-          <el-button ref="buttonLeft" type="primary" class="arrowLeft" :icon="ArrowLeft"
-            @click="changeIndex('left')"></el-button>
-          <el-button ref="buttonRight" type="primary" class="arrowRight" :icon="ArrowRight"
-            @click="changeIndex('right')"></el-button>
-       
+      <h4 v-show="!SLPLoading" style="text-align: center; margin-top: 0px; margin-bottom: 15px; font-size: 16px">({{
+        imgIndex + 1 }}/{{ imgSrc.length }})</h4>
+      <div class="imgContainer">
+        <img v-if="imgSrc.length" :src="'http://tianxing.tongji.edu.cn' + imgSrc[imgIndex]" class="image" alt="" />
+      </div>
+      <el-button ref="buttonLeft" type="primary" class="arrowLeft" :icon="ArrowLeft"
+        @click="changeIndex('left')"></el-button>
+      <el-button ref="buttonRight" type="primary" class="arrowRight" :icon="ArrowRight"
+        @click="changeIndex('right')"></el-button>
+
     </div>
 
     <!-- <el-tabs type="border-card" @tab-click="selectChart" :stretch="true">
@@ -359,23 +358,25 @@ onMounted(
             <el-button ref="buttonRight" type="primary" class="arrowRight" :icon="ArrowRight" @click="changeIndex('right')" />
           </el-col>
         </el-row> -->
-        <!-- <div class="description">
+    <!-- <div class="description">
           {{ SLPDescription }}
         </div> -->
-        <!-- 接口未提供描述 -->
-      <!-- </el-tab-pane>
+    <!-- 接口未提供描述 -->
+    <!-- </el-tab-pane>
     </el-tabs> -->
   </div>
 </template>
 
 <style scoped lang="scss">
-
 .title {
+  font-family: 'STXinwei';
+  font-weight: 300; //调整字体粗细
   text-align: center;
-  font-size: 50px;
+  font-size: 55px;
   margin-left: 20%;
-  /* 确保图片在文字下方 */
-  z-index: 1;
+  letter-spacing: 1px; /* 字符间距 */
+  z-index: 1; /* 确保图片在文字下方 */
+  color:#ffffff;
 }
 
 .NAOIChart {
@@ -383,8 +384,6 @@ onMounted(
 }
 
 .description {
-  margin-top: 20px;
-  font-size: 16px;
   text-align: center;
 }
 
@@ -392,6 +391,8 @@ onMounted(
   display: flex;
   justify-content: flex-end;
   margin-bottom: 20px;
+  padding-right: 15%;
+  padding-top: 50px;
 }
 
 .text {
@@ -409,35 +410,6 @@ onMounted(
   transform: translateX(-3%);
 }
 
-.el-button.arrowLeft {
-  z-index: 1;
-  position: absolute;
-  top: 50%;
-  left: 4%;
-  width: 5%;
-  height: 30%;
-  min-width: 40px;
-  min-height: 80px;
-  max-width: 50px;
-  max-height: 115px;
-  transform: translateY(-65%);
-  font-size: 20px;
-}
-
-.el-button.arrowRight {
-  z-index: 1;
-  position: absolute;
-  top: 50%;
-  right: 4%;
-  width: 5%;
-  height: 30%;
-  min-width: 40px;
-  min-height: 80px;
-  max-width: 50px;
-  max-height: 115px;
-  transform: translateY(-65%);
-  font-size: 20px;
-}
 // 以下是新加代码
 .banner {
   position: relative;
@@ -489,6 +461,7 @@ ul.menu li {
   justify-content: center;
   align-items: center;
   cursor: pointer; /* 更改鼠标形状为手形 */
+  overflow: hidden; /* 确保伪元素的边界与 li 元素一致 */
 }
 
 ul.menu li:not(:last-child)::after {
@@ -501,13 +474,27 @@ ul.menu li:not(:last-child)::after {
   background-color: #00000020;
   transform: translateY(-50%);
 }
-
-ul.menu li:hover p {
-  color: red;
-   /* 悬停时文字颜色变化为红色 */
-  //color: lightgray; //浅灰不太好看
+ul.menu li:hover::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(240, 240, 240, 0.8); /* 浅灰色 */
+  border-radius: 10px; /* 确保形状与选项卡一致 */
+  pointer-events: none; /* 确保伪元素不影响鼠标事件 */
+  z-index: 1; /* 确保覆盖层在文字和内容下方 */
 }
 
+ul.menu li:hover p {
+  color: rgb(255, 89, 0);
+  z-index: 2; /* 确保文字在覆盖层之上 */
+}
+.mov-box {
+  position: absolute;
+  z-index: 3; /* 确保滑动条在覆盖层之上 */
+}
 .chart-selector {
   position: relative;
   //修改为块级
@@ -522,4 +509,19 @@ ul.menu li:hover p {
   color: blue;
 }
 
+.text-container {
+  width: 90%;
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: center;
+  background-color:rgba(239, 242, 252, 0.801);; 
+  /* 淡紫色 */
+  display: flex;
+  padding: 20px;
+  border-radius: 8px;
+  /* 可选的圆角 */
+  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893); /* 阴影 */
+  font-family: 'STKaiti';
+  font-size: 18px;
+}
 </style>
