@@ -3,15 +3,11 @@
 import { ref, computed } from "vue";
 import VChart from 'vue-echarts'
 import axios from 'axios';
-import bannerImg from '@/assets/header.jpg';
-const currentDate = ref(new Date());
+import bannerImg from '@/assets/ensoBanner.png';
 
-const selectedYear = computed(() => {
-  return currentDate.value.getFullYear();
-});
-const selectedMonth = computed(() => {
-  return currentDate.value.getMonth() + 1;
-});
+const currentDate = new Date();
+const year = currentDate.getFullYear() - 1 + '';
+const month = currentDate.getMonth() < 10 ? '0' + (currentDate.getMonth() + 1 + '') : currentDate.getMonth() + 1 + ''
 
 selectedYear.value = '2023';
 selectedMonth.value = '01';
@@ -42,6 +38,7 @@ const movBoxStyle = computed(() => ({
   backgroundColor: "blue",
   transition: "left 0.3s ease"
 }));
+
 
 function selectChart(index) {
   chartSelected.value = index;
@@ -156,6 +153,7 @@ function handleClick(tab, event) {
   }
 }
 
+
 const limitedDateRange = (time) => {
   return time.getFullYear() < start_year.value || time.getFullYear() > end_year.value;
 };
@@ -197,19 +195,20 @@ const option7 = ref({})
 const chartX = ref('')
 const chartX1 = ref('')
 chartX.value = [`${selectedYear.value}/${selectedMonth.value}/1`, `${selectedYear.value}/${selectedMonth.value}/2`, `${selectedYear.value}/${selectedMonth.value}/3`,
-`${selectedYear.value}/${selectedMonth.value}/4`, `${selectedYear.value}/${selectedMonth.value}/5`, `${selectedYear.value}/${selectedMonth.value}/6`,
-`${selectedYear.value}/${selectedMonth.value}/7`, `${selectedYear.value}/${selectedMonth.value}/8`, `${selectedYear.value}/${selectedMonth.value}/9`,
-`${selectedYear.value}/${selectedMonth.value}/10`, `${selectedYear.value}/${selectedMonth.value}/11`, `${selectedYear.value}/${selectedMonth.value}/12`,
-`${selectedYear.value}/${selectedMonth.value}/13`, `${selectedYear.value}/${selectedMonth.value}/14`, `${selectedYear.value}/${selectedMonth.value}/15`,
-`${selectedYear.value}/${selectedMonth.value}/16`, `${selectedYear.value}/${selectedMonth.value}/17`, `${selectedYear.value}/${selectedMonth.value}/18`,
-`${selectedYear.value}/${selectedMonth.value}/19`, `${selectedYear.value}/${selectedMonth.value}/20`, `${selectedYear.value}/${selectedMonth.value}/21`,
-`${selectedYear.value}/${selectedMonth.value}/22`, `${selectedYear.value}/${selectedMonth.value}/23`, `${selectedYear.value}/${selectedMonth.value}/24`,
-`${selectedYear.value}/${selectedMonth.value}/25`, `${selectedYear.value}/${selectedMonth.value}/26`, `${selectedYear.value}/${selectedMonth.value}/27`,]
+  `${selectedYear.value}/${selectedMonth.value}/4`, `${selectedYear.value}/${selectedMonth.value}/5`, `${selectedYear.value}/${selectedMonth.value}/6`,
+  `${selectedYear.value}/${selectedMonth.value}/7`, `${selectedYear.value}/${selectedMonth.value}/8`, `${selectedYear.value}/${selectedMonth.value}/9`,
+  `${selectedYear.value}/${selectedMonth.value}/10`, `${selectedYear.value}/${selectedMonth.value}/11`, `${selectedYear.value}/${selectedMonth.value}/12`,
+  `${selectedYear.value}/${selectedMonth.value}/13`, `${selectedYear.value}/${selectedMonth.value}/14`, `${selectedYear.value}/${selectedMonth.value}/15`,
+  `${selectedYear.value}/${selectedMonth.value}/16`, `${selectedYear.value}/${selectedMonth.value}/17`, `${selectedYear.value}/${selectedMonth.value}/18`,
+  `${selectedYear.value}/${selectedMonth.value}/19`, `${selectedYear.value}/${selectedMonth.value}/20`, `${selectedYear.value}/${selectedMonth.value}/21`,
+  `${selectedYear.value}/${selectedMonth.value}/22`, `${selectedYear.value}/${selectedMonth.value}/23`, `${selectedYear.value}/${selectedMonth.value}/24`,
+  `${selectedYear.value}/${selectedMonth.value}/25`, `${selectedYear.value}/${selectedMonth.value}/26`, `${selectedYear.value}/${selectedMonth.value}/27`,]
 
 chartX1.value = [`${selectedYear.value - 2}spring`, `${selectedYear.value - 2}summer`, `${selectedYear.value - 2}fall`, `${selectedYear.value - 2}winter`,
-`${selectedYear.value - 1}spring`, `${selectedYear.value - 1}summer`, `${selectedYear.value - 1}fall`, `${selectedYear.value - 1}winter`,
-`${selectedYear.value}spring`, `${selectedYear.value}summer`, `${selectedYear.value}fall`, `${selectedYear.value}winter`
+  `${selectedYear.value - 1}spring`, `${selectedYear.value - 1}summer`, `${selectedYear.value - 1}fall`, `${selectedYear.value - 1}winter`,
+  `${selectedYear.value}spring`, `${selectedYear.value}summer`, `${selectedYear.value}fall`, `${selectedYear.value}winter`
 ]
+
 
 function updateChart() {
   //使元素失焦
@@ -362,6 +361,7 @@ axios.get('/seaice/error?year=' + Number(selectedYear.value) + '&month=' + Numbe
 
       ]
     }
+
 
     // SICChartErroPrediction.value = response.data.description;
   })
@@ -680,26 +680,25 @@ axios.get('/seaice/predictionExamination/errorAnalysis?year=2022')
   });
 
 
-
-
 </script>
 
 <template>
   <div class="pageContent">
     <div class="banner">
-      <img :src="bannerImg" />
+      <img :src="bannerImg"/>
       <h3 class="title">海冰预测结果检验</h3>
     </div>
 
     <div class="menu-container">
       <ul class="menu">
-        <div :style="movBoxStyle" class="mov-box"></div>
+        <div :style="movBoxStyle"></div>
         <li v-for="(chartName, index) in chartNames" :key="chartName" @click="selectChart(index)"
-          :class="{ 'chart-name-selected': chartSelected === index }">
+            :class="{ 'chart-name-selected': chartSelected === index }">
           <p>{{ chartName }}</p>
         </li>
       </ul>
     </div>
+
 
     <div>
       <p></p>
@@ -731,10 +730,12 @@ axios.get('/seaice/predictionExamination/errorAnalysis?year=2022')
     <div v-if="chartSelected === 0">
       <div class="chart">
         <v-chart :option="option1" autoresize></v-chart>
+
       </div>
       <div class="chart">
         <v-chart :option="option2" autoresize></v-chart>
       </div>
+
     </div>
     <div v-else-if="chartSelected === 1">
       <div class="chart">
@@ -753,6 +754,7 @@ axios.get('/seaice/predictionExamination/errorAnalysis?year=2022')
       </div>
       <div class="chart">
         <v-chart :option="option7" autoresize></v-chart>
+
       </div>
     </div>
   </div>
@@ -761,14 +763,10 @@ axios.get('/seaice/predictionExamination/errorAnalysis?year=2022')
 
 <style scoped lang="scss">
 .title {
-  font-family: 'STXinwei';
-  font-weight: 300; //调整字体粗细
   text-align: center;
-  font-size: 55px;
+  font-size: 50px;
   margin-left: 20%;
-  letter-spacing: 1px; /* 字符间距 */
-  z-index: 1; /* 确保图片在文字下方 */
-  color:#ffffff;
+  z-index: 1;
 }
 
 .banner {
@@ -820,8 +818,8 @@ ul.menu li {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  cursor: pointer; /* 更改鼠标形状为手形 */
-  overflow: hidden; /* 确保伪元素的边界与 li 元素一致 */
+  cursor: pointer;
+  /* 更改鼠标形状为手形 */
 }
 
 ul.menu li:not(:last-child)::after {
@@ -834,26 +832,11 @@ ul.menu li:not(:last-child)::after {
   background-color: #00000020;
   transform: translateY(-50%);
 }
-ul.menu li:hover::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(240, 240, 240, 0.8); /* 浅灰色 */
-  border-radius: 10px; /* 确保形状与选项卡一致 */
-  pointer-events: none; /* 确保伪元素不影响鼠标事件 */
-  z-index: 1; /* 确保覆盖层在文字和内容下方 */
-}
 
 ul.menu li:hover p {
-  color: rgb(255, 89, 0);
-  z-index: 2; /* 确保文字在覆盖层之上 */
-}
-.mov-box {
-  position: absolute;
-  z-index: 3; /* 确保滑动条在覆盖层之上 */
+  color: red;
+  /* 悬停时文字颜色变化为红色 */
+  //color: lightgray; //浅灰不太好看
 }
 
 .chart-name-selected {
@@ -867,15 +850,12 @@ ul.menu li:hover p {
 }
 
 .description {
-  // font-size: 16px;
-  text-align: center;
+  font-size: 16px;
 }
 
 .datePickerContainer {
   display: flex;
   justify-content: flex-end;
-  padding-right: 15%;
-  padding-top: 50px;
   margin-bottom: 20px;
 }
 
@@ -883,6 +863,7 @@ ul.menu li:hover p {
   margin-left: 5px;
   margin-right: 10px;
 }
+
 
 .text-container {
   width: 90%;
@@ -899,4 +880,6 @@ ul.menu li:hover p {
   font-family: 'STKaiti';
   font-size: 18px;
 }
+
 </style>
+
