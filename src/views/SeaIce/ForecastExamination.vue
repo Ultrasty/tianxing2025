@@ -1,21 +1,18 @@
 <script setup>
-
-import { ref, onMounted, computed } from "vue";
-
+import {ref, onMounted, computed} from "vue";
 import VChart from 'vue-echarts'
 import axios from 'axios';
-import bannerImg from '@/assets/header.jpg';
-const currentDate = ref(new Date());
+import bannerImg from '@/assets/ensoBanner.png';
 
-const selectedYear = computed(() => {
-  return currentDate.value.getFullYear();
-});
-const selectedMonth = computed(() => {
-  return currentDate.value.getMonth() + 1;
-});
+const currentDate = new Date();
+const year = currentDate.getFullYear() - 1 + '';
+const month = currentDate.getMonth() < 10 ? '0' + (currentDate.getMonth() + 1 + '') : currentDate.getMonth() + 1 + ''
 
+const selectedYear = ref('');
+const selectedMonth = ref('');
 
 selectedYear.value = '2023'
+selectedMonth.value = '01';
 
 const start_year1 = ref(null);
 const start_month1 = ref(null);
@@ -43,7 +40,6 @@ const movBoxStyle = computed(() => ({
   backgroundColor: "blue",
   transition: "left 0.3s ease"
 }));
-
 
 const limitedDateRange = (time) => {
   return time.getFullYear() < start_year.value || time.getFullYear() > end_year.value;
@@ -86,369 +82,368 @@ const option7 = ref({})
 const chartX = ref('')
 const chartX1 = ref('')
 chartX.value = [`${selectedYear.value}/${selectedMonth.value}/1`, `${selectedYear.value}/${selectedMonth.value}/2`, `${selectedYear.value}/${selectedMonth.value}/3`,
-`${selectedYear.value}/${selectedMonth.value}/4`, `${selectedYear.value}/${selectedMonth.value}/5`, `${selectedYear.value}/${selectedMonth.value}/6`,
-`${selectedYear.value}/${selectedMonth.value}/7`, `${selectedYear.value}/${selectedMonth.value}/8`, `${selectedYear.value}/${selectedMonth.value}/9`,
-`${selectedYear.value}/${selectedMonth.value}/10`, `${selectedYear.value}/${selectedMonth.value}/11`, `${selectedYear.value}/${selectedMonth.value}/12`,
-`${selectedYear.value}/${selectedMonth.value}/13`, `${selectedYear.value}/${selectedMonth.value}/14`, `${selectedYear.value}/${selectedMonth.value}/15`,
-`${selectedYear.value}/${selectedMonth.value}/16`, `${selectedYear.value}/${selectedMonth.value}/17`, `${selectedYear.value}/${selectedMonth.value}/18`,
-`${selectedYear.value}/${selectedMonth.value}/19`, `${selectedYear.value}/${selectedMonth.value}/20`, `${selectedYear.value}/${selectedMonth.value}/21`,
-`${selectedYear.value}/${selectedMonth.value}/22`, `${selectedYear.value}/${selectedMonth.value}/23`, `${selectedYear.value}/${selectedMonth.value}/24`,
-`${selectedYear.value}/${selectedMonth.value}/25`, `${selectedYear.value}/${selectedMonth.value}/26`, `${selectedYear.value}/${selectedMonth.value}/27`,]
+  `${selectedYear.value}/${selectedMonth.value}/4`, `${selectedYear.value}/${selectedMonth.value}/5`, `${selectedYear.value}/${selectedMonth.value}/6`,
+  `${selectedYear.value}/${selectedMonth.value}/7`, `${selectedYear.value}/${selectedMonth.value}/8`, `${selectedYear.value}/${selectedMonth.value}/9`,
+  `${selectedYear.value}/${selectedMonth.value}/10`, `${selectedYear.value}/${selectedMonth.value}/11`, `${selectedYear.value}/${selectedMonth.value}/12`,
+  `${selectedYear.value}/${selectedMonth.value}/13`, `${selectedYear.value}/${selectedMonth.value}/14`, `${selectedYear.value}/${selectedMonth.value}/15`,
+  `${selectedYear.value}/${selectedMonth.value}/16`, `${selectedYear.value}/${selectedMonth.value}/17`, `${selectedYear.value}/${selectedMonth.value}/18`,
+  `${selectedYear.value}/${selectedMonth.value}/19`, `${selectedYear.value}/${selectedMonth.value}/20`, `${selectedYear.value}/${selectedMonth.value}/21`,
+  `${selectedYear.value}/${selectedMonth.value}/22`, `${selectedYear.value}/${selectedMonth.value}/23`, `${selectedYear.value}/${selectedMonth.value}/24`,
+  `${selectedYear.value}/${selectedMonth.value}/25`, `${selectedYear.value}/${selectedMonth.value}/26`, `${selectedYear.value}/${selectedMonth.value}/27`,]
 
 chartX1.value = [`${selectedYear.value - 2}spring`, `${selectedYear.value - 2}summer`, `${selectedYear.value - 2}fall`, `${selectedYear.value - 2}winter`,
-`${selectedYear.value - 1}spring`, `${selectedYear.value - 1}summer`, `${selectedYear.value - 1}fall`, `${selectedYear.value - 1}winter`,
-`${selectedYear.value}spring`, `${selectedYear.value}summer`, `${selectedYear.value}fall`, `${selectedYear.value}winter`
+  `${selectedYear.value - 1}spring`, `${selectedYear.value - 1}summer`, `${selectedYear.value - 1}fall`, `${selectedYear.value - 1}winter`,
+  `${selectedYear.value}spring`, `${selectedYear.value}summer`, `${selectedYear.value}fall`, `${selectedYear.value}winter`
 ]
-
 
 const updateTab1 = () => {
   // axios.get('/seaice/error?year=2023&month=1')
   axios.get('/seaice/error?year=' + Number(selectedYear.value) + '&month=' + Number(selectedMonth.value))
-    .then(response => {
+      .then(response => {
 
-      console.log(response.data);
-      option1.value = {
-        title: {
-          text: chartTitle.value,
-          left: 'center' //标题水平居中
-        },
-        tooltip: {},
-        xAxis: {
-          type: 'category',
-          name: '时间',
-          data: chartX.value
-        },
-        yAxis: {
-          type: 'value',
-          name: 'BACC(%)',
-          data: [10, 12, 14, 16, 18]
-        },
-        legend: { //图例
-          data: ['ours', 'persistence'],
-          orient: 'horizontal',
-          left: 'center',
-          bottom: '5',
-        },
-        series: [
-          {
-            name: 'ours',
-            type: 'line',
-            data: response.data["2023_BACC"],
-
+        console.log(response.data);
+        option1.value = {
+          title: {
+            text: chartTitle.value,
+            left: 'center' //标题水平居中
           },
-          {
-            name: 'persistence',
-            type: 'line',
-            data: response.data["2023_per_BACC"],
+          tooltip: {},
+          xAxis: {
+            type: 'category',
+            name: '时间',
+            data: chartX.value
           },
-
-        ]
-      }
-
-      option2.value = {
-        tooltip: {},
-        xAxis: {
-          type: 'category',
-          name: '时间',
-          data: chartX.value
-        },
-        yAxis: {
-          type: 'value',
-          name: 'RMSE(%)',
-          data: [10, 12, 14, 16, 18]
-        },
-        legend: { //图例
-          data: ['ours', 'persistence'],
-          orient: 'horizontal',
-          left: 'center',
-          bottom: '5',
-        },
-        series: [
-          {
-            name: 'ours',
-            type: 'line',
-            data: response.data["2023_RMSE"],
+          yAxis: {
+            type: 'value',
+            name: 'BACC(%)',
+            data: [10, 12, 14, 16, 18]
           },
-          {
-            name: 'persistence',
-            type: 'line',
-            data: response.data["2023_per_RMSE"],
+          legend: { //图例
+            data: ['ours', 'persistence'],
+            orient: 'horizontal',
+            left: 'center',
+            bottom: '5',
           },
+          series: [
+            {
+              name: 'ours',
+              type: 'line',
+              data: response.data["2023_BACC"],
 
-        ]
-      }
-      //SICChartErroPrediction.value = response.data.description;
-    })
-    .catch(error => {
-      console.error(error);
-    });
+            },
+            {
+              name: 'persistence',
+              type: 'line',
+              data: response.data["2023_per_BACC"],
+            },
+
+          ]
+        }
+
+        option2.value = {
+          tooltip: {},
+          xAxis: {
+            type: 'category',
+            name: '时间',
+            data: chartX.value
+          },
+          yAxis: {
+            type: 'value',
+            name: 'RMSE(%)',
+            data: [10, 12, 14, 16, 18]
+          },
+          legend: { //图例
+            data: ['ours', 'persistence'],
+            orient: 'horizontal',
+            left: 'center',
+            bottom: '5',
+          },
+          series: [
+            {
+              name: 'ours',
+              type: 'line',
+              data: response.data["2023_RMSE"],
+            },
+            {
+              name: 'persistence',
+              type: 'line',
+              data: response.data["2023_per_RMSE"],
+            },
+
+          ]
+        }
+        //SICChartErroPrediction.value = response.data.description;
+      })
+      .catch(error => {
+        console.error(error);
+      });
 }
 
 const updateTab2 = () => {
   // axios.get('/seaice/errorBox?year=2022')
   axios.get('/seaice/errorBox?year=' + Number(selectedYear.value) + '&month=' + Number(selectedMonth.value))
-    .then(response => {
-      console.log(response.data);
-      const data0 = response.data["withoutDA_withoutBC"];
-      const data1 = response.data["withoutDA_withBC_RMSE"];
-      const data2 = response.data["withDA_withoutBC_RMSE"];
-      const data3 = response.data["MITgcm(with DA)withBC_RMSE"];
-      option3.value = {
-        title: {
-          text: chartTitle3.value,
-          left: 'center' //标题水平居中
-        },
+      .then(response => {
+        console.log(response.data);
+        const data0 = response.data["withoutDA_withoutBC"];
+        const data1 = response.data["withoutDA_withBC_RMSE"];
+        const data2 = response.data["withDA_withoutBC_RMSE"];
+        const data3 = response.data["MITgcm(with DA)withBC_RMSE"];
+        option3.value = {
+          title: {
+            text: chartTitle3.value,
+            left: 'center' //标题水平居中
+          },
 
-        dataset: [
-          {
-            source: data0
-          },
-          {
-            source: data1
-          },
-          {
-            source: data2
-          },
-          {
-            source: data3
-          },
-          {
-            fromDatasetIndex: 0,
-            transform: { type: 'boxplot' }
-          },
-          {
-            fromDatasetIndex: 1,
-            transform: { type: 'boxplot' }
-          },
-          {
-            fromDatasetIndex: 2,
-            transform: { type: 'boxplot' }
-          },
-          {
-            fromDatasetIndex: 3,
-            transform: { type: 'boxplot' }
-          }
-        ],
-        legend: {
-          top: '10%'
-        },
-        tooltip: {
-          trigger: 'item',
-          axisPointer: {
-            type: 'shadow'
-          }
-        },
-        grid: {
-          left: '10%',
-          top: '20%',
-          right: '10%',
-          bottom: '15%'
-        },
-        xAxis: {
-          type: 'category',
-          name: 'Lead time',
-          axisLabel: {
-            formatter: function (value) {
-              return (parseInt(value) + 1) + 'day';
+          dataset: [
+            {
+              source: data0
             },
-            align: 'center'
+            {
+              source: data1
+            },
+            {
+              source: data2
+            },
+            {
+              source: data3
+            },
+            {
+              fromDatasetIndex: 0,
+              transform: {type: 'boxplot'}
+            },
+            {
+              fromDatasetIndex: 1,
+              transform: {type: 'boxplot'}
+            },
+            {
+              fromDatasetIndex: 2,
+              transform: {type: 'boxplot'}
+            },
+            {
+              fromDatasetIndex: 3,
+              transform: {type: 'boxplot'}
+            }
+          ],
+          legend: {
+            top: '10%'
           },
-          boundaryGap: true,
-          nameGap: 30,
-          splitArea: {
-            show: true
+          tooltip: {
+            trigger: 'item',
+            axisPointer: {
+              type: 'shadow'
+            }
           },
-          splitLine: {
-            show: false
-          }
-        },
-        yAxis: {
-          type: 'value',
-          name: 'RMSE(%)',
-          splitArea: {
-            show: false
-          }
-        },
-        series: [
-          {
-            name: 'withDA_withoutBC_RMSE',
-            type: 'boxplot',
-            datasetIndex: 4
+          grid: {
+            left: '10%',
+            top: '20%',
+            right: '10%',
+            bottom: '15%'
           },
-          {
-            name: 'withoutDA_withoutBC',
-            type: 'boxplot',
-            datasetIndex: 5
+          xAxis: {
+            type: 'category',
+            name: 'Lead time',
+            axisLabel: {
+              formatter: function (value) {
+                return (parseInt(value) + 1) + 'day';
+              },
+              align: 'center'
+            },
+            boundaryGap: true,
+            nameGap: 30,
+            splitArea: {
+              show: true
+            },
+            splitLine: {
+              show: false
+            }
           },
-          {
-            name: 'withoutDA_withBC_RMSE',
-            type: 'boxplot',
-            datasetIndex: 6
+          yAxis: {
+            type: 'value',
+            name: 'RMSE(%)',
+            splitArea: {
+              show: false
+            }
           },
-          {
-            name: 'MITgcm(with DA)withBC_RMSE',
-            type: 'boxplot',
-            datasetIndex: 7
-          }
-        ]
+          series: [
+            {
+              name: 'withDA_withoutBC_RMSE',
+              type: 'boxplot',
+              datasetIndex: 4
+            },
+            {
+              name: 'withoutDA_withoutBC',
+              type: 'boxplot',
+              datasetIndex: 5
+            },
+            {
+              name: 'withoutDA_withBC_RMSE',
+              type: 'boxplot',
+              datasetIndex: 6
+            },
+            {
+              name: 'MITgcm(with DA)withBC_RMSE',
+              type: 'boxplot',
+              datasetIndex: 7
+            }
+          ]
 
-      }
+        }
 
-      //SICChartErroAdd.value = response.data.description;
-    })
-    .catch(error => {
-      console.error(error);
-    });
+        //SICChartErroAdd.value = response.data.description;
+      })
+      .catch(error => {
+        console.error(error);
+      });
 }
 
 
 const updateTab3 = () => {
   axios.get('/seaice/predictionExamination/errorAnalysis?year=2022')
-    .then(response => {
-      console.log(response.data);
-      option4.value = {
-        title: {
-          text: chartTitle4.value,
-          left: 'center' //标题水平居中
-        },
-        tooltip: {},
-        xAxis: {
-          type: 'category',
-          // name: '时间',
-          data: ['2020 spring', '2020 summer', '2020 fall', '2020 winter',
-            '2021 spring', '2021 summer', '2021 fall', '2021 winter',
-            '2022 spring', '2022 summer', '2022 fall', '2022 winter']
-        },
-        yAxis: {
-          type: 'value',
-          name: 'RMSD(million km²)',
-          data: [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0]
-        },
-        legend: { //图例
-          data: [''],
-          orient: 'horizontal',
-          left: 'center',
-          bottom: '5',
-        },
-        series: [
-          {
-            type: 'line',
-            data: response.data["RMSD"]
-          }
-        ]
-      }
-      option5.value = {
-        title: {
-          // text: chartTitle4.value,
-          left: 'center' //标题水平居中
-        },
-        tooltip: {},
-        xAxis: {
-          type: 'category',
-          // name: '时间',
-          data: ['2020 spring', '2020 summer', '2020 fall', '2020 winter',
-            '2021 spring', '2021 summer', '2021 fall', '2021 winter',
-            '2022 spring', '2022 summer', '2022 fall', '2022 winter']
-        },
-        yAxis: {
-          type: 'value',
-          name: 'RMSD²(million km²)',
-          data: [0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8]
-        },
-        legend: { //图例
-          data: ['bais', 'variance'],
-          orient: 'horizontal',
-          left: 'center',
-          bottom: '5',
-        },
-        series: [
-          {
-            name: 'bais',
-            type: 'bar',
-            data: response.data["BAIS"]
+      .then(response => {
+        console.log(response.data);
+        option4.value = {
+          title: {
+            text: chartTitle4.value,
+            left: 'center' //标题水平居中
           },
-          {
-            name: 'variance',
-            type: 'bar',
-            data: response.data["VAR"]
+          tooltip: {},
+          xAxis: {
+            type: 'category',
+            // name: '时间',
+            data: ['2020 spring', '2020 summer', '2020 fall', '2020 winter',
+              '2021 spring', '2021 summer', '2021 fall', '2021 winter',
+              '2022 spring', '2022 summer', '2022 fall', '2022 winter']
           },
+          yAxis: {
+            type: 'value',
+            name: 'RMSD(million km²)',
+            data: [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0]
+          },
+          legend: { //图例
+            data: [''],
+            orient: 'horizontal',
+            left: 'center',
+            bottom: '5',
+          },
+          series: [
+            {
+              type: 'line',
+              data: response.data["RMSD"]
+            }
+          ]
+        }
+        option5.value = {
+          title: {
+            // text: chartTitle4.value,
+            left: 'center' //标题水平居中
+          },
+          tooltip: {},
+          xAxis: {
+            type: 'category',
+            // name: '时间',
+            data: ['2020 spring', '2020 summer', '2020 fall', '2020 winter',
+              '2021 spring', '2021 summer', '2021 fall', '2021 winter',
+              '2022 spring', '2022 summer', '2022 fall', '2022 winter']
+          },
+          yAxis: {
+            type: 'value',
+            name: 'RMSD²(million km²)',
+            data: [0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8]
+          },
+          legend: { //图例
+            data: ['bais', 'variance'],
+            orient: 'horizontal',
+            left: 'center',
+            bottom: '5',
+          },
+          series: [
+            {
+              name: 'bais',
+              type: 'bar',
+              data: response.data["BAIS"]
+            },
+            {
+              name: 'variance',
+              type: 'bar',
+              data: response.data["VAR"]
+            },
 
-        ]
-      }
-      option6.value = {
-        title: {
-          // text: chartTitle4.value,
-          left: 'center' //标题水平居中
-        },
-        tooltip: {},
-        xAxis: {
-          type: 'category',
-          // name: '时间',
-          data: ['2020 spring', '2020 summer', '2020 fall', '2020 winter',
-            '2021 spring', '2021 summer', '2021 fall', '2021 winter',
-            '2022 spring', '2022 summer', '2022 fall', '2022 winter']
-        },
-        yAxis: {
-          type: 'value',
-          name: 'Correlation coefficient',
-          data: [0.970, 0.975, 0.980, 0.985, 0.990, 0.995, 1.000]
-        },
-        legend: { //图例
-          data: [''],
-          orient: 'horizontal',
-          left: 'center',
-          bottom: '5',
-        },
-        series: [
-          {
-            type: 'line',
-            data: response.data["CORRELATION"]
-          }
-        ]
-      }
-      option7.value = {
-        title: {
-          // text: chartTitle4.value,
-          left: 'center' //标题水平居中
-        },
-        tooltip: {},
-        xAxis: {
-          type: 'category',
-          // name: '时间',
-          data: ['2020 spring', '2020 summer', '2020 fall', '2020 winter',
-            '2021 spring', '2021 summer', '2021 fall', '2021 winter',
-            '2022 spring', '2022 summer', '2022 fall', '2022 winter']
-        },
-        yAxis: {
-          type: 'value',
-          name: 'standard deviation(million km²)',
-          data: [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5]
-        },
-        legend: { //图例
-          data: ['observation', 'IceTFT'],
-          orient: 'horizontal',
-          left: 'center',
-          bottom: '5',
-        },
-        series: [
-          {
-            name: 'observation',
-            type: 'line',
-            data: response.data["OBS_STD"]
+          ]
+        }
+        option6.value = {
+          title: {
+            // text: chartTitle4.value,
+            left: 'center' //标题水平居中
           },
-          {
-            name: 'IceTFT',
-            type: 'line',
-            data: response.data["PRE_STD"]
-          }
-        ]
-      }
+          tooltip: {},
+          xAxis: {
+            type: 'category',
+            // name: '时间',
+            data: ['2020 spring', '2020 summer', '2020 fall', '2020 winter',
+              '2021 spring', '2021 summer', '2021 fall', '2021 winter',
+              '2022 spring', '2022 summer', '2022 fall', '2022 winter']
+          },
+          yAxis: {
+            type: 'value',
+            name: 'Correlation coefficient',
+            data: [0.970, 0.975, 0.980, 0.985, 0.990, 0.995, 1.000]
+          },
+          legend: { //图例
+            data: [''],
+            orient: 'horizontal',
+            left: 'center',
+            bottom: '5',
+          },
+          series: [
+            {
+              type: 'line',
+              data: response.data["CORRELATION"]
+            }
+          ]
+        }
+        option7.value = {
+          title: {
+            // text: chartTitle4.value,
+            left: 'center' //标题水平居中
+          },
+          tooltip: {},
+          xAxis: {
+            type: 'category',
+            // name: '时间',
+            data: ['2020 spring', '2020 summer', '2020 fall', '2020 winter',
+              '2021 spring', '2021 summer', '2021 fall', '2021 winter',
+              '2022 spring', '2022 summer', '2022 fall', '2022 winter']
+          },
+          yAxis: {
+            type: 'value',
+            name: 'standard deviation(million km²)',
+            data: [0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5]
+          },
+          legend: { //图例
+            data: ['observation', 'IceTFT'],
+            orient: 'horizontal',
+            left: 'center',
+            bottom: '5',
+          },
+          series: [
+            {
+              name: 'observation',
+              type: 'line',
+              data: response.data["OBS_STD"]
+            },
+            {
+              name: 'IceTFT',
+              type: 'line',
+              data: response.data["PRE_STD"]
+            }
+          ]
+        }
 
-      //SIEChartErroAnalyse.value = response.data.description;
-    })
-    .catch(error => {
-      console.error(error);
-    });
+        //SIEChartErroAnalyse.value = response.data.description;
+      })
+      .catch(error => {
+        console.error(error);
+      });
 }
 
 function selectChart(index) {
@@ -562,34 +557,31 @@ onMounted(() => {
 // }
 
 
-
-
 </script>
 
 <template>
   <div class="pageContent">
     <div class="banner">
-      <img :src="bannerImg" />
+      <img :src="bannerImg"/>
       <h3 class="title">海冰预测结果检验</h3>
     </div>
 
     <div class="menu-container">
       <ul class="menu">
-        <div :style="movBoxStyle" class="mov-box"></div>
+        <div :style="movBoxStyle"></div>
         <li v-for="(chartName, index) in chartNames" :key="chartName" @click="selectChart(index)"
-          :class="{ 'chart-name-selected': chartSelected === index }">
+            :class="{ 'chart-name-selected': chartSelected === index }">
           <p>{{ chartName }}</p>
         </li>
       </ul>
     </div>
 
-
     <div class="datePickerContainer">
       <el-date-picker :disabledDate="limitedDateRange" v-model="selectedYear" type="year" format="YYYY"
-        value-format="YYYY" :clearable="false" style="width: 80px; height: 25px" />
+                      value-format="YYYY" :clearable="false" style="width: 80px; height: 25px"/>
       <div class="text">年</div>
       <el-date-picker :disabledDate="limitedDateRange2" v-model="selectedMonth" type="month" format="MM"
-        value-format="MM" :clearable="false" style="width: 60px; height: 25px" />
+                      value-format="MM" :clearable="false" style="width: 60px; height: 25px"/>
       <div class="text">月</div>
       <!-- <el-date-picker
               v-model="selectedDateTime"
@@ -609,7 +601,6 @@ onMounted(() => {
         <div class="description">
           {{ SICChartErroPrediction }}
         </div>
-
       </div>
       <div v-if="chartSelected === 1">
         <div class="chart">
@@ -619,7 +610,6 @@ onMounted(() => {
           {{ SICChartErroAdd }}
         </div>
       </div>
-
       <div v-if="chartSelected === 2">
         <div class="chart">
           <v-chart :option="option4" autoresize></v-chart>
@@ -637,7 +627,6 @@ onMounted(() => {
           {{ SIEChartErroAnalyse }}
         </div>
       </div>
-
     </div>
   </div>
 </template>
@@ -645,14 +634,10 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .title {
-  font-family: 'STXinwei';
-  font-weight: 300; //调整字体粗细
   text-align: center;
-  font-size: 55px;
+  font-size: 50px;
   margin-left: 20%;
-  letter-spacing: 1px; /* 字符间距 */
-  z-index: 1; /* 确保图片在文字下方 */
-  color:#ffffff;
+  z-index: 1;
 }
 
 .banner {
@@ -704,8 +689,8 @@ ul.menu li {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  cursor: pointer; /* 更改鼠标形状为手形 */
-  overflow: hidden; /* 确保伪元素的边界与 li 元素一致 */
+  cursor: pointer;
+  /* 更改鼠标形状为手形 */
 }
 
 ul.menu li:not(:last-child)::after {
@@ -718,26 +703,11 @@ ul.menu li:not(:last-child)::after {
   background-color: #00000020;
   transform: translateY(-50%);
 }
-ul.menu li:hover::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(240, 240, 240, 0.8); /* 浅灰色 */
-  border-radius: 10px; /* 确保形状与选项卡一致 */
-  pointer-events: none; /* 确保伪元素不影响鼠标事件 */
-  z-index: 1; /* 确保覆盖层在文字和内容下方 */
-}
 
 ul.menu li:hover p {
-  color: rgb(255, 89, 0);
-  z-index: 2; /* 确保文字在覆盖层之上 */
-}
-.mov-box {
-  position: absolute;
-  z-index: 3; /* 确保滑动条在覆盖层之上 */
+  color: red;
+  /* 悬停时文字颜色变化为红色 */
+  //color: lightgray; //浅灰不太好看
 }
 
 .chart-name-selected {
@@ -751,15 +721,12 @@ ul.menu li:hover p {
 }
 
 .description {
-  // font-size: 16px;
-  text-align: center;
+  font-size: 16px;
 }
 
 .datePickerContainer {
   display: flex;
   justify-content: flex-end;
-  padding-right: 15%;
-  padding-top: 50px;
   margin-bottom: 20px;
 }
 
@@ -767,7 +734,6 @@ ul.menu li:hover p {
   margin-left: 5px;
   margin-right: 10px;
 }
-
 
 .chart-selector {
   position: relative;
@@ -778,4 +744,3 @@ ul.menu li:hover p {
   padding: 0px 15%;
 }
 </style>
-
