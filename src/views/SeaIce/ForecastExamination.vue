@@ -9,8 +9,11 @@ const currentDate = new Date();
 const year = currentDate.getFullYear() - 1 + '';
 const month = currentDate.getMonth() < 10 ? '0' + (currentDate.getMonth() + 1 + '') : currentDate.getMonth() + 1 + ''
 
-selectedYear.value = '2023';
-selectedMonth.value = '01';
+// selectedYear.value = '2023';
+// selectedMonth.value = '01';
+
+const selectedYear = ref('2023'); //改为了响应变量
+const selectedMonth = ref('01'); //改为了响应变量
 
 const start_year1 = ref(null);
 const start_month1 = ref(null);
