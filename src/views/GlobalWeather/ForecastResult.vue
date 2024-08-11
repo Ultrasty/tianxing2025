@@ -381,7 +381,7 @@ const moveBoxLeft = computed(() => {
   return chartSelected.value * 250;
 });
 
-const movBoxtyle = computed(() => ({
+const movBoxStyle = computed(() => ({
   position: "absolute",
   bottom: "0px",
   left: `${moveBoxLeft.value}px`,
