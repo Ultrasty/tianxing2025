@@ -889,7 +889,7 @@ ul.menu li:hover p {
   max-width: 1100px;
   margin: 0 auto;
   text-align: center;
-  background-color:rgba(239, 242, 252, 0.801);; 
+  background-color:rgba(239, 242, 252, 0.801);;
   /* 淡紫色 */
   display: flex;
   padding: 20px;
