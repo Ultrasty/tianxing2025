@@ -385,6 +385,7 @@ onMounted(
 
 .description {
   text-align: center;
+  font-size: 23px;
 }
 
 .datePickerContainer {
@@ -522,6 +523,6 @@ ul.menu li:hover p {
   /* 可选的圆角 */
   box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893); /* 阴影 */
   font-family: 'STKaiti';
-  font-size: 18px;
+  // font-size: 18px;
 }
 </style>

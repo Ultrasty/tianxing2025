@@ -722,6 +722,7 @@ axios.get('/seaice/predictionExamination/errorAnalysis?year=2022')
       </div>
     </div>
 
+    <div><p></p></div>
     
     <div class="datePickerContainer">
       <el-date-picker @change="updateChart()" v-model="currentDate" type="month" :clearable="false"
@@ -853,7 +854,7 @@ ul.menu li:hover p {
 }
 
 .description {
-  font-size: 16px;
+  font-size: 23px;
 }
 
 .datePickerContainer {
@@ -881,7 +882,7 @@ ul.menu li:hover p {
   /* 可选的圆角 */
   box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893); /* 阴影 */
   font-family: 'STKaiti';
-  font-size: 18px;
+  // font-size: 18px;
 }
 
 </style>

@@ -452,6 +452,7 @@ ul.menu li:hover p {
   position: relative;
   text-align: center;
   /* 使文本内容居中 */
+  font-size: 23px;
 }
 
 .text-container {
@@ -467,6 +468,6 @@ ul.menu li:hover p {
   /* 可选的圆角 */
   box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893); /* 阴影 */
   font-family: 'STKaiti';
-  font-size: 18px;
+  // font-size: 18px;
 }
 </style>
