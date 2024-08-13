@@ -302,20 +302,20 @@ onMounted(
       <p></p>
     </div>
     <div style="margin: 0px 10%;">
-    <div class="text-container" v-if="chartSelected === 0">
-      <div class="description">
-        {{ NAOIDescription }}
+      <div class="text-container" v-if="chartSelected === 0">
+        <div class="description">
+          {{ NAOIDescription }}
+        </div>
+      </div>
+
+
+      <div class="datePickerContainer">
+        <el-date-picker @change="updateNAOIChart" v-if="selectedNAOI" type="month" v-model="selectedDate"
+          :clearable="false" :disabled-date="NAOIDisabledYear" />
+        <el-date-picker @change="updateSLPChart" v-if="selectedSLP" type="month" v-model="selectedDate"
+          :clearable="false" :disabled-date="SLPDisabledYear" />
       </div>
     </div>
-
-
-    <div class="datePickerContainer">
-      <el-date-picker @change="updateNAOIChart" v-if="selectedNAOI" type="month" v-model="selectedDate"
-        :clearable="false" :disabled-date="NAOIDisabledYear" />
-      <el-date-picker @change="updateSLPChart" v-if="selectedSLP" type="month" v-model="selectedDate" :clearable="false"
-        :disabled-date="SLPDisabledYear" />
-    </div>
-  </div>
 
     <div class="chart-selector" v-if="chartSelected === 0">
       <v-chart class="NAOIChart" :option="NAOIOption" autoresize />
@@ -376,9 +376,11 @@ onMounted(
   text-align: center;
   font-size: 55px;
   margin-left: 20%;
-  letter-spacing: 1px; /* 字符间距 */
-  z-index: 1; /* 确保图片在文字下方 */
-  color:#ffffff;
+  letter-spacing: 1px;
+  /* 字符间距 */
+  z-index: 1;
+  /* 确保图片在文字下方 */
+  color: #ffffff;
 }
 
 .NAOIChart {
@@ -393,8 +395,8 @@ onMounted(
 .datePickerContainer {
   display: flex;
   justify-content: flex-end;
-  position:relative;
-  padding:50px 0 30px;
+  position: relative;
+  padding: 50px 0 30px;
 }
 
 .text {
@@ -464,8 +466,10 @@ ul.menu li {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  cursor: pointer; /* 更改鼠标形状为手形 */
-  overflow: hidden; /* 确保伪元素的边界与 li 元素一致 */
+  cursor: pointer;
+  /* 更改鼠标形状为手形 */
+  overflow: hidden;
+  /* 确保伪元素的边界与 li 元素一致 */
 }
 
 ul.menu li:not(:last-child)::after {
@@ -478,6 +482,7 @@ ul.menu li:not(:last-child)::after {
   background-color: #00000020;
   transform: translateY(-50%);
 }
+
 ul.menu li:hover::before {
   content: "";
   position: absolute;
@@ -485,28 +490,26 @@ ul.menu li:hover::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(240, 240, 240, 0.8); /* 浅灰色 */
-  border-radius: 10px; /* 确保形状与选项卡一致 */
-  pointer-events: none; /* 确保伪元素不影响鼠标事件 */
-  z-index: 1; /* 确保覆盖层在文字和内容下方 */
+  background-color: rgba(240, 240, 240, 0.8);
+  /* 浅灰色 */
+  border-radius: 10px;
+  /* 确保形状与选项卡一致 */
+  pointer-events: none;
+  /* 确保伪元素不影响鼠标事件 */
+  z-index: 1;
+  /* 确保覆盖层在文字和内容下方 */
 }
 
 ul.menu li:hover p {
   color: rgb(255, 89, 0);
-  z-index: 2; /* 确保文字在覆盖层之上 */
+  z-index: 2;
+  /* 确保文字在覆盖层之上 */
 }
+
 .mov-box {
   position: absolute;
-  z-index: 3; /* 确保滑动条在覆盖层之上 */
-}
-.chart-selector {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 0px 0%;
-  margin: 0px 0%;
+  z-index: 3;
+  /* 确保滑动条在覆盖层之上 */
 }
 
 .chart-name-selected {
@@ -517,13 +520,15 @@ ul.menu li:hover p {
   position: relative;
   margin: 0px auto;
   text-align: center;
-  background-color:rgba(239, 242, 252, 0.801);; 
+  background-color: rgba(239, 242, 252, 0.801);
+  ;
   /* 淡紫色 */
   display: flex;
   padding: 20px;
   border-radius: 8px;
   /* 可选的圆角 */
-  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893); /* 阴影 */
+  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
+  /* 阴影 */
   font-family: 'STKaiti';
   // font-size: 18px;
 }
