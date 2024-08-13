@@ -418,6 +418,8 @@ import {
     <div>
       <p></p>
     </div>
+
+    <div style="margin: 0px 10%;">
     <div class="text-container" v-if="chartSelected === 0">
       <p class="text_of_graph">{{ text_of_temperature }}</p>
     </div>
@@ -435,7 +437,7 @@ import {
       <el-date-picker @change="handleDateTimeChange()" v-model="selectedDateTime" type="date" :clearable="false"
         :disabledDate="limitedDateRange" />
     </div>
-
+  </div>
     <div class="chart-selector" v-if="chartSelected === 0">
       <div class="whole_container">
         <p class="picture_title">
@@ -463,7 +465,7 @@ import {
           @click="change_time_rain('left')"></el-button>
         <el-button ref="buttonRightRain" type="primary" class="arrow-right" :icon="ArrowRight"
           @click="change_time_rain('right')"></el-button>
-      </div>
+        </div>
     </div>
 
     <div class="chart-selector" v-else-if="chartSelected === 2">
@@ -493,6 +495,7 @@ import {
       </div>
     </div>
   </div>
+
 </template>
 
 <style scoped lang="scss">
@@ -538,9 +541,8 @@ import {
   /* 其他样式 */
   display: flex;
   justify-content: flex-end;
-  padding-right: 15%;
-  padding-top: 50px;
-  margin-bottom: 20px;
+  position:relative;
+  padding:50px 0 30px;
 }
 
 .el-tabs {
@@ -575,14 +577,13 @@ import {
 }
 
 .picture {
-  width: 100vh;
+  width: 100%;
   display: block;
   /* 将元素设置为块级元素 */
-  margin-top: -15%;
-  margin-bottom: -15%;
+  margin-top: -18%;
+  margin-bottom: -18%;
   margin-left: -20%;
   margin-right: -20%;
-  max-width: 100%;
   /* 确保图片不会超出父容器 */
   height: auto;
   /* 保持图片比例 */
@@ -594,6 +595,7 @@ import {
   text-align: center;
   /* 使图片在容器内居中 */
   max-width: 100%;
+  margin: 0% 10%;
   overflow: hidden;
 }
 
@@ -694,12 +696,12 @@ ul.menu li:hover p {
 }
 .chart-selector {
   position: relative;
-  //修改为块级
-  display: block;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 0px 15%;
+  padding: 0px 0%;
+  margin: 0px 0%;
 }
 
 .chart-name-selected {
@@ -725,9 +727,8 @@ ul.menu li:hover p {
 }
 
 .text-container {
-  width: 90%;
-  max-width: 1100px;
-  margin: 0 auto;
+  position: relative;
+  margin: 0px auto;
   text-align: center;
   background-color:rgba(239, 242, 252, 0.801);; 
   /* 淡紫色 */
