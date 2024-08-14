@@ -31,7 +31,6 @@ import logo_txt_w from '@/assets/logo-txt-w.png';
 import DropdownMenu from '@/views/user/DropdownMenu.vue';
 
 const isHeaderVisible = ref(true);
-const scrollThreshold = 10; // 设置滚动消失的阈值
 
 const menus = ref([
   {
