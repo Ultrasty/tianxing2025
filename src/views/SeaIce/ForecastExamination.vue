@@ -897,6 +897,7 @@ ul.menu li:hover p {
   /* 阴影 */
   font-family: 'STKaiti';
   // font-size: 18px;
+  width: 80%;
 }
 
 </style>
