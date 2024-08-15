@@ -415,11 +415,13 @@ import {
       </ul>
     </div>
 
-    <div>
-      <p></p>
-    </div>
-
     <div style="margin: 0px 10%;">
+
+      <div class="datePickerContainer">
+        <el-date-picker @change="handleDateTimeChange()" v-model="selectedDateTime" type="date" :clearable="false"
+          :disabledDate="limitedDateRange" />
+      </div>
+      
       <div class="text-container" v-if="chartSelected === 0">
         <p class="text_of_graph">{{ text_of_temperature }}</p>
       </div>
@@ -433,11 +435,12 @@ import {
         </div>
       </div>
 
-      <div class="datePickerContainer">
-        <el-date-picker @change="handleDateTimeChange()" v-model="selectedDateTime" type="date" :clearable="false"
-          :disabledDate="limitedDateRange" />
-      </div>
     </div>
+    
+    <div>
+      <p></p>
+    </div>
+
     <div class="chart-selector" v-if="chartSelected === 0">
       <div class="whole_container">
         <p class="picture_title">
@@ -481,6 +484,7 @@ import {
         <el-button ref="buttonRightWind" type="primary" class="arrow-right" :icon="ArrowRight"
           @click="change_time_wind('right')"></el-button>
       </div>
+      <div><p></p></div>
       <div class="whole_container">
         <p class="picture_title">
           {{ title_of_wind2 }}
@@ -597,7 +601,7 @@ import {
   text-align: center;
   /* 使图片在容器内居中 */
   max-width: 100%;
-  margin: 0% 10%;
+  // margin: 0% 10%;
   overflow: hidden;
 }
 
