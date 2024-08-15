@@ -163,11 +163,15 @@ const movBoxStyle = computed(() => ({
       </ul>
     </div>
 
-    <div>
-      <p></p>
-    </div>
+
 
     <div style="margin: 0px 10%;">
+
+      <div class="datePickerContainer">
+        <el-date-picker @change="updateChartTitle()" v-model="selectedDateTime" type="month" :clearable="false"
+          :disabledDate="limitedDateRange" />
+      </div>
+      
       <div class="text-container" v-if="chartSelected === 0">
         <div class="description">
           {{ text_of_option1 }}
@@ -179,12 +183,12 @@ const movBoxStyle = computed(() => ({
           {{ text_of_option7 }}
         </div>
       </div>
-
-      <div class="datePickerContainer">
-        <el-date-picker @change="updateChartTitle()" v-model="selectedDateTime" type="month" :clearable="false"
-          :disabledDate="limitedDateRange" />
-      </div>
     </div>
+    
+    <div>
+      <p></p>
+    </div>
+    
     <div class="chart-selector" v-if="chartSelected === 1">
       <h2 class="chart-title">
         NAOI指数预测的相关系数
@@ -198,17 +202,15 @@ const movBoxStyle = computed(() => ({
       <h2 class="chart-title">
         {{ selectedYear }}年{{ selectedMonth }}月 预测结果分布误差图
       </h2>
-      <div class="whole_container">
-        <div style="margin: 0 10%;">
-          <div class="pic_container">
+      <!-- <div class="whole_container"> -->
+          <!-- <div class="pic_container"> -->
             <img class="picture" :src="imgSrc_of_nao" alt="">
-          </div>
-        </div>
+          <!-- </div> -->
         <!-- <el-button ref="buttonLeft" type="primary" class="arrowLeft" :icon="ArrowLeft"
             @click=" change_time_nao('left')"></el-button>
           <el-button ref="buttonRight" type="primary" class="arrowRight" :icon="ArrowRight"
             @click=" change_time_nao('right')"></el-button> -->
-      </div>
+      <!-- </div> -->
     </div>
 
 
@@ -301,28 +303,31 @@ const movBoxStyle = computed(() => ({
 }
 
 .picture {
-  width: 100%;
-  display: block;
+  min-width: 100%;
+  display:block;
   /* 将元素设置为块级元素 */
   /* 确保图片不会超出父容器 */
   // height: auto;
   /* 保持图片比例 */
-  display: inline-block;
   /* 使图片可以与 text-align 一起使用 */
 }
 
 .whole_container {
-  //position: relative;
+  // position: relative;
   display: block;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin: 0 0;
+  padding:0 0;
 }
 
 .pic_container {
   overflow: hidden;
   display: block;
   justify-content: center;
+  padding: 0px 0%;
+  margin: 0px 0%;
 }
 
 //以下新加代码

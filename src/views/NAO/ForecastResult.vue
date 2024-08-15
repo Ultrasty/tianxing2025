@@ -298,16 +298,8 @@ onMounted(
       </ul>
     </div>
 
-    <div>
-      <p></p>
-    </div>
-    <div style="margin: 0px 10%;">
-      <div class="text-container" v-if="chartSelected === 0">
-        <div class="description">
-          {{ NAOIDescription }}
-        </div>
-      </div>
 
+    <div style="margin: 0px 10%;">
 
       <div class="datePickerContainer">
         <el-date-picker @change="updateNAOIChart" v-if="selectedNAOI" type="month" v-model="selectedDate"
@@ -315,6 +307,16 @@ onMounted(
         <el-date-picker @change="updateSLPChart" v-if="selectedSLP" type="month" v-model="selectedDate"
           :clearable="false" :disabled-date="SLPDisabledYear" />
       </div>
+      
+      <div class="text-container" v-if="chartSelected === 0">
+        <div class="description">
+          {{ NAOIDescription }}
+        </div>
+      </div>
+    </div>
+    
+    <div>
+      <p></p>
     </div>
 
     <div class="chart-selector" v-if="chartSelected === 0">
@@ -407,7 +409,7 @@ onMounted(
 
 .imgContainer {
   overflow: hidden;
-  margin: 0px 10%;
+  // margin: 0px 10%;
 }
 
 .image {
