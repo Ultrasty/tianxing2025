@@ -853,6 +853,12 @@ ul.menu li:hover p {
   margin: 0 10%;
   height: 500px;
   background-color:white;
+  /* 圆角 */
+  border-radius: 8px;
+  /* 阴影 */
+  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .description {
