@@ -259,7 +259,7 @@ onMounted(() => {
 
     <div class="datePickerContainer">
       <el-date-picker @change="updateSIEChartTitle" v-model="selectedTime" :clearable="false" type="month"
-        :disabled-date="disabledMonth" v-if="selectedSIE" />
+        :disabled-date="disabledMonth" v-if="selectedSIE"  />
       <el-date-picker @change="updateSICChart" v-model="selectedTime" :clearable="false" :disabled-date="disabledDate"
         v-if="selectedSIC" />
     </div>
@@ -436,7 +436,7 @@ ul.menu li.chart-name-selected:hover p {
   justify-content: flex-end;
   position: relative;
   padding: 50px 0 30px;
-  margin-right: 5%; //new
+  //margin-right: 5%; //new
 }
 
 .SIEChartContainer {
@@ -472,6 +472,7 @@ ul.menu li.chart-name-selected:hover p {
   padding-bottom: 20px;
   width: 40%;
   margin: auto;
+  //transform: scale(1.1);
 }
 
 .SIEChart {
@@ -494,6 +495,7 @@ ul.menu li.chart-name-selected:hover p {
   /* 保持图片比例 */
   display: inline-block;
   /* 使图片可以与 text-align 一起使用 */
+  transform: scale(1.1);
 }
 
 //下面这个样式不用加，因为全局样式里面有对应的了
@@ -531,4 +533,6 @@ ul.menu li.chart-name-selected:hover p {
   font-family: 'STKaiti';
   // font-size: 18px;
 }
+
+
 </style>
