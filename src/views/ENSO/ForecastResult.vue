@@ -205,11 +205,12 @@ import {
       </ul>
     </div>
 
-
-    <div>
-      <p></p>
-    </div>
+    
     <div style="margin: 0px 10%;">
+      <div class="datePickerContainer">
+        <el-date-picker @change="update_charts()" v-model="currentDate" type="month" :clearable="false"
+          :disabledDate="limitedDateRange" />
+      </div>
 
       <div class="text-container" v-if="chartSelected === 0">
         <p class="text_of_graph">{{ Chart1_Description.text }}</p>
@@ -217,13 +218,9 @@ import {
       <!-- <div class="text-container" v-if="chartSelected === 1">
       <p class="text_of_graph">{{ Chart2_Description.text }}</p>
     </div> -->
-
-
-      <div class="datePickerContainer">
-        <el-date-picker @change="update_charts()" v-model="currentDate" type="month" :clearable="false"
-          :disabledDate="limitedDateRange" />
+      <div>
+        <p></p>
       </div>
-
     </div>
 
     <div class="chart-selector" v-if="chartSelected === 0">
@@ -232,7 +229,6 @@ import {
 
 
     <div class="chart-selector" v-else-if="chartSelected === 1">
-      <div style="margin: 0px 10%;">
         <p class="picture_title">
           {{ title_of_heat }}
         </p>
@@ -243,7 +239,6 @@ import {
           <el-button ref="buttonRight" type="primary" class="arrow-right" :icon="ArrowRight"
             @click="change_time_heat('right')"></el-button>
         </div>
-      </div>
     </div>
   </div>
 </template>
