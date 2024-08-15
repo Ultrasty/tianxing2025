@@ -411,6 +411,7 @@ ul.menu li:hover p {
   justify-content: flex-end;
   position: relative;
   padding: 50px 0 30px;
+  margin-right: 5%; //new
 }
 
 .SIEChartContainer {
@@ -444,6 +445,8 @@ ul.menu li:hover p {
   box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
   padding-top: 20px;
   padding-bottom: 20px;
+  width: 40%;
+  margin: auto;
 }
 
 .SIEChart {
