@@ -271,6 +271,12 @@ const movBoxStyle = computed(() => ({
 .chart {
   width: 100%;
   background-color:white;
+  /* 圆角 */
+  border-radius: 8px;
+  /* 阴影 */
+  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .description {
@@ -310,6 +316,13 @@ const movBoxStyle = computed(() => ({
   // height: auto;
   /* 保持图片比例 */
   /* 使图片可以与 text-align 一起使用 */
+  background-color:white;
+  /* 圆角 */
+  border-radius: 8px;
+  /* 阴影 */
+  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .whole_container {
