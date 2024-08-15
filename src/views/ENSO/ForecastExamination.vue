@@ -311,6 +311,12 @@ import {
   height: 50vh;
   min-height: 700px;
   background-color:white;
+  /* 圆角 */
+  border-radius: 8px;
+  /* 阴影 */
+  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .chart {
@@ -319,6 +325,12 @@ import {
   height: 50vh;
   min-height: 500px;
   background-color:white;
+  /* 圆角 */
+  border-radius: 8px;
+  /* 阴影 */
+  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .text_of_graph {
