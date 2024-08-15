@@ -415,25 +415,30 @@ import {
       </ul>
     </div>
 
+    <div style="margin: 0px 10%;">
+
+      <div class="datePickerContainer">
+        <el-date-picker @change="handleDateTimeChange()" v-model="selectedDateTime" type="date" :clearable="false"
+          :disabledDate="limitedDateRange" />
+      </div>
+      
+      <div class="text-container" v-if="chartSelected === 0">
+        <p class="text_of_graph">{{ text_of_temperature }}</p>
+      </div>
+      <div class="text-container" v-if="chartSelected === 1">
+        <p class="text_of_graph">{{ text_of_rain }}</p>
+      </div>
+      <div class="text-container" v-if="chartSelected === 2">
+        <div>
+          <p class="text_of_graph">{{ text_of_wind }}</p>
+          <p class="text_of_graph">{{ text_of_wind2 }}</p>
+        </div>
+      </div>
+
+    </div>
+    
     <div>
       <p></p>
-    </div>
-    <div class="text-container" v-if="chartSelected === 0">
-      <p class="text_of_graph">{{ text_of_temperature }}</p>
-    </div>
-    <div class="text-container" v-if="chartSelected === 1">
-      <p class="text_of_graph">{{ text_of_rain }}</p>
-    </div>
-    <div class="text-container" v-if="chartSelected === 2">
-      <div>
-        <p class="text_of_graph">{{ text_of_wind }}</p>
-        <p class="text_of_graph">{{ text_of_wind2 }}</p>
-      </div>
-    </div>
-
-    <div class="datePickerContainer">
-      <el-date-picker @change="handleDateTimeChange()" v-model="selectedDateTime" type="date" :clearable="false"
-        :disabledDate="limitedDateRange" />
     </div>
 
     <div class="chart-selector" v-if="chartSelected === 0">
@@ -479,6 +484,7 @@ import {
         <el-button ref="buttonRightWind" type="primary" class="arrow-right" :icon="ArrowRight"
           @click="change_time_wind('right')"></el-button>
       </div>
+      <div><p></p></div>
       <div class="whole_container">
         <p class="picture_title">
           {{ title_of_wind2 }}
@@ -493,6 +499,7 @@ import {
       </div>
     </div>
   </div>
+
 </template>
 
 <style scoped lang="scss">
@@ -538,9 +545,8 @@ import {
   /* 其他样式 */
   display: flex;
   justify-content: flex-end;
-  padding-right: 15%;
-  padding-top: 50px;
-  margin-bottom: 20px;
+  position: relative;
+  padding: 50px 0 30px;
 }
 
 .el-tabs {
@@ -558,11 +564,12 @@ import {
 
 .title {
   font-family: 'STXinwei';
-  
+
   font-weight: 300; //调整字体粗细
   text-align: center;
   font-size: 55px;
   margin-left: 20%;
+
   letter-spacing: 1px; /* 字符间距 */
  
   z-index: 1; /* 确保图片在文字下方 */
@@ -576,14 +583,13 @@ import {
 }
 
 .picture {
-  width: 100vh;
+  width: 100%;
   display: block;
   /* 将元素设置为块级元素 */
-  margin-top: -15%;
-  margin-bottom: -15%;
+  margin-top: -18%;
+  margin-bottom: -18%;
   margin-left: -20%;
   margin-right: -20%;
-  max-width: 100%;
   /* 确保图片不会超出父容器 */
   height: auto;
   /* 保持图片比例 */
@@ -595,7 +601,15 @@ import {
   text-align: center;
   /* 使图片在容器内居中 */
   max-width: 100%;
+  // margin: 0% 10%;
   overflow: hidden;
+  background-color:white;
+  /* 圆角 */
+  border-radius: 8px;
+  /* 阴影 */
+  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 /* 预报误差页面的容器 */
@@ -671,8 +685,10 @@ ul.menu li {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  cursor: pointer; /* 更改鼠标形状为手形 */
-  overflow: hidden; /* 确保伪元素的边界与 li 元素一致 */
+  cursor: pointer;
+  /* 更改鼠标形状为手形 */
+  overflow: hidden;
+  /* 确保伪元素的边界与 li 元素一致 */
 }
 
 ul.menu li:not(:last-child)::after {
@@ -685,6 +701,7 @@ ul.menu li:not(:last-child)::after {
   background-color: #00000020;
   transform: translateY(-50%);
 }
+
 // ul.menu li:hover::before {
 //   content: "";
 //   position: absolute;
@@ -706,18 +723,11 @@ ul.menu li:hover p {
 ul.menu li.chart-name-selected:hover p {
   color: inherit; //保持原有颜色
 }
+
 .mov-box {
   position: absolute;
-  z-index: 3; /* 确保滑动条在覆盖层之上 */
-}
-.chart-selector {
-  position: relative;
-  //修改为块级
-  display: block;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 0px 15%;
+  z-index: 3;
+  /* 确保滑动条在覆盖层之上 */
 }
 
 .chart-name-selected {
@@ -743,17 +753,18 @@ ul.menu li.chart-name-selected:hover p {
 }
 
 .text-container {
-  width: 90%;
-  max-width: 1100px;
-  margin: 0 auto;
+  position: relative;
+  margin: 0px auto;
   text-align: center;
-  background-color:rgba(239, 242, 252, 0.801);; 
+  background-color: rgba(239, 242, 252, 0.801);
+  ;
   /* 淡紫色 */
   display: flex;
   padding: 20px;
   border-radius: 8px;
   /* 可选的圆角 */
-  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893); /* 阴影 */
+  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
+  /* 阴影 */
   font-family: 'STKaiti';
   // font-size: 18px;
 }

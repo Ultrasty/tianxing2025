@@ -165,27 +165,32 @@ const movBoxStyle = computed(() => ({
       </ul>
     </div>
 
+
+
+    <div style="margin: 0px 10%;">
+
+      <div class="datePickerContainer">
+        <el-date-picker @change="updateChartTitle()" v-model="selectedDateTime" type="month" :clearable="false"
+          :disabledDate="limitedDateRange" />
+      </div>
+      
+      <div class="text-container" v-if="chartSelected === 0">
+        <div class="description">
+          {{ text_of_option1 }}
+        </div>
+      </div>
+
+      <div class="text-container" v-if="chartSelected === 1">
+        <div class="description1">
+          {{ text_of_option7 }}
+        </div>
+      </div>
+    </div>
+    
     <div>
       <p></p>
     </div>
-    <div class="text-container" v-if="chartSelected === 0">
-      <div class="description">
-        {{ text_of_option1 }}
-      </div>
-    </div>
-
-    <div class="text-container" v-if="chartSelected === 1">
-      <div class="description1">
-        {{ text_of_option7 }}
-      </div>
-    </div>
-
-    <div class="datePickerContainer">
-      <el-date-picker @change="updateChartTitle()" v-model="selectedDateTime" type="month" :clearable="false"
-        :disabledDate="limitedDateRange" />
-    </div>
-
-
+    
     <div class="chart-selector" v-if="chartSelected === 1">
       <h2 class="chart-title">
         NAOI指数预测的相关系数
@@ -199,15 +204,15 @@ const movBoxStyle = computed(() => ({
       <h2 class="chart-title">
         {{ selectedYear }}年{{ selectedMonth }}月 预测结果分布误差图
       </h2>
-      <div class="whole_container">
-        <div class="pic_container">
-          <img class="picture" :src="imgSrc_of_nao" alt="">
-        </div>
+      <!-- <div class="whole_container"> -->
+          <!-- <div class="pic_container"> -->
+            <img class="picture" :src="imgSrc_of_nao" alt="">
+          <!-- </div> -->
         <!-- <el-button ref="buttonLeft" type="primary" class="arrowLeft" :icon="ArrowLeft"
             @click=" change_time_nao('left')"></el-button>
           <el-button ref="buttonRight" type="primary" class="arrowRight" :icon="ArrowRight"
             @click=" change_time_nao('right')"></el-button> -->
-      </div>
+      <!-- </div> -->
     </div>
 
 
@@ -226,7 +231,7 @@ const movBoxStyle = computed(() => ({
   //font-family: 'STKaiti';
   //font-family: 'SimSun';
   font-family: 'STXinwei';
-  
+
   font-weight: 300; //调整字体粗细
   text-align: center;
   font-size: 55px;
@@ -239,39 +244,12 @@ const movBoxStyle = computed(() => ({
   z-index: 1; /* 确保图片在文字下方 */
   //color:#ffffff;
   color:rgb(19, 24, 36);
-}
 
-  .datePickerContainer {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 20px;
-    padding-right: 15%;
-    padding-top: 50px;
-  }
-
-  .text {
-    margin-left: 5px;
-    margin-right: 10px;
-  }
-  .picture_title {
-   text-align: center;
-   font-size: 14px;
 }
 
 .chart {
   height: 500px;
-}
-
-.description {
-  text-align: center;
-  font-size: 23px;
-  margin-left: 10px;
-}
-
-.description1 {
-  text-align: center;
-  font-size: 23px;
-  margin-left: 10px;
+  background-color:white;
 }
 
 .datePickerContainer {
@@ -292,28 +270,79 @@ const movBoxStyle = computed(() => ({
   font-size: 14px;
 }
 
-.picture {
-  max-width: 100%;
+.chart {
+  width: 100%;
+  background-color:white;
+  /* 圆角 */
+  border-radius: 8px;
+  /* 阴影 */
+  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.description {
+  text-align: center;
+  font-size: 23px;
+  margin-left: 10px;
+}
+
+.description1 {
+  text-align: center;
+  font-size: 23px;
+  margin-left: 10px;
+}
+
+.datePickerContainer {
   display: flex;
+  justify-content: flex-end;
+  position: relative;
+  padding: 50px 0 30px;
+}
+
+.text {
+  margin-left: 5px;
+  margin-right: 10px;
+}
+
+.picture_title {
+  text-align: center;
+  font-size: 14px;
+}
+
+.picture {
+  min-width: 100%;
+  display:block;
   /* 将元素设置为块级元素 */
-  justify-content: center;
-  //margin-left: 3%;
-  margin-top: 0px;
-  // margin-bottom: -160px;
+  /* 确保图片不会超出父容器 */
+  // height: auto;
+  /* 保持图片比例 */
+  /* 使图片可以与 text-align 一起使用 */
+  background-color:white;
+  /* 圆角 */
+  border-radius: 8px;
+  /* 阴影 */
+  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .whole_container {
-  //position: relative;
-  display: flex;
+  // position: relative;
+  display: block;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin: 0 0;
+  padding:0 0;
 }
 
 .pic_container {
   overflow: hidden;
-  display: flex;
+  display: block;
   justify-content: center;
+  padding: 0px 0%;
+  margin: 0px 0%;
 }
 
 //以下新加代码
@@ -380,8 +409,10 @@ ul.menu li {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  cursor: pointer; /* 更改鼠标形状为手形 */
-  overflow: hidden; /* 确保伪元素的边界与 li 元素一致 */
+  cursor: pointer;
+  /* 更改鼠标形状为手形 */
+  overflow: hidden;
+  /* 确保伪元素的边界与 li 元素一致 */
 }
 
 ul.menu li:not(:last-child)::after {
@@ -394,6 +425,7 @@ ul.menu li:not(:last-child)::after {
   background-color: #00000020;
   transform: translateY(-50%);
 }
+
 // ul.menu li:hover::before {
 //   content: "";
 //   position: absolute;
@@ -415,18 +447,11 @@ ul.menu li:hover p {
 ul.menu li.chart-name-selected:hover p {
   color: inherit; //保持原有颜色
 }
+
 .mov-box {
   position: absolute;
-  z-index: 3; /* 确保滑动条在覆盖层之上 */
-}
-.chart-selector {
-  position: relative;
-  //修改为块级
-  display: block;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 0px 15%;
+  z-index: 3;
+  /* 确保滑动条在覆盖层之上 */
 }
 
 .chart-name-selected {
@@ -434,17 +459,18 @@ ul.menu li.chart-name-selected:hover p {
 }
 
 .text-container {
-  width: 90%;
-  max-width: 1100px;
-  margin: 0 auto;
+  position: relative;
+  margin: 0px auto;
   text-align: center;
-  background-color:rgba(239, 242, 252, 0.801);; 
+  background-color: rgba(239, 242, 252, 0.801);
+  ;
   /* 淡紫色 */
   display: flex;
   padding: 20px;
   border-radius: 8px;
   /* 可选的圆角 */
-  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893); /* 阴影 */
+  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
+  /* 阴影 */
   font-family: 'STKaiti';
   // font-size: 18px;
 }

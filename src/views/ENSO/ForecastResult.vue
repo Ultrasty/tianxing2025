@@ -205,38 +205,40 @@ import {
       </ul>
     </div>
 
+    
+    <div style="margin: 0px 10%;">
+      <div class="datePickerContainer">
+        <el-date-picker @change="update_charts()" v-model="currentDate" type="month" :clearable="false"
+          :disabledDate="limitedDateRange" />
+      </div>
 
-    <div>
-      <p></p>
-    </div>
-    <div class="text-container" v-if="chartSelected === 0">
-      <p class="text_of_graph">{{ Chart1_Description.text }}</p>
-    </div>
-    <!-- <div class="text-container" v-if="chartSelected === 1">
+      <div class="text-container" v-if="chartSelected === 0">
+        <p class="text_of_graph">{{ Chart1_Description.text }}</p>
+      </div>
+      <!-- <div class="text-container" v-if="chartSelected === 1">
       <p class="text_of_graph">{{ Chart2_Description.text }}</p>
     </div> -->
-
-
-    <div class="datePickerContainer">
-      <el-date-picker @change="update_charts()" v-model="currentDate" type="month" :clearable="false"
-        :disabledDate="limitedDateRange" />
+      <div>
+        <p></p>
+      </div>
     </div>
 
     <div class="chart-selector" v-if="chartSelected === 0">
       <v-chart class="chart_1" :option="chart1" autoresize> </v-chart>
     </div>
 
+
     <div class="chart-selector" v-else-if="chartSelected === 1">
-      <p class="picture_title">
-        {{ title_of_heat }}
-      </p>
-      <div class="pic_container">
-        <img class="picture" :src="imgSrc_of_heat" alt="">
-        <el-button ref="buttonLeft" type="primary" class="arrow-left" :icon="ArrowLeft"
-          @click="change_time_heat('left')"></el-button>
-        <el-button ref="buttonRight" type="primary" class="arrow-right" :icon="ArrowRight"
-          @click="change_time_heat('right')"></el-button>
-      </div>
+        <p class="picture_title">
+          {{ title_of_heat }}
+        </p>
+        <div class="pic_container">
+          <img class="picture" :src="imgSrc_of_heat" alt="">
+          <el-button ref="buttonLeft" type="primary" class="arrow-left" :icon="ArrowLeft"
+            @click="change_time_heat('left')"></el-button>
+          <el-button ref="buttonRight" type="primary" class="arrow-right" :icon="ArrowRight"
+            @click="change_time_heat('right')"></el-button>
+        </div>
     </div>
   </div>
 </template>
@@ -248,20 +250,21 @@ import {
   text-align: center;
   font-size: 55px;
   margin-left: 20%;
+
   letter-spacing: 1px; /* 字符间距 */
  
   z-index: 1; /* 确保图片在文字下方 */
   //color:#ffffff;
   color:rgb(251, 236, 222);
 
+
 }
 
 .datePickerContainer {
   display: flex;
   justify-content: flex-end;
-  padding-right: 15%;
-  padding-top: 50px;
-  margin-bottom: 20px;
+  position: relative;
+  padding: 50px 0 30px;
 }
 
 .text {
@@ -328,6 +331,7 @@ ul.menu {
   background-color: white;
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
+
   overflow: hidden; /* 新增: 确保伪元素不会超出 ul.menu 边界 */
 }
 /* 新增: 添加一个伪元素用于整个选项卡区域的上半部分透明或阴影效果 */
@@ -341,6 +345,7 @@ ul.menu::before {
   background-color: rgba(240, 240, 240, 0.8); /* 上半部分透明效果，或更改为 box-shadow 实现阴影效果 */
   z-index: 0; /* 确保伪元素在 li 元素下方 */
   pointer-events: none; /* 确保透明层不影响鼠标事件 */
+
 }
 ul.menu li {
   position: relative;
@@ -350,8 +355,10 @@ ul.menu li {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  cursor: pointer; /* 更改鼠标形状为手形 */
-  overflow: hidden; /* 确保伪元素的边界与 li 元素一致 */
+  cursor: pointer;
+  /* 更改鼠标形状为手形 */
+  overflow: hidden;
+  /* 确保伪元素的边界与 li 元素一致 */
 }
 
 ul.menu li:not(:last-child)::after {
@@ -364,6 +371,7 @@ ul.menu li:not(:last-child)::after {
   background-color: #00000020;
   transform: translateY(-50%);
 }
+
 // ul.menu li:hover::before {
 //   content: "";
 //   position: absolute;
@@ -408,10 +416,17 @@ ul.menu li.chart-name-selected:hover p {
 .chart_1 {
   height: 50vh;
   min-height: 400px;
+  background-color:white;
+  /* 圆角 */
+  border-radius: 8px;
+  /* 阴影 */
+  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .picture {
-  width: 700px;
+  width: 100%;
   display: block;
   /* 将元素设置为块级元素 */
   max-width: 100%;
@@ -426,7 +441,15 @@ ul.menu li.chart-name-selected:hover p {
   text-align: center;
   /* 使图片在容器内居中 */
   max-width: 100%;
+  margin: 0% auto;
   overflow: hidden;
+  background-color:white;
+  /* 圆角 */
+  border-radius: 8px;
+  /* 阴影 */
+  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .picture_title {
@@ -435,17 +458,18 @@ ul.menu li.chart-name-selected:hover p {
 }
 
 .text-container {
-  width: 90%;
-  max-width: 1100px;
-  margin: 0 auto;
+  position: relative;
+  margin: 0px auto;
   text-align: center;
-  background-color:rgba(239, 242, 252, 0.801);; 
+  background-color: rgba(239, 242, 252, 0.801);
+  ;
   /* 淡紫色 */
   display: flex;
   padding: 20px;
   border-radius: 8px;
   /* 可选的圆角 */
-  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893); /* 阴影 */
+  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
+  /* 阴影 */
   font-family: 'STKaiti';
   // font-size: 18px;
 }
