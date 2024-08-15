@@ -859,6 +859,8 @@ ul.menu li:hover p {
   box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
   padding-top: 20px;
   padding-bottom: 20px;
+  width: 82.5%;
+  margin: auto;
 }
 
 .description {
@@ -871,6 +873,7 @@ ul.menu li:hover p {
   justify-content: flex-end;
   position: relative;
   padding: 50px 0 30px;
+  margin-right: 9%; //new
 }
 
 .text {
