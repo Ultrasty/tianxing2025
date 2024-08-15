@@ -394,6 +394,12 @@ ul.menu li:hover p {
   height: 50vh;
   min-height: 400px;
   background-color:white;
+  /* 圆角 */
+  border-radius: 8px;
+  /* 阴影 */
+  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .picture {
@@ -414,6 +420,13 @@ ul.menu li:hover p {
   max-width: 100%;
   margin: 0% auto;
   overflow: hidden;
+  background-color:white;
+  /* 圆角 */
+  border-radius: 8px;
+  /* 阴影 */
+  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .picture_title {
