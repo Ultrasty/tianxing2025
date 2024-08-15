@@ -181,7 +181,7 @@ defineExpose({
 });
 
 /* 新版添加的代码========================================================== */
-import bannerImg from '@/assets/header.jpg';
+import bannerImg from '@/assets/enso1.jpg';
 
 
 const chartSelected = ref(0);
@@ -199,7 +199,7 @@ const movBoxStyle = computed(() => ({
   height: "2px",
   width: "125px",
   transform: "translateX(50%)",
-  backgroundColor: "blue",
+  backgroundColor: "rgb(143,178,201)",
   transition: "left 0.3s ease"
 }));
 
@@ -229,25 +229,31 @@ import {
         </li>
       </ul>
     </div>
-    <div>
-      <p></p>
-    </div>
-    <div class="text-container" v-if="chartSelected === 0">
-      <p class="text_of_graph">{{ Chart1_Description.text }}</p>
-    </div>
-    <div class="text-container" v-if="chartSelected === 1">
-      <p class="text_of_graph">{{ Chart2_Description.text }}</p>
-    </div>
-    <div class="text-container" v-if="chartSelected === 2">
-      <p class="text_of_graph">{{ Chart3_Description.text }}</p>
-    </div>
-    <div class="text-container" v-if="chartSelected === 3">
-      <p class="text_of_graph">{{ Chart4_Description.text }}</p>
+
+    <div style="margin: 0 10%">
+
+
+      <div class="datePickerContainer">
+        <el-date-picker @change="update_charts()" v-model="currentDate" type="month" :clearable="false"
+          :disabledDate="limitedDateRange" />
+      </div>
+      
+      <div class="text-container" v-if="chartSelected === 0">
+        <p class="text_of_graph">{{ Chart1_Description.text }}</p>
+      </div>
+      <div class="text-container" v-if="chartSelected === 1">
+        <p class="text_of_graph">{{ Chart2_Description.text }}</p>
+      </div>
+      <div class="text-container" v-if="chartSelected === 2">
+        <p class="text_of_graph">{{ Chart3_Description.text }}</p>
+      </div>
+      <div class="text-container" v-if="chartSelected === 3">
+        <p class="text_of_graph">{{ Chart4_Description.text }}</p>
+      </div>
     </div>
 
-    <div class="datePickerContainer">
-      <el-date-picker @change="update_charts()" v-model="currentDate" type="month" :clearable="false"
-        :disabledDate="limitedDateRange" />
+    <div>
+      <p></p>
     </div>
 
     <div class="chart-selector" v-if="chartSelected === 0">
@@ -271,6 +277,7 @@ import {
       <v-chart class="chart" :option="chart4" autoresize></v-chart>
     </div>
   </div>
+
 </template>
 
 <style scoped lang="scss">
@@ -282,15 +289,15 @@ import {
   margin-left: 20%;
   letter-spacing: 1px; /* 字符间距 */
   z-index: 1; /* 确保图片在文字下方 */
-  color:#ffffff;
+  color:rgb(251, 236, 222);
+
 }
 
 .datePickerContainer {
   display: flex;
   justify-content: flex-end;
-  padding-right: 15%;
-  padding-top: 50px;
-  margin-bottom: 20px;
+  position: relative;
+  padding: 50px 0 30px;
 }
 
 .text {
@@ -302,11 +309,27 @@ import {
 .chart1 {
   height: 50vh;
   min-height: 700px;
+  background-color:white;
+  /* 圆角 */
+  border-radius: 8px;
+  /* 阴影 */
+  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .chart {
+  width:100%;
+  display: flex;
   height: 50vh;
   min-height: 500px;
+  background-color:white;
+  /* 圆角 */
+  border-radius: 8px;
+  /* 阴影 */
+  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .text_of_graph {
@@ -323,7 +346,7 @@ import {
 /* 新版添加的代码 =====================================================*/
 .banner {
   position: relative;
-  height: 500px;
+  height: 420px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -336,13 +359,15 @@ import {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: 50% -190px; /* 水平居中，垂直向下偏移20px */
   /* 确保图片在文字下方 */
   z-index: 0;
 }
 
 .menu-container {
   display: flex;
-  height: 105px;
+  //height: 105px;
+  height: 85px;
   flex-direction: row;
   justify-content: center;
   align-items: center;
@@ -360,8 +385,20 @@ ul.menu {
   background-color: white;
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
+  overflow: hidden; /* 新增: 确保伪元素不会超出 ul.menu 边界 */
 }
-
+/* 新增: 添加一个伪元素用于整个选项卡区域的上半部分透明或阴影效果 */
+ul.menu::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 55%; /* 仅覆盖上半部分 */
+  background-color: rgba(240, 240, 240, 0.8); /* 上半部分透明效果，或更改为 box-shadow 实现阴影效果 */
+  z-index: 0; /* 确保伪元素在 li 元素下方 */
+  pointer-events: none; /* 确保透明层不影响鼠标事件 */
+}
 ul.menu li {
   position: relative;
   display: flex;
@@ -370,8 +407,10 @@ ul.menu li {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  cursor: pointer; /* 更改鼠标形状为手形 */
-  overflow: hidden; /* 确保伪元素的边界与 li 元素一致 */
+  cursor: pointer;
+  /* 更改鼠标形状为手形 */
+  overflow: hidden;
+  /* 确保伪元素的边界与 li 元素一致 */
 }
 
 ul.menu li:not(:last-child)::after {
@@ -384,22 +423,27 @@ ul.menu li:not(:last-child)::after {
   background-color: #00000020;
   transform: translateY(-50%);
 }
-ul.menu li:hover::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(240, 240, 240, 0.8); /* 浅灰色 */
-  border-radius: 10px; /* 确保形状与选项卡一致 */
-  pointer-events: none; /* 确保伪元素不影响鼠标事件 */
-  z-index: 1; /* 确保覆盖层在文字和内容下方 */
-}
+
+// ul.menu li:hover::before {
+//   content: "";
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   width: 100%;
+//   height: 100%;
+//   //background-color: rgba(240, 240, 240, 0.8); /* 浅灰色 */
+//   border-radius: 10px; /* 确保形状与选项卡一致 */
+//   pointer-events: none; /* 确保伪元素不影响鼠标事件 */
+//   z-index: 1; /* 确保覆盖层在文字和内容下方 */
+// }
 
 ul.menu li:hover p {
-  color: rgb(255, 89, 0);
+  color: rgb(71, 72, 76);
   z-index: 2; /* 确保文字在覆盖层之上 */
+}
+/* 已经被选中的选项卡在鼠标悬停时字体颜色不变 */
+ul.menu li.chart-name-selected:hover p {
+  color: inherit; //保持原有颜色
 }
 .mov-box {
   position: absolute;
@@ -407,7 +451,8 @@ ul.menu li:hover p {
 }
 .chart-selector {
   position: relative;
-  display: flex;
+  //修改为块级
+  display: block;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -415,21 +460,23 @@ ul.menu li:hover p {
 }
 
 .chart-name-selected {
-  color: blue;
+  color:rgb(30, 158, 179)
 }
 
+
 .text-container {
-  width: 90%;
-  max-width: 1100px;
-  margin: 0 auto;
+  position: relative;
+  margin: 0px auto;
   text-align: center;
-  background-color:rgba(239, 242, 252, 0.801);; 
+  background-color: rgba(239, 242, 252, 0.801);
+  ;
   /* 淡紫色 */
   display: flex;
   padding: 20px;
   border-radius: 8px;
   /* 可选的圆角 */
-  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893); /* 阴影 */
+  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
+  /* 阴影 */
   font-family: 'STKaiti';
   // font-size: 18px;
 }

@@ -3,7 +3,7 @@ import { ref, onMounted, computed } from "vue";
 import axios from 'axios';
 import VChart from 'vue-echarts';
 import { ArrowLeft, ArrowRight } from '@element-plus/icons-vue';
-import bannerImg from '@/assets/header.jpg';
+import bannerImg from '@/assets/Ice.jpg';
 
 const selectedSIE = ref(true);
 const selectedSIC = ref(false);
@@ -48,7 +48,7 @@ const movBoxStyle = computed(() => ({
   height: "2px",
   width: "125px",
   transform: "translateX(50%)",
-  backgroundColor: "blue",
+  backgroundColor: "rgb(143,178,201)",
   transition: "left 0.3s ease"
 }));
 
@@ -255,9 +255,15 @@ onMounted(() => {
       </ul>
     </div>
 
-    <div>
-      <p></p>
+    <div style="margin: 0 10%;">
+
+    <div class="datePickerContainer">
+      <el-date-picker @change="updateSIEChartTitle" v-model="selectedTime" :clearable="false" type="month"
+        :disabled-date="disabledMonth" v-if="selectedSIE" />
+      <el-date-picker @change="updateSICChart" v-model="selectedTime" :clearable="false" :disabled-date="disabledDate"
+        v-if="selectedSIC" />
     </div>
+
     <div class="text-container" v-if="selectedSIE">
       <div class="description">
         {{ SIEDescription }}
@@ -270,28 +276,27 @@ onMounted(() => {
     <h1 v-show="selectedSIC" class="title">
       {{ SICChartTitle }}
     </h1> -->
-
-    <div class="datePickerContainer">
-      <el-date-picker @change="updateSIEChartTitle" v-model="selectedTime" :clearable="false" type="month"
-        :disabled-date="disabledMonth" v-if="selectedSIE" />
-      <el-date-picker @change="updateSICChart" v-model="selectedTime" :clearable="false" :disabled-date="disabledDate"
-        v-if="selectedSIC" />
     </div>
 
-
-    <div v-if="selectedSIE" class="SIEChartContainer">
+    <div><p></p></div>
+    
+    <div v-if="selectedSIE" class="chart-selector">
       <v-chart class="SIEChart" :option="SIEOption" autoresize />
     </div>
 
-    <div v-if="selectedSIC">
+    <div style="margin:0 10%;">
+    <div v-if="selectedSIC" class="whole_container">
       <h3 style="text-align: center; margin-top: 0px; font-size: 18px">{{ SICChartTitle }}</h3>
       <h4 style="text-align: center; margin-top: 0px; font-size: 16px">({{ imgIndex + 1 }}/{{ imgSrc.length }})</h4>
       <div class="imageContainer">
-        <el-button ref="buttonLeft" type="primary" class="arrowLeft" :icon="ArrowLeft" @click="changeIndex('left')" />
+        <div>
         <img v-if="imgSrc.length" :src="'http://tianxing.tongji.edu.cn' + imgSrc[imgIndex]" class="image" alt="" />
+        </div>
+        <el-button ref="buttonLeft" type="primary" class="arrowLeft" :icon="ArrowLeft" @click="changeIndex('left')" />
         <el-button ref="buttonRight" type="primary" class="arrowRight" :icon="ArrowRight"
           @click="changeIndex('right')" />
       </div>
+    </div>
     </div>
   </div>
 </template>
@@ -305,12 +310,13 @@ onMounted(() => {
   margin-left: 20%;
   letter-spacing: 1px; /* 字符间距 */
   z-index: 1; /* 确保图片在文字下方 */
-  color:#ffffff;
+  //color:#ffffff;
+  color:rgb(19, 24, 36);
 }
 
 .banner {
   position: relative;
-  height: 500px;
+  height: 420px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -329,7 +335,8 @@ onMounted(() => {
 
 .menu-container {
   display: flex;
-  height: 105px;
+  //height: 105px;
+  height: 85px;
   flex-direction: row;
   justify-content: center;
   align-items: center;
@@ -347,8 +354,20 @@ ul.menu {
   background-color: white;
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
+  overflow: hidden; /* 新增: 确保伪元素不会超出 ul.menu 边界 */
 }
-
+/* 新增: 添加一个伪元素用于整个选项卡区域的上半部分透明或阴影效果 */
+ul.menu::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 55%; /* 仅覆盖上半部分 */
+  background-color: rgba(240, 240, 240, 0.8); /* 上半部分透明效果，或更改为 box-shadow 实现阴影效果 */
+  z-index: 0; /* 确保伪元素在 li 元素下方 */
+  pointer-events: none; /* 确保透明层不影响鼠标事件 */
+}
 ul.menu li {
   position: relative;
   display: flex;
@@ -371,41 +390,53 @@ ul.menu li:not(:last-child)::after {
   background-color: #00000020;
   transform: translateY(-50%);
 }
-
-ul.menu li:hover::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(240, 240, 240, 0.8); /* 浅灰色 */
-  border-radius: 10px; /* 确保形状与选项卡一致 */
-  pointer-events: none; /* 确保伪元素不影响鼠标事件 */
-  z-index: 1; /* 确保覆盖层在文字和内容下方 */
-}
+// ul.menu li:hover::before {
+//   content: "";
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   width: 100%;
+//   height: 100%;
+//   //background-color: rgba(240, 240, 240, 0.8); /* 浅灰色 */
+//   border-radius: 10px; /* 确保形状与选项卡一致 */
+//   pointer-events: none; /* 确保伪元素不影响鼠标事件 */
+//   z-index: 1; /* 确保覆盖层在文字和内容下方 */
+// }
 
 ul.menu li:hover p {
-  color: rgb(255, 89, 0);
+  color: rgb(71, 72, 76);
   z-index: 2; /* 确保文字在覆盖层之上 */
+}
+/* 已经被选中的选项卡在鼠标悬停时字体颜色不变 */
+ul.menu li.chart-name-selected:hover p {
+  color: inherit; //保持原有颜色
 }
 .mov-box {
   position: absolute;
   z-index: 3; /* 确保滑动条在覆盖层之上 */
 }
-
-
-.chart-name-selected {
-  color:blue;
-  //color: rgba(0, 55, 255, 0.957);
+.chart-selector {
+  position: relative;
+  //修改为块级
+  display: block;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 15%;
 }
 
+.chart-name-selected {
+  color:rgb(30, 158, 179)
+}
+
+
 .datePickerContainer {
+  /* 其他样式 */
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 20px;
-  padding-right: 15%;
-  padding-top: 50px;
+  position: relative;
+  padding: 50px 0 30px;
+  margin-right: 5%; //new
 }
 
 .SIEChartContainer {
@@ -414,7 +445,7 @@ ul.menu li:hover p {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 0px 15%;
+  // padding: 0px 15%;
 }
 
 .text {
@@ -422,30 +453,59 @@ ul.menu li:hover p {
   margin-right: 10px;
 }
 
-.imageContainer {
+.whole_container {
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 500px;
+}
+
+.imageContainer {
+  text-align: center;
+  /* 使图片在容器内居中 */
+  max-width: 100%;
+  // margin: 0% 10%;
+  overflow: hidden;
+  background-color:white;
+  /* 圆角 */
+  border-radius: 8px;
+  /* 阴影 */
+  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
+  padding-top: 20px;
+  padding-bottom: 20px;
+  width: 40%;
+  margin: auto;
 }
 
 .SIEChart {
   height: 500px;
+  background-color:white;
+  /* 圆角 */
+  border-radius: 8px;
+  /* 阴影 */
+  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
+//这里应用全球天气的picture样式
 .image {
-  height: 100%;
+  width: 100%;
+  display: block;
+  /* 将元素设置为块级元素 */
+  height: auto;
+  /* 保持图片比例 */
+  display: inline-block;
+  /* 使图片可以与 text-align 一起使用 */
 }
 
-/* 设置箭头按钮的样式 */
-.el-button.arrowLeft,
-.el-button.arrowRight {
-  position: relative;
-  margin: 20px;
-  width: 40px;
-  height: 80px;
-}
+//下面这个样式不用加，因为全局样式里面有对应的了
+
+// /* 设置箭头按钮的样式 */
+// .el-button.arrowLeft,
+// .el-button.arrowRight {
+//   position: relative;
+//   margin: 20px;
+//   width: 40px;
+//   height: 80px;
+// }
 
 
 .description {
@@ -456,17 +516,18 @@ ul.menu li:hover p {
 }
 
 .text-container {
-  width: 90%;
-  max-width: 1100px;
-  margin: 0 auto;
+  position: relative;
+  margin: 0px auto;
   text-align: center;
-  background-color:rgba(239, 242, 252, 0.801);; 
+  background-color: rgba(239, 242, 252, 0.801);
+  ;
   /* 淡紫色 */
   display: flex;
   padding: 20px;
   border-radius: 8px;
   /* 可选的圆角 */
-  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893); /* 阴影 */
+  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
+  /* 阴影 */
   font-family: 'STKaiti';
   // font-size: 18px;
 }
