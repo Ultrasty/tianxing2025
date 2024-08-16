@@ -387,6 +387,7 @@ ul.menu li {
   align-items: center;
   cursor: pointer; /* 更改鼠标形状为手形 */
   overflow: hidden; /* 确保伪元素的边界与 li 元素一致 */
+  font-size: 17px;
 }
 
 ul.menu li:not(:last-child)::after {
@@ -520,10 +521,10 @@ ul.menu li.chart-name-selected:hover p {
 
 
 .description {
-  position: relative;
+  //position: relative;
   text-align: center;
   /* 使文本内容居中 */
-  font-size: 23px;
+  font-size: 17px;
 }
 
 .text-container {
@@ -533,14 +534,13 @@ ul.menu li.chart-name-selected:hover p {
   background-color: rgba(239, 242, 252, 0.801);
   ;
   /* 淡紫色 */
-  display: flex;
+  //display: flex;
   padding: 20px;
   border-radius: 8px;
   /* 可选的圆角 */
   box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
   /* 阴影 */
-  font-family: 'STKaiti';
-  // font-size: 18px;
+  //font-family: 'STKaiti';
 }
 
 

@@ -231,18 +231,12 @@ const movBoxStyle = computed(() => ({
   //font-family: 'STKaiti';
   //font-family: 'SimSun';
   font-family: 'STXinwei';
-
   font-weight: 300; //调整字体粗细
   text-align: center;
   font-size: 55px;
   margin-left: 20%;
-  //text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* 添加阴影 */
-  //text-shadow: 1px 1px 2px #000, 0 0 25px blue, 0 0 5px darkblue;
-  //webkit-text-stroke: 1px black; /* 文字描边 */
   letter-spacing: 1px; /* 字符间距 */
- 
   z-index: 1; /* 确保图片在文字下方 */
-  //color:#ffffff;
   color:rgb(19, 24, 36);
 
 }
@@ -283,13 +277,13 @@ const movBoxStyle = computed(() => ({
 
 .description {
   text-align: center;
-  font-size: 23px;
+  font-size: 17px;
   margin-left: 10px;
 }
 
 .description1 {
   text-align: center;
-  font-size: 23px;
+  font-size: 17px;
   margin-left: 10px;
 }
 
@@ -413,6 +407,7 @@ ul.menu li {
   /* 更改鼠标形状为手形 */
   overflow: hidden;
   /* 确保伪元素的边界与 li 元素一致 */
+  font-size: 17px;
 }
 
 ul.menu li:not(:last-child)::after {
@@ -465,13 +460,12 @@ ul.menu li.chart-name-selected:hover p {
   background-color: rgba(239, 242, 252, 0.801);
   ;
   /* 淡紫色 */
-  display: flex;
+  //display: flex;
   padding: 20px;
   border-radius: 8px;
   /* 可选的圆角 */
   box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
   /* 阴影 */
-  font-family: 'STKaiti';
-  // font-size: 18px;
+  //font-family: 'STKaiti';
 }
 </style>

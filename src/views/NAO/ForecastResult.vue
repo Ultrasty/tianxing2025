@@ -336,38 +336,6 @@ onMounted(
         @click="changeIndex('right')"></el-button>
 
     </div>
-
-    <!-- <el-tabs type="border-card" @tab-click="selectChart" :stretch="true">
-      <el-tab-pane label="指数预测" v-loading="NAOILoading && selectedNAOI">
-        <v-chart class="NAOIChart" :option="NAOIOption" autoresize />
-        <div class="description">
-          {{ NAOIDescription }}
-        </div>
-      </el-tab-pane>
-      <el-tab-pane label="模态预测" v-loading="SLPLoading && selectedSLP" style="min-height: 350px">
-        <h3 v-show="!SLPLoading" style="text-align: center; margin-top: 0px; margin-bottom: 15px">{{ SLPChartTitle }}</h3>
-        <h4 v-show="!SLPLoading" style="text-align: center; margin-top: 0px; margin-bottom: 15px; font-size: 16px">({{ imgIndex + 1 }}/{{ imgSrc.length }})</h4>
-        <el-row v-show="!SLPLoading">
-          <el-col :span="2">
-            <el-button ref="buttonLeft" type="primary" class="arrowLeft" :icon="ArrowLeft" @click="changeIndex('left')" />
-          </el-col>
-          <el-col :span="20">
-
-            <div class="imgContainer">
-              <img v-if="imgSrc.length" :src="'http://tianxing.tongji.edu.cn' + imgSrc[imgIndex]" class="image" alt="" />
-            </div>
-          </el-col>
-
-          <el-col :span="2">
-            <el-button ref="buttonRight" type="primary" class="arrowRight" :icon="ArrowRight" @click="changeIndex('right')" />
-          </el-col>
-        </el-row> -->
-    <!-- <div class="description">
-          {{ SLPDescription }}
-        </div> -->
-    <!-- 接口未提供描述 -->
-    <!-- </el-tab-pane>
-    </el-tabs> -->
   </div>
 </template>
 
@@ -399,7 +367,7 @@ onMounted(
 
 .description {
   text-align: center;
-  font-size: 23px;
+  font-size: 17px;
 }
 
 .datePickerContainer {
@@ -501,6 +469,7 @@ ul.menu li {
   /* 更改鼠标形状为手形 */
   overflow: hidden;
   /* 确保伪元素的边界与 li 元素一致 */
+  font-size: 17px;
 }
 
 ul.menu li:not(:last-child)::after {
@@ -554,13 +523,12 @@ ul.menu li.chart-name-selected:hover p {
   background-color: rgba(239, 242, 252, 0.801);
   ;
   /* 淡紫色 */
-  display: flex;
+  //display: flex;
   padding: 20px;
   border-radius: 8px;
   /* 可选的圆角 */
   box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
   /* 阴影 */
-  font-family: 'STKaiti';
-  // font-size: 18px;
+  //font-family: 'STKaiti';
 }
 </style>
