@@ -282,6 +282,7 @@ onMounted(() => {
 
     <div><p></p></div>
     
+    <!-- 这里的chart-selector为全局样式，不用在本文件中添加 -->
     <div v-if="selectedSIE" class="chart-selector">
       <v-chart class="SIEChart" :option="SIEOption" autoresize />
     </div>
@@ -417,15 +418,15 @@ ul.menu li.chart-name-selected:hover p {
   position: absolute;
   z-index: 3; /* 确保滑动条在覆盖层之上 */
 }
-.chart-selector {
-  position: relative;
-  //修改为块级
-  display: block;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 0px 15%;
-}
+// .chart-selector {
+//   position: relative;
+//   //修改为块级
+//   display: block;
+//   flex-direction: column;
+//   justify-content: center;
+//   align-items: center;
+//   padding: 0px 15%;
+// }
 
 .chart-name-selected {
   color:rgb(30, 158, 179)
