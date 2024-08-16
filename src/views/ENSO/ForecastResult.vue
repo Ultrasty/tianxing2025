@@ -205,7 +205,7 @@ import {
       </ul>
     </div>
 
-    
+
     <div style="margin: 0px 10%;">
       <div class="datePickerContainer">
         <el-date-picker @change="update_charts()" v-model="currentDate" type="month" :clearable="false"
@@ -229,16 +229,16 @@ import {
 
     <!-- 这里的chart-selector为全局样式，不用在本文件中添加 -->
     <div class="chart-selector" v-else-if="chartSelected === 1">
+      <div class="pic_container">
         <p class="picture_title">
           {{ title_of_heat }}
         </p>
-        <div class="pic_container">
-          <img class="picture" :src="imgSrc_of_heat" alt="">
-          <el-button ref="buttonLeft" type="primary" class="arrow-left" :icon="ArrowLeft"
-            @click="change_time_heat('left')"></el-button>
-          <el-button ref="buttonRight" type="primary" class="arrow-right" :icon="ArrowRight"
-            @click="change_time_heat('right')"></el-button>
-        </div>
+        <img style="max-height:90%;" :src="imgSrc_of_heat" alt="">
+        <el-button ref="buttonLeft" type="primary" class="arrow-left" :icon="ArrowLeft"
+          @click="change_time_heat('left')"></el-button>
+        <el-button ref="buttonRight" type="primary" class="arrow-right" :icon="ArrowRight"
+          @click="change_time_heat('right')"></el-button>
+      </div>
     </div>
   </div>
 </template>
@@ -251,11 +251,13 @@ import {
   font-size: 55px;
   margin-left: 20%;
 
-  letter-spacing: 1px; /* 字符间距 */
- 
-  z-index: 1; /* 确保图片在文字下方 */
+  letter-spacing: 1px;
+  /* 字符间距 */
+
+  z-index: 1;
+  /* 确保图片在文字下方 */
   //color:#ffffff;
-  color:rgb(251, 236, 222);
+  color: rgb(251, 236, 222);
 
 
 }
@@ -305,7 +307,8 @@ import {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% -190px; /* 水平居中，垂直向下偏移20px */
+  object-position: 50% -190px;
+  /* 水平居中，垂直向下偏移20px */
   /* 确保图片在文字下方 */
   z-index: 0;
 }
@@ -332,8 +335,10 @@ ul.menu {
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
 
-  overflow: hidden; /* 新增: 确保伪元素不会超出 ul.menu 边界 */
+  overflow: hidden;
+  /* 新增: 确保伪元素不会超出 ul.menu 边界 */
 }
+
 /* 新增: 添加一个伪元素用于整个选项卡区域的上半部分透明或阴影效果 */
 ul.menu::before {
   content: "";
@@ -341,12 +346,17 @@ ul.menu::before {
   top: 0;
   left: 0;
   width: 100%;
-  height: 55%; /* 仅覆盖上半部分 */
-  background-color: rgba(240, 240, 240, 0.8); /* 上半部分透明效果，或更改为 box-shadow 实现阴影效果 */
-  z-index: 0; /* 确保伪元素在 li 元素下方 */
-  pointer-events: none; /* 确保透明层不影响鼠标事件 */
+  height: 55%;
+  /* 仅覆盖上半部分 */
+  background-color: rgba(240, 240, 240, 0.8);
+  /* 上半部分透明效果，或更改为 box-shadow 实现阴影效果 */
+  z-index: 0;
+  /* 确保伪元素在 li 元素下方 */
+  pointer-events: none;
+  /* 确保透明层不影响鼠标事件 */
 
 }
+
 ul.menu li {
   position: relative;
   display: flex;
@@ -387,15 +397,19 @@ ul.menu li:not(:last-child)::after {
 
 ul.menu li:hover p {
   color: rgb(71, 72, 76);
-  z-index: 2; /* 确保文字在覆盖层之上 */
+  z-index: 2;
+  /* 确保文字在覆盖层之上 */
 }
+
 /* 已经被选中的选项卡在鼠标悬停时字体颜色不变 */
 ul.menu li.chart-name-selected:hover p {
   color: inherit; //保持原有颜色
 }
+
 .mov-box {
   position: absolute;
-  z-index: 3; /* 确保滑动条在覆盖层之上 */
+  z-index: 3;
+  /* 确保滑动条在覆盖层之上 */
 }
 
 // .chart-selector {
@@ -409,7 +423,7 @@ ul.menu li.chart-name-selected:hover p {
 // }
 
 .chart-name-selected {
-  color:rgb(30, 158, 179)
+  color: rgb(30, 158, 179)
 }
 
 
@@ -417,7 +431,7 @@ ul.menu li.chart-name-selected:hover p {
 .chart_1 {
   height: 50vh;
   min-height: 400px;
-  background-color:white;
+  background-color: white;
   /* 圆角 */
   border-radius: 8px;
   /* 阴影 */
@@ -426,25 +440,15 @@ ul.menu li.chart-name-selected:hover p {
   padding-bottom: 20px;
 }
 
-.picture {
-  width: 100%;
-  display: block;
-  /* 将元素设置为块级元素 */
-  max-width: 100%;
-  /* 确保图片不会超出父容器 */
-  height: auto;
-  /* 保持图片比例 */
-  display: inline-block;
-  /* 使图片可以与 text-align 一起使用 */
-}
-
 .pic_container {
-  text-align: center;
-  /* 使图片在容器内居中 */
-  max-width: 100%;
-  margin: 0% auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 60vh;
   overflow: hidden;
-  background-color:white;
+  background-color: white;
   /* 圆角 */
   border-radius: 8px;
   /* 阴影 */

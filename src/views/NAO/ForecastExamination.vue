@@ -173,7 +173,7 @@ const movBoxStyle = computed(() => ({
         <el-date-picker @change="updateChartTitle()" v-model="selectedDateTime" type="month" :clearable="false"
           :disabledDate="limitedDateRange" />
       </div>
-      
+
       <div class="text-container" v-if="chartSelected === 0">
         <div class="description">
           {{ text_of_option1 }}
@@ -186,11 +186,11 @@ const movBoxStyle = computed(() => ({
         </div>
       </div>
     </div>
-    
+
     <div>
       <p></p>
     </div>
-    
+
     <div class="chart-selector" v-if="chartSelected === 1">
       <h2 class="chart-title">
         NAOI指数预测的相关系数
@@ -201,14 +201,14 @@ const movBoxStyle = computed(() => ({
     </div>
 
     <div class="chart-selector" v-else-if="chartSelected === 0">
-      <h2 class="chart-title">
-        {{ selectedYear }}年{{ selectedMonth }}月 预测结果分布误差图
-      </h2>
       <!-- <div class="whole_container"> -->
-          <!-- <div class="pic_container"> -->
-            <img class="picture" :src="imgSrc_of_nao" alt="">
-          <!-- </div> -->
-        <!-- <el-button ref="buttonLeft" type="primary" class="arrowLeft" :icon="ArrowLeft"
+      <div class="pic_container">
+        <h2 class="chart-title">
+          {{ selectedYear }}年{{ selectedMonth }}月 预测结果分布误差图
+        </h2>
+        <img class="picture" :src="imgSrc_of_nao" alt="">
+      </div>
+      <!-- <el-button ref="buttonLeft" type="primary" class="arrowLeft" :icon="ArrowLeft"
             @click=" change_time_nao('left')"></el-button>
           <el-button ref="buttonRight" type="primary" class="arrowRight" :icon="ArrowRight"
             @click=" change_time_nao('right')"></el-button> -->
@@ -239,17 +239,19 @@ const movBoxStyle = computed(() => ({
   //text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* 添加阴影 */
   //text-shadow: 1px 1px 2px #000, 0 0 25px blue, 0 0 5px darkblue;
   //webkit-text-stroke: 1px black; /* 文字描边 */
-  letter-spacing: 1px; /* 字符间距 */
- 
-  z-index: 1; /* 确保图片在文字下方 */
+  letter-spacing: 1px;
+  /* 字符间距 */
+
+  z-index: 1;
+  /* 确保图片在文字下方 */
   //color:#ffffff;
-  color:rgb(19, 24, 36);
+  color: rgb(19, 24, 36);
 
 }
 
 .chart {
   height: 500px;
-  background-color:white;
+  background-color: white;
 }
 
 .datePickerContainer {
@@ -272,7 +274,7 @@ const movBoxStyle = computed(() => ({
 
 .chart {
   width: 100%;
-  background-color:white;
+  background-color: white;
   /* 圆角 */
   border-radius: 8px;
   /* 阴影 */
@@ -312,19 +314,12 @@ const movBoxStyle = computed(() => ({
 
 .picture {
   min-width: 100%;
-  display:block;
+  display: block;
   /* 将元素设置为块级元素 */
   /* 确保图片不会超出父容器 */
   // height: auto;
   /* 保持图片比例 */
   /* 使图片可以与 text-align 一起使用 */
-  background-color:white;
-  /* 圆角 */
-  border-radius: 8px;
-  /* 阴影 */
-  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
-  padding-top: 20px;
-  padding-bottom: 20px;
 }
 
 .whole_container {
@@ -334,15 +329,19 @@ const movBoxStyle = computed(() => ({
   align-items: center;
   justify-content: center;
   margin: 0 0;
-  padding:0 0;
+  padding: 0 0;
 }
 
 .pic_container {
   overflow: hidden;
-  display: block;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
-  padding: 0px 0%;
-  margin: 0px 0%;
+  padding: 20px 0;
+  width: 100%;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
 }
 
 //以下新加代码
@@ -361,7 +360,8 @@ const movBoxStyle = computed(() => ({
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% -155px; /* 水平居中，垂直向下偏移20px */
+  object-position: 50% -155px;
+  /* 水平居中，垂直向下偏移20px */
   /* 确保图片在文字下方 */
   z-index: 0;
 }
@@ -387,8 +387,10 @@ ul.menu {
   background-color: white;
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
-  overflow: hidden; /* 新增: 确保伪元素不会超出 ul.menu 边界 */
+  overflow: hidden;
+  /* 新增: 确保伪元素不会超出 ul.menu 边界 */
 }
+
 /* 新增: 添加一个伪元素用于整个选项卡区域的上半部分透明或阴影效果 */
 ul.menu::before {
   content: "";
@@ -396,11 +398,16 @@ ul.menu::before {
   top: 0;
   left: 0;
   width: 100%;
-  height: 55%; /* 仅覆盖上半部分 */
-  background-color: rgba(240, 240, 240, 0.8); /* 上半部分透明效果，或更改为 box-shadow 实现阴影效果 */
-  z-index: 0; /* 确保伪元素在 li 元素下方 */
-  pointer-events: none; /* 确保透明层不影响鼠标事件 */
+  height: 55%;
+  /* 仅覆盖上半部分 */
+  background-color: rgba(240, 240, 240, 0.8);
+  /* 上半部分透明效果，或更改为 box-shadow 实现阴影效果 */
+  z-index: 0;
+  /* 确保伪元素在 li 元素下方 */
+  pointer-events: none;
+  /* 确保透明层不影响鼠标事件 */
 }
+
 ul.menu li {
   position: relative;
   display: flex;
@@ -441,8 +448,10 @@ ul.menu li:not(:last-child)::after {
 
 ul.menu li:hover p {
   color: rgb(71, 72, 76);
-  z-index: 2; /* 确保文字在覆盖层之上 */
+  z-index: 2;
+  /* 确保文字在覆盖层之上 */
 }
+
 /* 已经被选中的选项卡在鼠标悬停时字体颜色不变 */
 ul.menu li.chart-name-selected:hover p {
   color: inherit; //保持原有颜色
@@ -455,7 +464,7 @@ ul.menu li.chart-name-selected:hover p {
 }
 
 .chart-name-selected {
-  color:rgb(30, 158, 179)
+  color: rgb(30, 158, 179)
 }
 
 .text-container {

@@ -421,7 +421,7 @@ import {
         <el-date-picker @change="handleDateTimeChange()" v-model="selectedDateTime" type="date" :clearable="false"
           :disabledDate="limitedDateRange" />
       </div>
-      
+
       <div class="text-container" v-if="chartSelected === 0">
         <p class="text_of_graph">{{ text_of_temperature }}</p>
       </div>
@@ -436,17 +436,17 @@ import {
       </div>
 
     </div>
-    
+
     <div>
       <p></p>
     </div>
 
     <div class="chart-selector" v-if="chartSelected === 0">
       <div class="whole_container">
-        <p class="picture_title">
-          {{ title_of_temperature }}
-        </p>
         <div class="pic_container">
+          <p class="picture_title">
+            {{ title_of_temperature }}
+          </p>
           <img class="picture" :src="imgSrc_of_temperature" alt="">
         </div>
         <el-button ref="buttonLeftTemp" type="primary" class="arrow-left" :icon="ArrowLeft"
@@ -458,10 +458,10 @@ import {
 
     <div class="chart-selector" v-else-if="chartSelected === 1">
       <div class="whole_container">
-        <p class="picture_title">
-          {{ title_of_rain }}
-        </p>
         <div class="pic_container">
+          <p class="picture_title">
+            {{ title_of_rain }}
+          </p>
           <img class="picture" :src="imgSrc_of_rain" alt="">
         </div>
         <el-button ref="buttonLeftRain" type="primary" class="arrow-left" :icon="ArrowLeft"
@@ -473,10 +473,10 @@ import {
 
     <div class="chart-selector" v-else-if="chartSelected === 2">
       <div class="whole_container">
-        <p class="picture_title">
-          {{ title_of_wind }}
-        </p>
         <div class="pic_container">
+          <p class="picture_title">
+            {{ title_of_wind }}
+          </p>
           <img class="picture" :src="imgSrc_of_wind" alt="">
         </div>
         <el-button ref="buttonLeftWind" type="primary" class="arrow-left" :icon="ArrowLeft"
@@ -484,12 +484,14 @@ import {
         <el-button ref="buttonRightWind" type="primary" class="arrow-right" :icon="ArrowRight"
           @click="change_time_wind('right')"></el-button>
       </div>
-      <div><p></p></div>
+      <div>
+        <p></p>
+      </div>
       <div class="whole_container">
-        <p class="picture_title">
-          {{ title_of_wind2 }}
-        </p>
         <div class="pic_container">
+          <p class="picture_title">
+            {{ title_of_wind2 }}
+          </p>
           <img class="picture" :src="imgSrc_of_wind2" alt="">
         </div>
         <el-button ref="buttonLeftWind2" type="primary" class="arrow-left" :icon="ArrowLeft"
@@ -570,43 +572,40 @@ import {
   font-size: 55px;
   margin-left: 20%;
 
-  letter-spacing: 1px; /* 字符间距 */
- 
-  z-index: 1; /* 确保图片在文字下方 */
+  letter-spacing: 1px;
+  /* 字符间距 */
+
+  z-index: 1;
+  /* 确保图片在文字下方 */
   //color:#ffffff;
-  color:rgb(251, 236, 222);
+  color: rgb(251, 236, 222);
 }
 
 .picture_title {
   text-align: center;
   font-size: 22px;
+  z-index: 1;
 }
 
 .picture {
   width: 100%;
-  display: block;
-  /* 将元素设置为块级元素 */
   margin-top: -18%;
   margin-bottom: -18%;
   margin-left: -20%;
   margin-right: -20%;
-  /* 确保图片不会超出父容器 */
   height: auto;
-  /* 保持图片比例 */
-  display: inline-block;
-  /* 使图片可以与 text-align 一起使用 */
+  z-index: 0;
 }
 
 .pic_container {
-  text-align: center;
-  /* 使图片在容器内居中 */
-  max-width: 100%;
-  // margin: 0% 10%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
   overflow: hidden;
-  background-color:white;
-  /* 圆角 */
+  background-color: white;
   border-radius: 8px;
-  /* 阴影 */
   box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
   padding-top: 20px;
   padding-bottom: 20px;
@@ -638,7 +637,8 @@ import {
   height: 100%;
   object-fit: cover;
   /* 确保图片在文字下方 */
-  object-position: 50% -35px; /* 水平居中，垂直向上偏移20px */
+  object-position: 50% -35px;
+  /* 水平居中，垂直向上偏移20px */
   z-index: 0;
 }
 
@@ -663,8 +663,10 @@ ul.menu {
   background-color: white;
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
-  overflow: hidden; /* 新增: 确保伪元素不会超出 ul.menu 边界 */
+  overflow: hidden;
+  /* 新增: 确保伪元素不会超出 ul.menu 边界 */
 }
+
 /* 新增: 添加一个伪元素用于整个选项卡区域的上半部分透明或阴影效果 */
 ul.menu::before {
   content: "";
@@ -672,11 +674,16 @@ ul.menu::before {
   top: 0;
   left: 0;
   width: 100%;
-  height: 55%; /* 仅覆盖上半部分 */
-  background-color: rgba(240, 240, 240, 0.8); /* 上半部分透明效果，或更改为 box-shadow 实现阴影效果 */
-  z-index: 0; /* 确保伪元素在 li 元素下方 */
-  pointer-events: none; /* 确保透明层不影响鼠标事件 */
+  height: 55%;
+  /* 仅覆盖上半部分 */
+  background-color: rgba(240, 240, 240, 0.8);
+  /* 上半部分透明效果，或更改为 box-shadow 实现阴影效果 */
+  z-index: 0;
+  /* 确保伪元素在 li 元素下方 */
+  pointer-events: none;
+  /* 确保透明层不影响鼠标事件 */
 }
+
 ul.menu li {
   position: relative;
   display: flex;
@@ -717,8 +724,10 @@ ul.menu li:not(:last-child)::after {
 
 ul.menu li:hover p {
   color: rgb(71, 72, 76);
-  z-index: 2; /* 确保文字在覆盖层之上 */
+  z-index: 2;
+  /* 确保文字在覆盖层之上 */
 }
+
 /* 已经被选中的选项卡在鼠标悬停时字体颜色不变 */
 ul.menu li.chart-name-selected:hover p {
   color: inherit; //保持原有颜色
@@ -731,7 +740,7 @@ ul.menu li.chart-name-selected:hover p {
 }
 
 .chart-name-selected {
-  color:rgb(30, 158, 179)
+  color: rgb(30, 158, 179)
 }
 
 /*chart1、2 的表和文字*/
