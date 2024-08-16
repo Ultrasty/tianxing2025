@@ -57,6 +57,7 @@ function selectChart(index) {
   selectedSIE.value = index === 0;
   selectedSIC.value = index === 1;
   if (selectedSIE.value) {
+    selectedTime.value = new Date('2023-01');
     updateSIEChart();
   } else {
     updateSICChart();
@@ -235,6 +236,7 @@ const loadImg = (imgList) => {
 onMounted(() => {
   initSIEAvailableList();
   initSICAvailableList();
+  
 });
 </script>
 
