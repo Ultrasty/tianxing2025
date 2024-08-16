@@ -5,15 +5,15 @@ import VChart from 'vue-echarts'
 import axios from 'axios';
 import bannerImg from '@/assets/Ice.jpg';
 
-const currentDate = new Date();
-const year = currentDate.getFullYear() - 1 + '';
-const month = currentDate.getMonth() < 10 ? '0' + (currentDate.getMonth() + 1 + '') : currentDate.getMonth() + 1 + ''
+const selectedTime = ref(new Date('2023-01'));
 
-// selectedYear.value = '2023';
-// selectedMonth.value = '01';
-
-const selectedYear = ref('2023'); //改为了响应变量
-const selectedMonth = ref('01'); //改为了响应变量
+const selectedYear = computed(() => {
+  return selectedTime.value.getFullYear();
+})
+const selectedMonth = computed(() => {
+  return selectedTime.value.getMonth() + 1;
+})
+const selectedDay = computed(() => { return selectedTime.value; });
 
 const start_year1 = ref(null);
 const start_month1 = ref(null);
@@ -437,8 +437,6 @@ const updateTab3 = () => {
           }
         ]
       }
-
-      //SIEChartErroAnalyse.value = response.data.description;
     })
     .catch(error => {
       console.error(error);
@@ -451,22 +449,19 @@ function selectChart(index) {
     case 0:
       start_year.value = start_year1.value;
       start_month.value = start_month1.value;
-      selectedYear.value = start_year.value.toString();
-      selectedMonth.value = start_month.value < 10 ? '0' + start_month.value.toString() : start_month.value.toString();
+      selectedTime.value = new Date(start_year.value, start_month.value - 1);
       updateTab1();
       break;
     case 1:
       start_year.value = start_year2.value;
       start_month.value = start_month2.value;
-      selectedYear.value = start_year.value.toString();
-      selectedMonth.value = start_month.value < 10 ? '0' + start_month.value.toString() : start_month.value.toString();
+      selectedTime.value = new Date(start_year.value, start_month.value - 1);
       updateTab2();
       break;
     case 2:
       start_year.value = start_year3.value;
       start_month.value = start_month3.value;
-      selectedYear.value = start_year.value.toString();
-      selectedMonth.value = start_month.value < 10 ? '0' + start_month.value.toString() : start_month.value.toString();
+      selectedTime.value = new Date(start_year.value, start_month.value - 1);
       updateTab3();
       break;
   }
@@ -481,6 +476,7 @@ onMounted(() => {
     axios.get('/seaice/initial/SICErrorBox'),
     axios.get('/seaice/initial/SIEErrorAnalysis')
   ]).then(([res1, res2, res3]) => {
+    // console.log(res1, res2, res3);
     start_year1.value = res1.data.yearList;
     start_month1.value = res1.data.monthList;
 
@@ -520,9 +516,9 @@ onMounted(() => {
     <div style="margin: 0 10%;">
 
       <div class="datePickerContainer">
-        <el-date-picker @change="updateChart()" v-model="currentDate" type="month" :clearable="false"
+        <el-date-picker @change="updateChart()" v-model="selectedTime" type="month" :clearable="false"
           :disabledDate="limitedDateRange2" v-if="chartSelected === 0 || chartSelected === 2" />
-        <el-date-picker @change="updateChart()" v-model="currentDate" type="year" :clearable="false"
+        <el-date-picker @change="updateChart()" v-model="selectedTime" type="year" :clearable="false"
           :disabledDate="limitedDateRange" v-if="chartSelected === 1" />
       </div>
 
