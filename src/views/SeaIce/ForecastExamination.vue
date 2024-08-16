@@ -553,6 +553,8 @@ onMounted(() => {
           <v-chart :option="option2" autoresize></v-chart>
         </div>
 
+      
+        <!-- 其实这里最好应该用全局样式chart-selector -->
       </div>
       <div v-else-if="chartSelected === 1">
         <div class="chart">
@@ -563,12 +565,16 @@ onMounted(() => {
         <div class="chart">
           <v-chart :option="option4" autoresize></v-chart>
         </div>
+        <!-- 表间间隙 -->
+        <div><p></p></div>
         <div class="chart">
           <v-chart :option="option5" autoresize></v-chart>
         </div>
+        <div><p></p></div>
         <div class="chart">
           <v-chart :option="option6" autoresize></v-chart>
         </div>
+        <div><p></p></div>
         <div class="chart">
           <v-chart :option="option7" autoresize></v-chart>
         </div>
@@ -735,7 +741,7 @@ ul.menu li.chart-name-selected:hover p {
   /* 阴影 */
   box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
   padding-top: 20px;
-  padding-bottom: 20px;
+  // padding-bottom: 20px;
   // width: 82.5%;
   margin: auto;
 }

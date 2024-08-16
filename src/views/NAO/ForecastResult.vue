@@ -307,14 +307,14 @@ onMounted(
         <el-date-picker @change="updateSLPChart" v-if="selectedSLP" type="month" v-model="selectedDate"
           :clearable="false" :disabled-date="SLPDisabledYear" />
       </div>
-      
+
       <div class="text-container" v-if="chartSelected === 0">
         <div class="description">
           {{ NAOIDescription }}
         </div>
       </div>
     </div>
-    
+
     <div>
       <p></p>
     </div>
@@ -324,10 +324,15 @@ onMounted(
     </div>
 
     <div class="chart-selector" v-else-if="chartSelected === 1">
-      <h3 v-show="!SLPLoading" style="text-align: center; margin-top: 0px; margin-bottom: 15px">{{ SLPChartTitle }}</h3>
-      <h4 v-show="!SLPLoading" style="text-align: center; margin-top: 0px; margin-bottom: 15px; font-size: 16px">({{
-        imgIndex + 1 }}/{{ imgSrc.length }})</h4>
       <div class="imgContainer">
+        <h3 v-show="!SLPLoading"
+          style="position:relative;text-align: center; margin-top: 0px; margin-bottom: 15px;z-index:1;">{{
+            SLPChartTitle }}
+        </h3>
+        <h4 v-show="!SLPLoading"
+          style="position:relative; text-align: center; margin-top: 0px; margin-bottom: 15px; font-size: 16px; z-index:1;">
+          ({{
+            imgIndex + 1 }}/{{ imgSrc.length }})</h4>
         <img v-if="imgSrc.length" :src="'http://tianxing.tongji.edu.cn' + imgSrc[imgIndex]" class="image" alt="" />
       </div>
       <el-button ref="buttonLeft" type="primary" class="arrowLeft" :icon="ArrowLeft"
@@ -346,17 +351,19 @@ onMounted(
   text-align: center;
   font-size: 55px;
   margin-left: 20%;
-  letter-spacing: 1px; /* 字符间距 */
-  z-index: 1; /* 确保图片在文字下方 */
+  letter-spacing: 1px;
+  /* 字符间距 */
+  z-index: 1;
+  /* 确保图片在文字下方 */
   //color:black
-  color:rgb(54, 52, 51);
-  color:rgb(19, 24, 36);
+  color: rgb(54, 52, 51);
+  color: rgb(19, 24, 36);
 
 }
 
 .NAOIChart {
   height: 500px;
-  background-color:white;
+  background-color: white;
   /* 圆角 */
   border-radius: 8px;
   /* 阴影 */
@@ -385,7 +392,7 @@ onMounted(
 .imgContainer {
   overflow: hidden;
   // margin: 0px 10%;
-  background-color:white;
+  background-color: white;
   /* 圆角 */
   border-radius: 8px;
   /* 阴影 */
@@ -399,6 +406,7 @@ onMounted(
   margin-top: -7.5%;
   margin-bottom: -5%;
   // transform: translateX(-3%);
+  z-index: 0;
 }
 
 // 以下是新加代码
@@ -417,7 +425,8 @@ onMounted(
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% -155px; /* 水平居中，垂直向下偏移20px */
+  object-position: 50% -155px;
+  /* 水平居中，垂直向下偏移20px */
   /* 确保图片在文字下方 */
   z-index: 0;
 }
@@ -443,8 +452,10 @@ ul.menu {
   background-color: white;
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
-  overflow: hidden; /* 新增: 确保伪元素不会超出 ul.menu 边界 */
+  overflow: hidden;
+  /* 新增: 确保伪元素不会超出 ul.menu 边界 */
 }
+
 /* 新增: 添加一个伪元素用于整个选项卡区域的上半部分透明或阴影效果 */
 ul.menu::before {
   content: "";
@@ -452,11 +463,16 @@ ul.menu::before {
   top: 0;
   left: 0;
   width: 100%;
-  height: 55%; /* 仅覆盖上半部分 */
-  background-color: rgba(240, 240, 240, 0.8); /* 上半部分透明效果，或更改为 box-shadow 实现阴影效果 */
-  z-index: 0; /* 确保伪元素在 li 元素下方 */
-  pointer-events: none; /* 确保透明层不影响鼠标事件 */
+  height: 55%;
+  /* 仅覆盖上半部分 */
+  background-color: rgba(240, 240, 240, 0.8);
+  /* 上半部分透明效果，或更改为 box-shadow 实现阴影效果 */
+  z-index: 0;
+  /* 确保伪元素在 li 元素下方 */
+  pointer-events: none;
+  /* 确保透明层不影响鼠标事件 */
 }
+
 ul.menu li {
   position: relative;
   display: flex;
@@ -498,8 +514,10 @@ ul.menu li:not(:last-child)::after {
 
 ul.menu li:hover p {
   color: rgb(71, 72, 76);
-  z-index: 2; /* 确保文字在覆盖层之上 */
+  z-index: 2;
+  /* 确保文字在覆盖层之上 */
 }
+
 /* 已经被选中的选项卡在鼠标悬停时字体颜色不变 */
 ul.menu li.chart-name-selected:hover p {
   color: inherit; //保持原有颜色
@@ -512,7 +530,7 @@ ul.menu li.chart-name-selected:hover p {
 }
 
 .chart-name-selected {
-  color:rgb(30, 158, 179)
+  color: rgb(30, 158, 179)
 }
 
 
