@@ -467,7 +467,7 @@ ul.menu li.chart-name-selected:hover p {
   background-color: rgba(239, 242, 252, 0.801);
   /* 淡紫色 */
   //display: flex;
-  padding: 20px;
+  padding: 4px;
   border-radius: 8px;
   /* 可选的圆角 */
   box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
