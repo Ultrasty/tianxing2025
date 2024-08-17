@@ -55,22 +55,22 @@ pnpm build
 ```
 
 ## 项目结构
-天行网站前端代码：https://github.com/Ultrasty/tianxing2024
-天行网站界面示例：
-![01.png](docs/01.png)
-![02.png](docs/02.png)
+天行网站前端代码：https://github.com/Ultrasty/tianxing2024 <br>
+天行网站界面示例：<br>
+![01.png](docs/01.png)<br>
+![02.png](docs/02.png)<br>
 
-运行pnpm install后，代码目录如下：
-![03.png](docs/03.png)
+运行pnpm install后，代码目录如下：<br>
+![03.png](docs/03.png)<br>
 
-项目维护的主要代码在./src目录中，具体如下：
-![04.png](docs/04.png)
+项目维护的主要代码在./src目录中，具体如下：<br>
+![04.png](docs/04.png)<br>
 
-其中ENSO、全球天气、NAO、海冰四个板块代码分别储存在./src/views目录下的ENSO、GlobalWeather、NAO、Seaice四个目录中，目前全球天气板块仅有预测结果模块，其余三个板块均分为预测结果模块和预测结果检验模块，其代码分别在ForecastExamination.vue和ForecastResult.vue文件中。
-![05.png](docs/05.png)
+其中ENSO、全球天气、NAO、海冰四个板块代码分别储存在./src/views目录下的ENSO、GlobalWeather、NAO、Seaice四个目录中，目前全球天气板块仅有预测结果模块，其余三个板块均分为预测结果模块和预测结果检验模块，其代码分别在ForecastExamination.vue和ForecastResult.vue文件中。<br>
+![05.png](docs/05.png)<br>
 
-所有网站图片放置在./src/assets目录下
-![07.png](docs/07.png)
+所有网站图片放置在./src/assets目录下<br>
+![07.png](docs/07.png)<br>
 
 所有网页路径放置在./src/router/index.ts文件中，添加新样式页面时需要在此文件中添加相应的路径。
 
