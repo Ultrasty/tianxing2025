@@ -59,7 +59,6 @@ const SIEChartErroAnalyse = ref('rmsd用来分析预报误差成因，其由偏�
 
 const chartTitle = ref('')
 chartTitle.value = `${selectedYear.value}年${selectedMonth.value}月 预测结果误差折线图`
-//chartTitle.value = `2023年1月预测结果误差折线图`
 
 
 const chartTitle2 = ref('')
@@ -537,47 +536,45 @@ onMounted(() => {
           {{ SIEChartErroAnalyse }}
         </div>
       </div>
+    </div>
 
 
+    <div>
+      <p></p>
+    </div>
 
-      <div>
-        <p></p>
+    <div v-if="chartSelected === 0">
+      <div class="chart-selector">
+        <v-chart class="chart" :option="option1" autoresize></v-chart>
+      </div>
+      <div class="chart-selector">
+        <v-chart class="chart" :option="option2" autoresize></v-chart>
+      </div>
+    </div>
+
+    <div v-else-if="chartSelected === 1">
+      <div class="chart-selector">
+        <v-chart class="chart" :option="option3" autoresize></v-chart>
+      </div>
+    </div>
+
+    <div v-else-if="chartSelected === 2">
+
+      <div class="chart-selector">
+        <v-chart class="chart" :option="option4" autoresize></v-chart>
       </div>
 
-      <div v-if="chartSelected === 0">
-        <div class="chart-selector">
-          <v-chart :option="option1" autoresize></v-chart>
-
-        </div>
-        <div class="chart">
-          <v-chart :option="option2" autoresize></v-chart>
-        </div>
-
-      
-        <!-- 其实这里最好应该用全局样式chart-selector -->
+      <div class="chart-selector">
+        <v-chart class="chart" :option="option5" autoresize></v-chart>
       </div>
-      <div v-else-if="chartSelected === 1">
-        <div class="chart">
-          <v-chart :option="option3" autoresize></v-chart>
-        </div>
+
+
+      <div class="chart-selector">
+        <v-chart class="chart" :option="option6" autoresize></v-chart>
       </div>
-      <div v-else-if="chartSelected === 2">
-        <div class="chart">
-          <v-chart :option="option4" autoresize></v-chart>
-        </div>
-        <!-- 表间间隙 -->
-        <div><p></p></div>
-        <div class="chart">
-          <v-chart :option="option5" autoresize></v-chart>
-        </div>
-        <div><p></p></div>
-        <div class="chart">
-          <v-chart :option="option6" autoresize></v-chart>
-        </div>
-        <div><p></p></div>
-        <div class="chart">
-          <v-chart :option="option7" autoresize></v-chart>
-        </div>
+
+      <div class="chart-selector">
+        <v-chart class="chart" :option="option7" autoresize></v-chart>
       </div>
     </div>
   </div>
@@ -686,19 +683,6 @@ ul.menu li:not(:last-child)::after {
   transform: translateY(-50%);
 }
 
-// ul.menu li:hover::before {
-//   content: "";
-//   position: absolute;
-//   top: 0;
-//   left: 0;
-//   width: 100%;
-//   height: 100%;
-//   //background-color: rgba(240, 240, 240, 0.8); /* 浅灰色 */
-//   border-radius: 10px; /* 确保形状与选项卡一致 */
-//   pointer-events: none; /* 确保伪元素不影响鼠标事件 */
-//   z-index: 1; /* 确保覆盖层在文字和内容下方 */
-// }
-
 ul.menu li:hover p {
   color: rgb(71, 72, 76);
   z-index: 2;
@@ -716,48 +700,37 @@ ul.menu li.chart-name-selected:hover p {
   /* 确保滑动条在覆盖层之上 */
 }
 
-// .chart-selector {
-//   position: relative;
-//   //修改为块级
-//   display: block;
-//   flex-direction: column;
-//   justify-content: center;
-//   align-items: center;
-//   padding: 0px 15%;
-// }
 
 .chart-name-selected {
   color: rgb(30, 158, 179)
 }
 
-
-
 .chart {
-  margin: 0 10%;
-  height: 500px;
+  width: 100%;
+  display: flex;
+  height: 50vh;
+  min-height: 500px;
   background-color: white;
   /* 圆角 */
   border-radius: 8px;
   /* 阴影 */
   box-shadow: 0px 0px 10px 1.5px rgba(199, 198, 198, 0.893);
   padding-top: 20px;
-  // padding-bottom: 20px;
-  // width: 82.5%;
-  margin: auto;
+  padding-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .description {
   text-align: center;
   font-size: 17px;
+  margin-left: 10px;
 }
 
 .datePickerContainer {
-  /* 其他样式 */
   display: flex;
   justify-content: flex-end;
   position: relative;
   padding: 50px 0 30px;
-  // margin-right: 9%; //new
 }
 
 .text {
