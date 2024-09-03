@@ -10,10 +10,9 @@
       </router-link>
       <div class="nav-wrapper">
         <div class="nav-items">
-          <div v-for="menu in menus" :key="menu.name" @mouseenter="handleMouseEnterNavItem(menu, $event)"
+          <div v-for="menu in menus" :key="menu.name" @mouseenter="handleMouseEnterNavItem(menu)"
             @mouseleave="handleMouseLeaveNavItem" class="nav-item" :class="{ active: isActive(menu.name) }">
-            <DropdownMenu :title="menu.title" :subMenus="menu.subMenus" :isVisible="nav_item_selected === menu.name"
-              :style="{ left: menu.offsetLeft + 'px', zIndex: -10 }" />
+            <DropdownMenu :title="menu.title" :subMenus="menu.subMenus" :isVisible="nav_item_selected === menu.name" />
             <span class="menu-title">{{ menu.title }}</span>
             <!-- 下拉小三角SVG -->
             <span class="v-icon" :class="{ 'rotate': nav_item_selected === menu.name }"><svg width="12px" height="6px"
@@ -56,7 +55,6 @@ const menus = ref([
       { title: '预测结果', name: 'ENSO_ForecastResult' },
       { title: '预测检验', name: 'ENSO_ForecastExamination' },
     ],
-    offsetLeft: 0 // 初始化 offsetLeft
   },
   {
     title: '全球天气',
@@ -64,7 +62,6 @@ const menus = ref([
     subMenus: [
       { title: '预测结果', name: 'GlobalWeather_ForecastResult' },
     ],
-    offsetLeft: 0 // 初始化 offsetLeft
   },
   {
     title: 'NAO',
@@ -73,7 +70,6 @@ const menus = ref([
       { title: '预测结果', name: 'NAO_ForecastResult' },
       { title: '预测检验', name: 'NAO_ForecastExamination' },
     ],
-    offsetLeft: 0 // 初始化 offsetLeft
   },
   {
     title: '海冰',
@@ -82,18 +78,12 @@ const menus = ref([
       { title: '预测结果', name: 'SeaIce_ForecastResult' },
       { title: '预测检验', name: 'SeaIce_ForecastExamination' },
     ],
-    offsetLeft: 0 // 初始化 offsetLeft
   },
 ]);
 
 const nav_item_selected = ref<string | null>(null);
 
-const handleMouseEnterNavItem = (menu: any, event: MouseEvent) => {
-  const navItem = (event.target as HTMLElement).closest('.nav-item');
-  if (navItem) {
-    const rect = navItem.getBoundingClientRect();
-    menu.offsetLeft = -rect.left; // 设置 offsetLeft 为负的 rect.left 以使 DropdownMenu 与屏幕左侧对齐
-  }
+const handleMouseEnterNavItem = (menu: any) => {
   nav_item_selected.value = menu.name;
 };
 

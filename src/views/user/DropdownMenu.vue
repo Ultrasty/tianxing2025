@@ -29,7 +29,7 @@ const props = defineProps<{
 
 <style scoped>
 .submenu {
-  position: absolute;
+  position: fixed;
   overflow-x: hidden;
   top: 70px;
   left: 0;

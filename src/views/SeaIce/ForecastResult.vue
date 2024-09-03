@@ -150,7 +150,6 @@ const initSICAvailableList = () => {
       let newestYear = Math.max(...SICAvailableList.value.yearList);
       let newestMonth = Math.max(...SICAvailableList.value.monthList);
       let newestDate = Math.max(...SICAvailableList.value.dateList);
-      selectedTime.value = new Date(newestYear, newestMonth - 1, newestDate);
       imgIndex.value = 0;
       loadImg(imgSrc.value);
       SICLoading.value = false;
