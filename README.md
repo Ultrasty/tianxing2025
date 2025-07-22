@@ -1,7 +1,5 @@
 # 同济大学天行气象预测平台
 
-## 分工
-
 ## 相关链接汇总
 
 天行网站：https://tianxing.tongji.edu.cn/
