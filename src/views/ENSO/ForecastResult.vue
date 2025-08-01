@@ -14,8 +14,14 @@ const end_time = ref(null);
 /* 赋初值————默认为指数预测 */
 axios.get('/enso/linechart/getInitData')
   .then(res => {
+    if (res.data && res.data.earliestDate && res.data.latestDate) {
     start_time.value = new Date(res.data.earliestDate.replace(/-/g, '/'));
-    end_time.value = new Date(res.data.latestDate.replace(/-/g, '/'));
+    end_time.value = new Date(res.data.latestDate.replace(/-/g, '/'))}
+    else {
+      start_time.value = null;
+      end_time.value = null;
+      console.warn("获取时间范围数据失败，返回数据不完整", res.data);
+    }
   });
 
 const limitedDateRange = (time) => {
@@ -29,15 +35,27 @@ function handleClick(chartName, index) {
   if (chartName == '模态预测') {
     axios.get('/imgs/predictionResult/ssta/getInitData')
       .then(res => {
-        start_time.value = new Date(res.data.start.replace(/-/g, '/'));
-        end_time.value = new Date(res.data.end.replace(/-/g, '/'));
+        if (res.data && res.data.start && res.data.end) {
+          start_time.value = new Date(res.data.start.replace(/-/g, '/'));
+          end_time.value = new Date(res.data.end.replace(/-/g, '/'));
+        } else {
+          start_time.value = null;
+          end_time.value = null;
+          console.warn("获取时间范围数据失败，返回数据不完整", res.data);
+        }
       });
   }
   else if (chartName == '指数预测') {
     axios.get('/enso/linechart/getInitData')
       .then(res => {
-        start_time.value = new Date(res.data.earliestDate.replace(/-/g, '/'));
-        end_time.value = new Date(res.data.latestDate.replace(/-/g, '/'));
+        if (res.data && res.data.earliestDate && res.data.latestDate) {
+          start_time.value = new Date(res.data.earliestDate.replace(/-/g, '/'));
+          end_time.value = new Date(res.data.latestDate.replace(/-/g, '/'));
+        } else {
+          start_time.value = null;
+          end_time.value = null;
+          console.warn("获取时间范围数据失败，返回数据不完整", res.data);
+        }
       });
   }
 
@@ -56,8 +74,14 @@ const start_month = computed(() => {
 // 此处调接口获取时间范围
 axios.get('/imgs/predictionResult/ssta/getInitData')
   .then(res => {
-    start_time.value = new Date(res.data.start.replace(/-/g, '/'));
-    end_time.value = new Date(res.data.end.replace(/-/g, '/'));
+    if (res.data && res.data.start && res.data.end) {
+      start_time.value = new Date(res.data.start.replace(/-/g, '/'));
+      end_time.value = new Date(res.data.end.replace(/-/g, '/'));
+    } else {
+      start_time.value = null;
+      end_time.value = null;
+      console.warn("获取时间范围数据失败，返回数据不完整", res.data);
+    }
   });
 
 const chart1 = ref({})
