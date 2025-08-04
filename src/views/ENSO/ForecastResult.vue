@@ -11,21 +11,49 @@ const prefix = "https://tianxing.tongji.edu.cn"
 //时间选择器范围框定--start
 const start_time = ref(null);
 const end_time = ref(null);
-/* 赋初值————默认为指数预测 */
+
+// 新增：分别存储两种类型的时间范围
+const indexStart = ref(null);
+const indexEnd = ref(null);
+const modeStart = ref(null);
+const modeEnd = ref(null);
+
+// 获取指数预测时间范围
 axios.get('/enso/linechart/getInitData')
   .then(res => {
     if (res.data && res.data.earliestDate && res.data.latestDate) {
-    start_time.value = new Date(res.data.earliestDate.replace(/-/g, '/'));
-    end_time.value = new Date(res.data.latestDate.replace(/-/g, '/'))}
-    else {
-      start_time.value = null;
-      end_time.value = null;
-      console.warn("获取时间范围数据失败，返回数据不完整", res.data);
+      indexStart.value = new Date(res.data.earliestDate.replace(/-/g, '/'));
+      indexEnd.value = new Date(res.data.latestDate.replace(/-/g, '/'));
+      // 如果模态预测时间已获取，计算交集
+      if (modeStart.value && modeEnd.value) {
+        start_time.value = new Date(Math.max(indexStart.value, modeStart.value));
+        end_time.value = new Date(Math.min(indexEnd.value, modeEnd.value));
+      }
+    } else {
+      console.warn("获取指数预测时间范围数据失败", res.data);
+    }
+  });
+
+// 获取模态预测时间范围
+axios.get('/imgs/predictionResult/ssta/getInitData')
+  .then(res => {
+    if (res.data && res.data.start && res.data.end) {
+      modeStart.value = new Date(res.data.start.replace(/-/g, '/'));
+      modeEnd.value = new Date(res.data.end.replace(/-/g, '/'));
+      // 如果指数预测时间已获取，计算交集
+      if (indexStart.value && indexEnd.value) {
+        start_time.value = new Date(Math.max(indexStart.value, modeStart.value));
+        end_time.value = new Date(Math.min(indexEnd.value, modeEnd.value));
+      }
+    } else {
+      console.warn("获取模态预测时间范围数据失败", res.data);
     }
   });
 
 const limitedDateRange = (time) => {
-  return time.getTime() < start_time.value || time.getTime() > end_time.value;
+  // start_time 和 end_time 都有值时才限制
+  if (!start_time.value || !end_time.value) return true;
+  return time.getTime() < start_time.value.getTime() || time.getTime() > end_time.value.getTime();
 };
 
 /* 根据选择页更新限制范围 */
