@@ -1,14 +1,18 @@
 <script setup>
 import { ref, onMounted, reactive, watch, defineExpose, computed } from "vue";
 import * as echarts from "echarts";
-import axios from "axios";
+//import axios from "axios";
+import request from '@/utils/request';//项目已提供 src/utils/request.ts 工具，它会自动应用环境变量中的API前缀。byCP
 import VChart from 'vue-echarts';
 import { nextTick } from "vue";
 import { configProviderContextKey } from "element-plus";
 import { ArrowLeft, ArrowRight } from "@element-plus/icons-vue";
 import bannerImg from '@/assets/nao.jpg';//首页图
 
-const prefix = "https://tianxing.tongji.edu.cn"
+//const prefix = "https://tianxing.tongji.edu.cn"注释掉硬编码bycP
+//使用环境变量byCP
+const API_PREFIX = import.meta.env.VITE_API_PREFIX;
+imgSrc_of_nao.value = `${API_PREFIX}${imgSrc_of_nao_Array[0]}`;
 // 新加入
 const chartSelected = ref(0);
 const chartNames = ['指数预测', '模态预测'];
@@ -27,7 +31,19 @@ const selectedMonth = computed(() => {
   return selectedDateTime.value.getMonth() + 1;
 })
 
-axios.get('/nao/initialize/naoCORR')
+// axios.get('/nao/initialize/naoCORR')
+//   .then(res => {
+//     start_year.value = res.data.start_year;
+//     start_month.value = new Date(res.data.start_month);
+//     end_year.value = res.data.end_year;
+//     end_month.value = new Date(res.data.end_month);
+//     //console.log(res.data);
+//   })
+//   .catch(error => {
+//     console.error(error);
+//   });
+//修改所有axios.get调用为request.get
+request.get('/nao/initialize/naoCORR')
   .then(res => {
     start_year.value = res.data.start_year;
     start_month.value = new Date(res.data.start_month);
@@ -37,7 +53,7 @@ axios.get('/nao/initialize/naoCORR')
   })
   .catch(error => {
     console.error(error);
-  });
+  });  
 
 const limitedDateRange = (time) => {
   return time.getFullYear() < start_year.value || time.getFullYear() > end_year.value;
@@ -60,7 +76,7 @@ function updateChartTitle() {
   //使元素失焦
   document.activeElement.blur();
 
-  axios.get('/nao/predictionExamination/nao?year=' + Number(selectedYear.value) + '&month=' + Number(selectedMonth.value))
+  request.get('/nao/predictionExamination/nao?year=' + Number(selectedYear.value) + '&month=' + Number(selectedMonth.value))
     .then(res => {
       index_nao = 0;
       console.log("点击标签,更新nao", res.data);
@@ -72,7 +88,7 @@ function updateChartTitle() {
       console.error(error);
     });
 
-  axios.get('/nao/predictionExamination/naoi')
+  request.get('/nao/predictionExamination/naoi')
     .then(res => {
       console.log("更新naoi", res.data);
       // title_of_option1.value='提前1个月预测';
@@ -85,7 +101,7 @@ function updateChartTitle() {
 }
 
 //////////以下两个是初始化
-axios.get('/nao/predictionExamination/nao?year=' + Number(selectedYear.value) + '&month=' + Number(selectedMonth.value))
+request.get('/nao/predictionExamination/nao?year=' + Number(selectedYear.value) + '&month=' + Number(selectedMonth.value))
   .then(res => {
     index_nao = 0;
     console.log("初始化nao", res.data);
@@ -94,7 +110,7 @@ axios.get('/nao/predictionExamination/nao?year=' + Number(selectedYear.value) + 
     //console.log("swwwww",imgSrc_of_nao_Array[0]);
   });
 
-axios.get('/nao/predictionExamination/naoi')
+request.get('/nao/predictionExamination/naoi')
   .then(res => {
     console.log("初始化naoi", res.data);
     // title_of_option1.value='提前1个月预测';

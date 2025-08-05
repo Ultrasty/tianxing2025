@@ -1,7 +1,8 @@
 <script setup>
 import { ref, onMounted, reactive, watch, defineExpose, computed } from "vue";
 import * as echarts from "echarts";
-import axios from 'axios';
+//import axios from 'axios';
+import request from '@/utils/request';//引入请求方法byCP
 import VChart from 'vue-echarts';
 import { nextTick } from "vue";
 import { configProviderContextKey } from "element-plus";
@@ -86,7 +87,17 @@ const updateNAOIChart = async () => {
     year: Number(NAOISelectedYear.value),
     month: Number(NAOISelectedMonth.value)
   };
-  axios.get('/nao/predictionResult/nao', { params })
+  // axios.get('/nao/predictionResult/nao', { params })
+  //   .then(response => {
+  //     NAOIOption.value = response.data.option;
+  //     NAOIDescription.value = response.data.description;
+  //     NAOILoading.value = false;
+  //   })
+  //   .catch(error => {
+  //     console.error(error);
+  //     NAOILoading.value = false;
+  //   });
+  request.get('/nao/predictionResult/nao', { params })
     .then(response => {
       NAOIOption.value = response.data.option;
       NAOIDescription.value = response.data.description;
@@ -95,7 +106,7 @@ const updateNAOIChart = async () => {
     .catch(error => {
       console.error(error);
       NAOILoading.value = false;
-    });
+    });//换用已有的request工具从后端请求数据byCP
 }
 
 // 请求SLP数据
