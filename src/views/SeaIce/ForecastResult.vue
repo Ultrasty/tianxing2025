@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import axios from 'axios';
+//import axios from 'axios';
+import request from '@/utils/request';//项目已提供 src/utils/request.ts 工具，它会自动应用环境变量中的API前缀。byCP
 import VChart from 'vue-echarts';
 import { ArrowLeft, ArrowRight } from '@element-plus/icons-vue';
 import bannerImg from '@/assets/Ice.jpg';
@@ -79,7 +80,8 @@ const updateSIEChart = async () => {
     year: Number(selectedYear.value),
     month: Number(selectedMonth.value)
   };
-  axios.get('/seaice/predictionResult/SIE', { params })
+  //axios.get('/seaice/predictionResult/SIE', { params })
+  request.get('/seaice/predictionResult/SIE', { params })
     .then(response => {
       SIEOption.value = response.data.option;
       SIEDescription.value = response.data.description;
@@ -103,7 +105,8 @@ const updateSICChart = async () => {
     month: selectedDay.value.getMonth() + 1,
     day: selectedDay.value.getDate()
   };
-  axios.get('/seaice/predictionResult/SIC', { params })
+  //axios.get('/seaice/predictionResult/SIC', { params })
+  request.get('/seaice/predictionResult/SIC', { params })
     .then(response => {
       imgSrc.value = response.data;
       imgIndex.value = 0;
@@ -124,7 +127,8 @@ const initSIEAvailableList = () => {
     year: 2023,
     month: 1
   };
-  axios.get('/seaice/predictionResult/SIE', { params })
+  //axios.get('/seaice/predictionResult/SIE', { params })
+  request.get('/seaice/predictionResult/SIE', { params })
     .then(response => {
       SIEAvailableList.value = response.data.availableList;
       SIEOption.value = response.data.option;
@@ -141,7 +145,8 @@ const initSIEAvailableList = () => {
 const initSICAvailableList = () => {
   updateSICChartTitle();
   SICLoading.value = true;
-  axios.get('/seaice/initial/SICprediction')
+  //axios.get('/seaice/initial/SICprediction')
+  request.get('/seaice/initial/SICprediction')
     .then(response => {
       SICAvailableList.value.yearList = response.data.yearList;
       SICAvailableList.value.monthList = response.data.monthList;
