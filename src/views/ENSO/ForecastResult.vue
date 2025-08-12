@@ -65,7 +65,7 @@ function handleClick(chartName, index) {
 
 
 // ====================== 时间 & 图表初始值 ======================
-const currentDate = ref(new Date('2023-2'));   // 初始日期
+const currentDate = ref(new Date());   // 初始日期
 const start_year = computed(() => currentDate.value.getFullYear());
 const start_month = computed(() => currentDate.value.getMonth() + 1);
 
@@ -117,24 +117,21 @@ function update_charts() {
 }
 
 // ====================== 热力图左右切换 ======================
-const buttonLeft = ref(null);
-const buttonRight = ref(null);
-
 function change_time_heat(flag) {
+  const maxIndex = imgSrc_of_heat_Array.length - 1; // 最大索引
+
   if (flag === "left") {
-    index_heat = index_heat > 0 ? index_heat - 1 : 17;
+    index_heat = index_heat > 0 ? index_heat - 1 : maxIndex;
     buttonLeft.value?.$el.blur();
   } else if (flag === "right") {
-    index_heat = index_heat < 17 ? index_heat + 1 : 0;
+    index_heat = index_heat < maxIndex ? index_heat + 1 : 0;
     buttonRight.value?.$el.blur();
   }
+
   imgSrc_of_heat.value = `${prefix}${imgSrc_of_heat_Array[index_heat]}`;
   title_of_heat.value = `${title_of_heat_Array[index_heat]}`;
 }
 
-defineExpose({
-  change_time_heat
-});
 
 // ====================== tab 样式控制 ======================
 const chartSelected = ref(0);

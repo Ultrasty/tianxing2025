@@ -1,6 +1,7 @@
 <script setup>
 import bannerImg from '@/assets/light.jpg'; 
-const newUrl = "https://example.com"; 
+import redirectImg from '@/assets/globleweather.png'; 
+const newUrl = "http://aimfdp.nmc.cn/"; 
 </script>
 
 <template>
@@ -10,6 +11,8 @@ const newUrl = "https://example.com";
     </div>
 
     <div class="redirect-box">
+      <!-- 新增的图片 -->
+      <img :src="redirectImg" alt="迁移提示图" class="redirect-img" />
       <h1>本功能已迁移</h1>
       <p>该页面已迁移至新网站，请访问：</p>
       <a :href="newUrl" target="_blank" rel="noopener">{{ newUrl }}</a>
@@ -27,7 +30,7 @@ const newUrl = "https://example.com";
 .banner {
   position: relative;
   width: 100%;
-  height: 420px;
+  height: 300px;
   overflow: hidden;
 }
 
@@ -51,6 +54,12 @@ const newUrl = "https://example.com";
   max-width: 600px;
   text-align: center;
   font-family: "Microsoft YaHei", sans-serif;
+}
+
+.redirect-img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 20px;
 }
 
 .redirect-box h1 {
