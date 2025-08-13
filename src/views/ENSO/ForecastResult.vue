@@ -118,19 +118,18 @@ function update_charts() {
 
 // ====================== 热力图左右切换 ======================
 function change_time_heat(flag) {
-  const maxIndex = imgSrc_of_heat_Array.length - 1; // 最大索引
+  const total = imgSrc_of_heat_Array.length; // 动态总数
 
   if (flag === "left") {
-    index_heat = index_heat > 0 ? index_heat - 1 : maxIndex;
-    buttonLeft.value?.$el.blur();
+    index_heat = index_heat > 0 ? index_heat - 1 : total - 1;
   } else if (flag === "right") {
-    index_heat = index_heat < maxIndex ? index_heat + 1 : 0;
-    buttonRight.value?.$el.blur();
+    index_heat = index_heat < total - 1 ? index_heat + 1 : 0;
   }
 
   imgSrc_of_heat.value = `${prefix}${imgSrc_of_heat_Array[index_heat]}`;
   title_of_heat.value = `${title_of_heat_Array[index_heat]}`;
 }
+
 
 
 // ====================== tab 样式控制 ======================
