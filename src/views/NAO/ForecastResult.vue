@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, reactive, watch, defineExpose, computed } from "vue";
 import * as echarts from "echarts";
-//import axios from 'axios';
+import axios from 'axios';
 import request from '@/utils/request';//引入请求方法byCP
 import VChart from 'vue-echarts';
 import { nextTick } from "vue";
@@ -97,7 +97,7 @@ const updateNAOIChart = async () => {
   //     console.error(error);
   //     NAOILoading.value = false;
   //   });
-  request.get('/nao/predictionResult/nao', { params })
+  axios.get('/nao/predictionResult/nao', { params })
     .then(response => {
       NAOIOption.value = response.data.option;
       NAOIDescription.value = response.data.description;

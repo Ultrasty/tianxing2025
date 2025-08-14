@@ -2,7 +2,7 @@
 
 import { ref, onMounted, computed } from "vue";
 import VChart from 'vue-echarts'
-//import axios from 'axios';
+import axios from 'axios';
 import request from '@/utils/request';//项目已提供 src/utils/request.ts 工具，它会自动应用环境变量中的API前缀。byCP
 import bannerImg from '@/assets/Ice.jpg';
 
@@ -98,8 +98,7 @@ chartX1.value = [`${selectedYear.value - 2}spring`, `${selectedYear.value - 2}su
 ]
 
 const updateTab1 = () => {
-  //axios.get('/seaice/error?year=' + Number(selectedYear.value) + '&month=' + Number(selectedMonth.value))
-  request.get('/seaice/error?year=' + Number(selectedYear.value) + '&month=' + Number(selectedMonth.value))
+  axios.get('/seaice/error?year=' + Number(selectedYear.value) + '&month=' + Number(selectedMonth.value))
     .then(response => {
       console.log(response.data);
       option1.value = {
@@ -180,8 +179,7 @@ const updateTab1 = () => {
 }
 
 const updateTab2 = () => {
-  //axios.get('/seaice/errorBox?year=' + Number(selectedYear.value) + '&month=' + Number(selectedMonth.value))
-  request.get('/seaice/errorBox?year=' + Number(selectedYear.value) + '&month=' + Number(selectedMonth.value))
+  axios.get('/seaice/errorBox?year=' + Number(selectedYear.value) + '&month=' + Number(selectedMonth.value))
     .then(response => {
       console.log(response.data);
       const data0 = response.data["withoutDA_withoutBC"];
@@ -298,8 +296,7 @@ const updateTab2 = () => {
 
 
 const updateTab3 = () => {
-  //axios.get('/seaice/predictionExamination/errorAnalysis?year=' + Number(selectedYear.value))
-  request.get('/seaice/predictionExamination/errorAnalysis?year=' + Number(selectedYear.value))
+  axios.get('/seaice/predictionExamination/errorAnalysis?year=' + Number(selectedYear.value))
     .then(response => {
       console.log(response.data);
       option4.value = {

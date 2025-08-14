@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, reactive, watch, defineExpose, computed } from "vue";
 import * as echarts from "echarts";
-//import axios from "axios";
+import axios from "axios";
 import request from '@/utils/request';//项目已提供 src/utils/request.ts 工具，它会自动应用环境变量中的API前缀。byCP
 import VChart from 'vue-echarts';
 import { nextTick } from "vue";
@@ -43,7 +43,7 @@ const selectedMonth = computed(() => {
 //     console.error(error);
 //   });
 //修改所有axios.get调用为request.get
-request.get('/nao/initialize/naoCORR')
+axios.get('/nao/initialize/naoCORR')
   .then(res => {
     start_year.value = res.data.start_year;
     start_month.value = new Date(res.data.start_month);
@@ -76,7 +76,7 @@ function updateChartTitle() {
   //使元素失焦
   document.activeElement.blur();
 
-  request.get('/nao/predictionExamination/nao?year=' + Number(selectedYear.value) + '&month=' + Number(selectedMonth.value))
+  axios.get('/nao/predictionExamination/nao?year=' + Number(selectedYear.value) + '&month=' + Number(selectedMonth.value))
     .then(res => {
       index_nao = 0;
       console.log("点击标签,更新nao", res.data);
@@ -88,7 +88,7 @@ function updateChartTitle() {
       console.error(error);
     });
 
-  request.get('/nao/predictionExamination/naoi')
+  axios.get('/nao/predictionExamination/naoi')
     .then(res => {
       console.log("更新naoi", res.data);
       // title_of_option1.value='提前1个月预测';
@@ -101,7 +101,7 @@ function updateChartTitle() {
 }
 
 //////////以下两个是初始化
-request.get('/nao/predictionExamination/nao?year=' + Number(selectedYear.value) + '&month=' + Number(selectedMonth.value))
+axios.get('/nao/predictionExamination/nao?year=' + Number(selectedYear.value) + '&month=' + Number(selectedMonth.value))
   .then(res => {
     index_nao = 0;
     console.log("初始化nao", res.data);
@@ -110,7 +110,7 @@ request.get('/nao/predictionExamination/nao?year=' + Number(selectedYear.value) 
     //console.log("swwwww",imgSrc_of_nao_Array[0]);
   });
 
-request.get('/nao/predictionExamination/naoi')
+axios.get('/nao/predictionExamination/naoi')
   .then(res => {
     console.log("初始化naoi", res.data);
     // title_of_option1.value='提前1个月预测';
