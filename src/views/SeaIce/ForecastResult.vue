@@ -53,6 +53,16 @@ const movBoxStyle = computed(() => ({
   transition: "left 0.3s ease"
 }));
 
+watch(selectedTime, (newValue, oldValue) => {
+  if (newValue !== oldValue && selectedSIE.value) {
+    updateSIEChart();
+  }
+  if (newValue !== oldValue && selectedSIC.value) {
+    updateSICChart();
+  }
+});
+
+
 function selectChart(index) {
   chartSelected.value = index;
   selectedSIE.value = index === 0;
@@ -80,23 +90,23 @@ function selectChart(index) {
 
 // 请求SIE数据
 // 该函数定义已在文件下方存在，此处应删除该不完整定义，让文件使用完整的函数定义
-  SIELoading.value = true;
-  updateSIEChartTitle();
-  const params = {
-    year: Number(selectedYear.value),
-    month: Number(selectedMonth.value)
-  };
+  // SIELoading.value = true;
+  // updateSIEChartTitle();
+  // const params = {
+  //   year: Number(selectedYear.value),
+  //   month: Number(selectedMonth.value)
+  // };
   
-  axios.get('/seaice/initial/SIEprediction', { params })
-    .then(response => {
-      SIEOption.value = response.data.option;
-      SIEDescription.value = response.data.description;
-      SIELoading.value = false;
-    })
-    .catch(error => {
-      console.error(error);
-      SIELoading.value = false;
-    });
+  // axios.get('/seaice/initial/SIEprediction', { params })
+  //   .then(response => {
+  //     SIEOption.value = response.data.option;
+  //     SIEDescription.value = response.data.description;
+  //     SIELoading.value = false;
+  //   })
+  //   .catch(error => {
+  //     console.error(error);
+  //     SIELoading.value = false;
+  //   });
 
 
 // 请求SIC数据
@@ -305,16 +315,22 @@ const provideMockData = () => {
 
 // 更新SIE图表
 const updateSIEChart = async () => {
+  console.log('updateSIEChart函数被调用，参数:', {
+    year: selectedYear.value,
+    month: selectedMonth.value
+  });
   SIELoading.value = true;
   updateSIEChartTitle();
   const params = {
-    year: selectedYear.value.toString(),  // 确保参数格式正确
+    year: selectedYear.value.toString(),  
     month: selectedMonth.value.toString()
   };
+  
+  console.log('发送API请求:', '/seaice/predictionResult/SIE', params);
   axios.get('/seaice/predictionResult/SIE', { params })
     .then(response => {
+      console.log('API响应数据:', response.data);
       if (response.data && Array.isArray(response.data.sieInitial)) {
-        // 提取所有模型的数据
         const modelData = {
           prediction: response.data.sieInitial.find(item => item.var_model === 'prediction_IceTFT')?.trans_data || [],
           mean: response.data.sieInitial.find(item => item.var_model === 'mean_IceTFT')?.trans_data || [],
@@ -323,11 +339,14 @@ const updateSIEChart = async () => {
         };
         SIEOption.value = buildSIEChartOption(modelData);
         SIEDescription.value = `${selectedYear.value}年${selectedMonth.value}月预测数据`;
+      } else {
+        console.warn('API返回的数据格式不正确');
       }
       SIELoading.value = false;
     })
     .catch(error => {
-      console.error('获取SIE预测结果失败:', error);
+      console.error('获取SIE预测结果失败:', error.message);
+      console.error('错误详情:', error);
       SIELoading.value = false;
     });
 }
@@ -627,7 +646,7 @@ onMounted(() => {
     <div style="margin: 0 10%;">
 
       <div class="datePickerContainer">
-        <el-date-picker @change="updateSIEChartTitle" v-model="selectedTime" :clearable="false" type="month"
+        <el-date-picker @change="updateSIEChart" v-model="selectedTime" :clearable="false" type="month"
           :disabled-date="disabledMonth" v-if="selectedSIE" />
         <el-date-picker @change="updateSICChart" v-model="selectedTime" :clearable="false" :disabled-date="disabledDate"
           v-if="selectedSIC" />
