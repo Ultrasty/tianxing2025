@@ -130,8 +130,8 @@ const initSIEAvailableList = () => {
   updateSIEChartTitle();
   SIELoading.value = true;
   const params = {
-    year: 2023,
-    month: 1
+    year: Number(selectedYear.value),  // 使用selectedYear.value
+    month: Number(selectedMonth.value) // 使用selectedMonth.value
   };
 
   // 使用相对路径，避免与request.get方法默认添加的前缀重复
