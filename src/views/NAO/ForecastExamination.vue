@@ -2,13 +2,17 @@
 import { ref, onMounted, reactive, watch, defineExpose, computed } from "vue";
 import * as echarts from "echarts";
 import axios from "axios";
+import request from '@/utils/request';//项目已提供 src/utils/request.ts 工具，它会自动应用环境变量中的API前缀。byCP
 import VChart from 'vue-echarts';
 import { nextTick } from "vue";
 import { configProviderContextKey } from "element-plus";
 import { ArrowLeft, ArrowRight } from "@element-plus/icons-vue";
 import bannerImg from '@/assets/nao.jpg';//首页图
 
-const prefix = "https://tianxing.tongji.edu.cn"
+//const prefix = "https://tianxing.tongji.edu.cn"注释掉硬编码bycP
+//使用环境变量byCP
+const API_PREFIX = import.meta.env.VITE_API_PREFIX;
+imgSrc_of_nao.value = `${API_PREFIX}${imgSrc_of_nao_Array[0]}`;
 // 新加入
 const chartSelected = ref(0);
 const chartNames = ['指数预测', '模态预测'];
@@ -27,6 +31,18 @@ const selectedMonth = computed(() => {
   return selectedDateTime.value.getMonth() + 1;
 })
 
+// axios.get('/nao/initialize/naoCORR')
+//   .then(res => {
+//     start_year.value = res.data.start_year;
+//     start_month.value = new Date(res.data.start_month);
+//     end_year.value = res.data.end_year;
+//     end_month.value = new Date(res.data.end_month);
+//     //console.log(res.data);
+//   })
+//   .catch(error => {
+//     console.error(error);
+//   });
+//修改所有axios.get调用为request.get
 axios.get('/nao/initialize/naoCORR')
   .then(res => {
     start_year.value = res.data.start_year;
@@ -37,7 +53,7 @@ axios.get('/nao/initialize/naoCORR')
   })
   .catch(error => {
     console.error(error);
-  });
+  });  
 
 const limitedDateRange = (time) => {
   return time.getFullYear() < start_year.value || time.getFullYear() > end_year.value;
