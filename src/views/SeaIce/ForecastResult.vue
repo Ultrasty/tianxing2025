@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import axios from 'axios';
 //import request from '@/utils/request';//项目已提供 src/utils/request.ts 工具，它会自动应用环境变量中的API前缀。byCP
 import VChart from 'vue-echarts';
@@ -128,40 +128,46 @@ const updateSICChart = async () => {
 const initSIEAvailableList = () => {
   updateSIEChartTitle();
   SIELoading.value = true;
-  const params = {
-    year: Number(selectedYear.value),  // 使用selectedYear.value
-    month: Number(selectedMonth.value) // 使用selectedMonth.value
-  };
 
   // 使用相对路径，避免与request.get方法默认添加的前缀重复
-  const apiUrl = '/seaice/initial/SIEprediction';
-  console.log('请求API:', apiUrl, '参数:', params);
+  const apiUrl = '/seaice/initial/SIEprediction'; // 修改为初始化接口
+  console.log('请求API:', apiUrl);
 
-  axios.get(apiUrl, { params })
+  axios.get(apiUrl)
     .then(response => {
       console.log('API响应状态:', response.status);
       console.log('API响应头:', response.headers);
       console.log('API响应数据:', response.data);
 
       if (response.data) {
-        // 检查是否包含sieInitial属性
-        if (Array.isArray(response.data.sieInitial)) {
-          SIEAvailableList.value = response.data.sieInitial;
-          // 初始化第一个月的数据
-          if (response.data.sieInitial.length > 0) {
-            // 提取所有模型的数据
+        // 检查是否包含yearList和monthList属性
+        if (Array.isArray(response.data.yearList) && Array.isArray(response.data.monthList)) {
+          // 构建SIEAvailableList
+          SIEAvailableList.value = [];
+          response.data.yearList.forEach(year => {
+            response.data.monthList.forEach(month => {
+              SIEAvailableList.value.push({ year, month });
+            });
+          });
+
+          // 设置默认年月
+          if (response.data.defaultYear && response.data.defaultMonth) {
+            selectedTime.value = new Date(response.data.defaultYear, response.data.defaultMonth - 1);
+          }
+
+          // 如果有初始数据，加载图表
+          if (response.data.sieInitial) {
             const modelData = {
               prediction: response.data.sieInitial.find(item => item.var_model === 'prediction_IceTFT')?.trans_data || [],
               mean: response.data.sieInitial.find(item => item.var_model === 'mean_IceTFT')?.trans_data || [],
               upper: response.data.sieInitial.find(item => item.var_model === 'upper_IceTFT')?.trans_data || [],
               lower: response.data.sieInitial.find(item => item.var_model === 'lower_IceTFT')?.trans_data || []
             };
-            // 构建图表选项
             SIEOption.value = buildSIEChartOption(modelData);
-            SIEDescription.value = `2023年1月预测数据`;
+            SIEDescription.value = `${response.data.defaultYear}年${response.data.defaultMonth}月预测数据`;
           }
         } else {
-          console.warn('API返回的sieInitial不是数组', response.data.sieInitial);
+          console.warn('API返回的yearList或monthList不是数组');
           SIEAvailableList.value = [];
           // 提供模拟数据
           provideMockData();
@@ -188,6 +194,63 @@ const initSIEAvailableList = () => {
 
       // 提供模拟数据进行测试
       provideMockData();
+      SIELoading.value = false;
+    });
+}
+
+
+// 根据年月和模型查询SIE指数预测结果
+const getSIEByModel = (varModel) => {
+  SIELoading.value = true;
+  const params = {
+    year: selectedYear.value.toString(),
+    month: selectedMonth.value.toString(),
+    var_model: varModel
+  };
+
+  axios.get('/seaice/findByModelandTime/SIE', { params })
+    .then(response => {
+      console.log('指定模型的SIE预测结果:', response.data);
+      // 这里可以添加处理单一模型数据的逻辑
+      SIELoading.value = false;
+    })
+    .catch(error => {
+      console.error('获取指定模型SIE预测结果失败:', error);
+      SIELoading.value = false;
+    });
+}
+
+// 查询全部SIE指数
+const getAllSIEData = () => {
+  SIELoading.value = true;
+
+  axios.get('/seaice/findAll/SIE')
+    .then(response => {
+      console.log('全部SIE指数数据:', response.data);
+      // 这里可以添加处理全部数据的逻辑
+      SIELoading.value = false;
+    })
+    .catch(error => {
+      console.error('获取全部SIE指数失败:', error);
+      SIELoading.value = false;
+    });
+}
+
+// 查询SIE预测误差分析数据
+const getSIEErrorAnalysis = () => {
+  SIELoading.value = true;
+  const params = {
+    year: selectedYear.value.toString()
+  };
+
+  axios.get('/seaice/predictionExamination/errorAnalysis', { params })
+    .then(response => {
+      console.log('SIE预测误差分析数据:', response.data);
+      // 这里可以添加处理误差分析数据的逻辑
+      SIELoading.value = false;
+    })
+    .catch(error => {
+      console.error('获取SIE预测误差分析数据失败:', error);
       SIELoading.value = false;
     });
 }
@@ -243,10 +306,10 @@ const updateSIEChart = async () => {
   SIELoading.value = true;
   updateSIEChartTitle();
   const params = {
-    year: Number(selectedYear.value),
-    month: Number(selectedMonth.value)
+    year: selectedYear.value.toString(),  // 确保参数格式正确
+    month: selectedMonth.value.toString()
   };
-  axios.get('/seaice/initial/SIEprediction', { params })
+  axios.get('/seaice/predictionResult/SIE', { params })
     .then(response => {
       if (response.data && Array.isArray(response.data.sieInitial)) {
         // 提取所有模型的数据
@@ -262,7 +325,7 @@ const updateSIEChart = async () => {
       SIELoading.value = false;
     })
     .catch(error => {
-      console.error(error);
+      console.error('获取SIE预测结果失败:', error);
       SIELoading.value = false;
     });
 }
