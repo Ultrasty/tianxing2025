@@ -153,6 +153,8 @@ const initSIEAvailableList = () => {
           // 设置默认年月
           if (response.data.defaultYear && response.data.defaultMonth) {
             selectedTime.value = new Date(response.data.defaultYear, response.data.defaultMonth - 1);
+            //初始化时手动调用一次updateSIEChart
+            updateSIEChart();
           }
 
           // 如果有初始数据，加载图表
@@ -592,7 +594,8 @@ defineExpose({ changeIndex });
 const loadImg = (imgList) => {
   imgList.forEach(src => {
     let img = new Image();
-    img.src = 'http://tianxing.tongji.edu.cn' + src;
+    // 使用环境变量中的API前缀，而不是硬编码的地址
+    img.src = import.meta.env.VITE_API_PREFIX + src;
     img.onload = () => console.log('加载完毕', img.src);
     img.onerror = () => console.log('加载错误', img.src);
   });
