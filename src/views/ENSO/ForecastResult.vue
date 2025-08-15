@@ -1,171 +1,142 @@
 <script setup>
-import { ref, onMounted, reactive, watch, defineExpose, computed } from "vue";
+import { ref, reactive, computed, defineExpose } from "vue";
 import * as echarts from "echarts";
 import axios from "axios";
 import VChart from 'vue-echarts';
-import { nextTick } from "vue";
-import { configProviderContextKey } from "element-plus";
+import { ArrowLeft, ArrowRight } from '@element-plus/icons-vue';
+import bannerImg from '@/assets/enso1.jpg';
 
-const prefix = "https://tianxing.tongji.edu.cn"
+const prefix = "https://tianxing.tongji.edu.cn";
 
-//时间选择器范围框定--start
+// ====================== 时间选择器范围框定 START ======================
 const start_time = ref(null);
 const end_time = ref(null);
-/* 赋初值————默认为指数预测 */
+
+// 分别保存原始时间范围
+const indexStart = ref(null);
+const indexEnd = ref(null);
+const modeStart = ref(null);
+const modeEnd = ref(null);
+
+// 获取指数预测时间范围
 axios.get('/enso/linechart/getInitData')
   .then(res => {
-    start_time.value = new Date(res.data.earliestDate.replace(/-/g, '/'));
-    end_time.value = new Date(res.data.latestDate.replace(/-/g, '/'));
+    if (res.data?.earliestDate && res.data?.latestDate) {
+      indexStart.value = new Date(res.data.earliestDate.replace(/-/g, '/'));
+      indexEnd.value = new Date(res.data.latestDate.replace(/-/g, '/'));
+      computeIntersection();
+    } else {
+      console.warn("获取指数预测时间范围失败", res.data);
+    }
   });
 
-const limitedDateRange = (time) => {
-  return time.getTime() < start_time.value || time.getTime() > end_time.value;
-};
-
-/* 根据选择页更新限制范围 */
-function handleClick(chartName, index) {
-  chartSelected.value = index;
-  console.log(chartName);
-  if (chartName == '模态预测') {
-    axios.get('/imgs/predictionResult/ssta/getInitData')
-      .then(res => {
-        start_time.value = new Date(res.data.start.replace(/-/g, '/'));
-        end_time.value = new Date(res.data.end.replace(/-/g, '/'));
-      });
-  }
-  else if (chartName == '指数预测') {
-    axios.get('/enso/linechart/getInitData')
-      .then(res => {
-        start_time.value = new Date(res.data.earliestDate.replace(/-/g, '/'));
-        end_time.value = new Date(res.data.latestDate.replace(/-/g, '/'));
-      });
-  }
-
-}
-//时间选择器范围框定--end
-
-const currentDate = ref(new Date('2023-2'));   //  赋初值
-const start_year = computed(() => {
-  return currentDate.value.getFullYear();
-});
-const start_month = computed(() => {
-  return currentDate.value.getMonth() + 1;
-});
-
-
-// 此处调接口获取时间范围
+// 获取模态预测时间范围
 axios.get('/imgs/predictionResult/ssta/getInitData')
   .then(res => {
-    start_time.value = new Date(res.data.start.replace(/-/g, '/'));
-    end_time.value = new Date(res.data.end.replace(/-/g, '/'));
+    if (res.data?.start && res.data?.end) {
+      modeStart.value = new Date(res.data.start.replace(/-/g, '/'));
+      modeEnd.value = new Date(res.data.end.replace(/-/g, '/'));
+      computeIntersection();
+    } else {
+      console.warn("获取模态预测时间范围失败", res.data);
+    }
   });
 
-const chart1 = ref({})
-const chart1Title = ref('**年*月~**年*月Niño3.4指数结果预测')
-let Chart1_Description = reactive({ single: true, text: '此处为预测结果指数预测折线图。' })
+// 计算交集
+function computeIntersection() {
+  if (indexStart.value && indexEnd.value && modeStart.value && modeEnd.value) {
+    start_time.value = new Date(Math.max(indexStart.value, modeStart.value));
+    end_time.value = new Date(Math.min(indexEnd.value, modeEnd.value));
+  }
+}
 
-var index_heat = 0; //切换热力图时修改这个索引
+// 限制可选日期
+const limitedDateRange = (time) => {
+  if (!start_time.value || !end_time.value) return true;
+  return time.getTime() < start_time.value.getTime() || time.getTime() > end_time.value.getTime();
+};
+
+// 切换时只改 tab，不改时间范围
+function handleClick(chartName, index) {
+  chartSelected.value = index;
+  console.log(`切换到 ${chartName}`);
+}
+// ====================== 时间选择器范围框定 END ======================
+
+
+// ====================== 时间 & 图表初始值 ======================
+const currentDate = ref(new Date());   // 初始日期
+const start_year = computed(() => currentDate.value.getFullYear());
+const start_month = computed(() => currentDate.value.getMonth() + 1);
+
+const chart1 = ref({});
+const chart1Title = ref('**年*月~**年*月Niño3.4指数结果预测');
+let Chart1_Description = reactive({ single: true, text: '此处为预测结果指数预测折线图。' });
+
+var index_heat = 0;
 var imgSrc_of_heat_Array;
 var title_of_heat_Array;
 
-const imgSrc_of_heat = ref({})
-const title_of_heat = ref({})
+const imgSrc_of_heat = ref({});
+const title_of_heat = ref({});
 
-/* 赋初值 */
-//指数预测
-axios.get('/enso/predictionResult/linechart?year=' + Number(start_year.value) + '&month=' + Number(start_month.value))
+// ====================== 初始化数据 ======================
+// 指数预测
+axios.get(`/enso/predictionResult/linechart?year=${start_year.value}&month=${start_month.value}`)
   .then(res => {
-    chart1.value = res.data
-
+    chart1.value = res.data;
   });
 
-//模态预测（热力图）
-axios.get('/imgs/predictionResult/ssta?year=' + Number(start_year.value) + '&month=' + Number(start_month.value))
+// 模态预测（热力图）
+axios.get(`/imgs/predictionResult/ssta?year=${start_year.value}&month=${start_month.value}`)
   .then(res => {
-    index_heat = 0;//图片数组指针置0
-    console.log(res.data.data);
-    imgSrc_of_heat_Array = res.data.data;  //res.data.data传递了一个图片数组
-    imgSrc_of_heat.value = `${prefix}${imgSrc_of_heat_Array[0]}`;    //const prefix="https://tianxing.tongji.edu.cn"
-
+    index_heat = 0;
+    imgSrc_of_heat_Array = res.data.data;
+    imgSrc_of_heat.value = `${prefix}${imgSrc_of_heat_Array[0]}`;
     title_of_heat_Array = res.data.titles;
     title_of_heat.value = title_of_heat_Array[0];
-
   });
 
-/* 图表更新 */
+// ====================== 图表更新 ======================
 function update_charts() {
-  //使元素失焦
-  document.activeElement.blur();
+  document.activeElement.blur(); // 失焦
 
-  // 当日期时间选择发生变化时被调用
-
-  console.log(start_month.value); // 输出当前选择的日期和时间
-  console.log(start_year.value);
-
-  start_month.value = start_month.value;
-  start_month.value = start_month.value;
-
-  axios.get('/enso/predictionResult/linechart?year=' + Number(start_year.value) + '&month=' + Number(start_month.value))
+  axios.get(`/enso/predictionResult/linechart?year=${start_year.value}&month=${start_month.value}`)
     .then(res => {
-      chart1.value = res.data
-    })
-  axios.get('/imgs/predictionResult/ssta?year=' + Number(start_year.value) + '&month=' + Number(start_month.value))
-    .then(res => {
-      index_heat = 0;//图片数组指针置0
-      console.log(res.data.data);
-      imgSrc_of_heat_Array = res.data.data;  //res.data.data传递了一个图片数组
-      imgSrc_of_heat.value = `${prefix}${imgSrc_of_heat_Array[0]}`;    //const prefix="https://tianxing.tongji.edu.cn"
+      chart1.value = res.data;
+    });
 
+  axios.get(`/imgs/predictionResult/ssta?year=${start_year.value}&month=${start_month.value}`)
+    .then(res => {
+      index_heat = 0;
+      imgSrc_of_heat_Array = res.data.data;
+      imgSrc_of_heat.value = `${prefix}${imgSrc_of_heat_Array[0]}`;
       title_of_heat_Array = res.data.titles;
       title_of_heat.value = title_of_heat_Array[0];
-
     });
 }
 
-/* 使el-button点击后能正常失焦 Start (by wyf)*/
-const buttonLeft = ref(null);
-const buttonRight = ref(null);
-
-/* 左右切换 -- begin */
+// ====================== 热力图左右切换 ======================
 function change_time_heat(flag) {
+  const total = imgSrc_of_heat_Array.length; // 动态总数
+
   if (flag === "left") {
-    if (index_heat > 0) {
-      index_heat--;
-    }
-    else {
-      index_heat = 17;
-    }
-    buttonLeft.value.$el.blur();
+    index_heat = index_heat > 0 ? index_heat - 1 : total - 1;
+  } else if (flag === "right") {
+    index_heat = index_heat < total - 1 ? index_heat + 1 : 0;
   }
-  else if (flag === "right") {
-    if (index_heat < 17) {
-      index_heat++;
-    }
-    else {
-      index_heat = 0;
-    }
-    buttonRight.value.$el.blur();
-  }
+
   imgSrc_of_heat.value = `${prefix}${imgSrc_of_heat_Array[index_heat]}`;
   title_of_heat.value = `${title_of_heat_Array[index_heat]}`;
 }
 
-defineExpose({
-  change_time_heat
-});
-/* 使el-button点击后能正常失焦 End */
-
-/* 新版添加的代码========================================================== */
-import bannerImg from '@/assets/enso1.jpg';
 
 
+// ====================== tab 样式控制 ======================
 const chartSelected = ref(0);
-
 const chartNames = ['指数预测', '模态预测'];
 
-const moveBoxLeft = computed(() => {
-  return chartSelected.value * 250;
-});
+const moveBoxLeft = computed(() => chartSelected.value * 250);
 
 const movBoxStyle = computed(() => ({
   position: "absolute",
@@ -177,14 +148,6 @@ const movBoxStyle = computed(() => ({
   backgroundColor: "rgb(143,178,201)",
   transition: "left 0.3s ease"
 }));
-
-
-/* 新版代码END============================================================ */
-
-import {
-  ArrowLeft,
-  ArrowRight,
-} from '@element-plus/icons-vue'
 </script>
 
 <template>

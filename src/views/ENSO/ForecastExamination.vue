@@ -19,9 +19,14 @@ const end_time = ref(null);
 //此处利用monthly comparison调接口获取未切换标签时的时间范围
 axios.get('/enso/monthlyComparison/getInitData')
   .then(res => {
-    //console.log(res.data.start);
-    start_time.value = new Date(res.data.start);
-    end_time.value = new Date(res.data.end);
+    if (res.data && res.data.start && res.data.end) {
+      start_time.value = new Date(res.data.start.replace(/-/g, '/'));
+      end_time.value = new Date(res.data.end.replace(/-/g, '/'));
+    } else {
+      start_time.value = null;
+      end_time.value = null;
+      console.warn("获取时间范围数据失败，返回数据不完整", res.data);
+    }
   });
 
 // start_time.value = new Date('2023-1');      //暂时写死范围
@@ -32,44 +37,44 @@ const limitedDateRange = (time) => {
 /* 根据选择页更新限制范围 ！！为了适应新版前端已经更改！！*/
 function handleClick(chartName, index) {
   chartSelected.value = index;
-
   console.log(chartName);
-  if (chartName == '逐月比对') {
-    //再次调用接口是为了当从别的标签切换回来时 能将时间选择器对应修改
+  if (chartName == '逐月比对' || chartName == '预报误差') {
     axios.get('/enso/monthlyComparison/getInitData')
       .then(res => {
-        start_time.value = new Date(res.data.start.replace(/-/g, '/'));
-        end_time.value = new Date(res.data.end.replace(/-/g, '/'));
-      });
-  }
-  else if (chartName == '预报误差') {
-    //再次调用接口是为了当从别的标签切换回来时 能将时间选择器对应修改
-    axios.get('/enso/monthlyComparison/getInitData')
-      .then(res => {
-        start_time.value = new Date(res.data.start.replace(/-/g, '/'));
-        end_time.value = new Date(res.data.end.replace(/-/g, '/'));
+        if (res.data && res.data.start && res.data.end) {
+          start_time.value = new Date(res.data.start.replace(/-/g, '/'));
+          end_time.value = new Date(res.data.end.replace(/-/g, '/'));
+        } else {
+          start_time.value = null;
+          end_time.value = null;
+          console.warn("获取时间范围数据失败，返回数据不完整", res.data);
+        }
       });
   }
   else if (chartName == '误差分析') {
     axios.get('/enso/errorBox/getInitData')
       .then(res => {
-        //console.log(res.data.earliestDate);
-        //console.log(res.data.latestDate);
-        start_time.value = new Date(res.data.earliestDate.replace(/-/g, '/'));
-        end_time.value = new Date(res.data.latestDate.replace(/-/g, '/'));
-        //console.log(start_time.value);
-        //console.log(end_time.value);
+        if (res.data && res.data.earliestDate && res.data.latestDate) {
+          start_time.value = new Date(res.data.earliestDate.replace(/-/g, '/'));
+          end_time.value = new Date(res.data.latestDate.replace(/-/g, '/'));
+        } else {
+          start_time.value = null;
+          end_time.value = null;
+          console.warn("获取时间范围数据失败，返回数据不完整", res.data);
+        }
       });
-    // start_time.value = new Date('2023-2');
-    // end_time.value = new Date('2023-2');
   }
-  else {        //相关系数
+  else { //相关系数
     axios.get('/enso/errorCorr/getInitData')
       .then(res => {
-        console.log(res.data.earliestDate);
-        console.log(res.data.latestDate);
-        start_time.value = new Date(res.data.earliestDate.replace(/-/g, '/'));
-        end_time.value = new Date(res.data.latestDate.replace(/-/g, '/'));
+        if (res.data && res.data.earliestDate && res.data.latestDate) {
+          start_time.value = new Date(res.data.earliestDate.replace(/-/g, '/'));
+          end_time.value = new Date(res.data.latestDate.replace(/-/g, '/'));
+        } else {
+          start_time.value = null;
+          end_time.value = null;
+          console.warn("获取时间范围数据失败，返回数据不完整", res.data);
+        }
       });
   }
 }
