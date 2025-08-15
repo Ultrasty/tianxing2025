@@ -315,41 +315,26 @@ const provideMockData = () => {
 
 // 更新SIE图表
 const updateSIEChart = async () => {
-  console.log('updateSIEChart函数被调用，参数:', {
-    year: selectedYear.value,
-    month: selectedMonth.value
-  });
   SIELoading.value = true;
   updateSIEChartTitle();
   const params = {
-    year: selectedYear.value.toString(),  
+    year: selectedYear.value.toString(),  // 后端接收字符串类型，保持一致
     month: selectedMonth.value.toString()
   };
-  
-  console.log('发送API请求:', '/seaice/predictionResult/SIE', params);
   axios.get('/seaice/predictionResult/SIE', { params })
     .then(response => {
-      console.log('API响应数据:', response.data);
-      if (response.data && Array.isArray(response.data.sieInitial)) {
-        const modelData = {
-          prediction: response.data.sieInitial.find(item => item.var_model === 'prediction_IceTFT')?.trans_data || [],
-          mean: response.data.sieInitial.find(item => item.var_model === 'mean_IceTFT')?.trans_data || [],
-          upper: response.data.sieInitial.find(item => item.var_model === 'upper_IceTFT')?.trans_data || [],
-          lower: response.data.sieInitial.find(item => item.var_model === 'lower_IceTFT')?.trans_data || []
-        };
-        SIEOption.value = buildSIEChartOption(modelData);
-        SIEDescription.value = `${selectedYear.value}年${selectedMonth.value}月预测数据`;
-      } else {
-        console.warn('API返回的数据格式不正确');
-      }
+      const data = response.data;
+      // 直接使用后端返回的完整图表配置
+      SIEOption.value = data.option;  
+      // 直接使用后端返回的描述文本
+      SIEDescription.value = data.description;  
       SIELoading.value = false;
     })
     .catch(error => {
-      console.error('获取SIE预测结果失败:', error.message);
-      console.error('错误详情:', error);
+      console.error('获取SIE预测结果失败:', error);
       SIELoading.value = false;
     });
-}
+};
 
 // 构建SIE图表选项 - 支持多模型数据
 const buildSIEChartOption = (modelData) => {
