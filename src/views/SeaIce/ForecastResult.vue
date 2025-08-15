@@ -111,8 +111,7 @@ const updateSICChart = async () => {
     month: selectedDay.value.getMonth() + 1,
     day: selectedDay.value.getDate()
   };
-  //axios.get('/seaice/predictionResult/SIC', { params })
-  request.get('/seaice/predictionResult/SIC', { params })
+  axios.get('/seaice/predictionResult/SIC', { params })
     .then(response => {
       imgSrc.value = response.data;
       imgIndex.value = 0;
@@ -247,7 +246,7 @@ const updateSIEChart = async () => {
     year: Number(selectedYear.value),
     month: Number(selectedMonth.value)
   };
-  request.get('/seaice/initial/SIEprediction', { params })
+  axios.get('/seaice/initial/SIEprediction', { params })
     .then(response => {
       if (response.data && Array.isArray(response.data.sieInitial)) {
         // 提取所有模型的数据
