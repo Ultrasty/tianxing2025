@@ -434,7 +434,6 @@ const buildSIEChartOption = (modelData) => {
 }
 
 // 初始化SIC可请求的年月
-// 修改initSICAvailableList函数中的请求部分
 const initSICAvailableList = () => {
   updateSICChartTitle();
   SICLoading.value = true;
@@ -446,8 +445,8 @@ const initSICAvailableList = () => {
     return;
   }
   
-  // 使用完整URL并添加详细日志
-  const apiUrl = 'http://localhost:8888/seaice/initial/SICprediction';
+  // 使用相对路径，不再硬编码URL
+  const apiUrl = '/seaice/initial/SICprediction';
   console.log('请求URL:', apiUrl);
   
   axios.get(apiUrl)
